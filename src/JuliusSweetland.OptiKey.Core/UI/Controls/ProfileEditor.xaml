@@ -1,0 +1,28 @@
+<!--Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved-->
+<UserControl x:Class="JuliusSweetland.OptiKey.UI.Controls.ProfileEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:valueConverters="clr-namespace:JuliusSweetland.OptiKey.UI.ValueConverters"
+             mc:Ignorable="d">
+  <UserControl.Resources>
+    <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
+    <valueConverters:ListNotEmpty x:Key="ListNotEmpty"/>
+  </UserControl.Resources>
+  <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+    <TextBox Margin="1,0,1,0" Text="{Binding Profile.BackgroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding Profile.BorderColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding Profile.ForegroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+    <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="1" Interval="0.1" HideUpDownButtons="True"
+                       Value="{Binding Profile.Opacity, UpdateSourceTrigger=PropertyChanged}"/>
+    <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="1000" Interval="10" HideUpDownButtons="True"
+                       Value="{Binding Profile.LockOnTime, UpdateSourceTrigger=PropertyChanged}"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding Profile.CompletionTimes, UpdateSourceTrigger=PropertyChanged}"/>
+    <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="10000" Interval="10" HideUpDownButtons="True"
+                       Value="{Binding Profile.TimeRequiredToLockDown, UpdateSourceTrigger=PropertyChanged}"/>
+  </StackPanel>
+</UserControl>
+
+ 

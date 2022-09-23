@@ -7,5 +7,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Keyboards.Base
         bool MultiKeySelectionSupported { get; }
         void OnEnter();
         void OnExit();
+        object GetContent();
     }
 }

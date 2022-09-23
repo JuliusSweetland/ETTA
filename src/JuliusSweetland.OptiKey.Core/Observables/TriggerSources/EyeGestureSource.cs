@@ -136,15 +136,37 @@ namespace JuliusSweetland.OptiKey.Observables.TriggerSources
                                                     var keyCommands = new List<KeyCommand>();
                                                     foreach (var command in step.Commands)
                                                     {
-                                                        keyCommands.Add(new KeyCommand()
+                                                        switch (command.Name)
                                                         {
-                                                            Name = command.Name,
-                                                            Value = command.Value,
-                                                            BackAction = command.BackAction,
-                                                            Method = command.Method,
-                                                            Argument = command.Argument
-                                                        });
-                                                    }
+                                                            case KeyCommands.Action:
+                                                                keyCommands.Add(new ActionCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.ChangeKeyboard:
+                                                                keyCommands.Add(new ChangeKeyboardCommand { Value = command.Value, BackAction = command.BackAction });
+                                                                break;
+                                                            case KeyCommands.KeyDown:
+                                                                keyCommands.Add(new KeyDownCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.KeyUp:
+                                                                keyCommands.Add(new KeyUpCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.KeyToggle:
+                                                                keyCommands.Add(new KeyTogglCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.MoveWindow:
+                                                                keyCommands.Add(new MoveWindowCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.Plugin:
+                                                                keyCommands.Add(new PluginCommand { Method = command.Method, Arguments = command.Argument });
+                                                                break;
+                                                            case KeyCommands.Text:
+                                                                keyCommands.Add(new TextCommand { Value = command.Value });
+                                                                break;
+                                                            case KeyCommands.Wait:
+                                                                keyCommands.Add(new WaitCommand { Value = command.Value });
+                                                                break;
+                                                        }
+                                                   }
                                                     var pakv = new PointAndKeyValue(checkPoint, new KeyValue(gesture.Name) { Commands = keyCommands });
                                                     observer.OnNext(new TriggerSignal(1, 1, pakv));
                                                     observer.OnNext(new TriggerSignal(null, 0, null));

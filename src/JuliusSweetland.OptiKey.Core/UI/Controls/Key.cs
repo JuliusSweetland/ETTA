@@ -37,21 +37,27 @@ namespace JuliusSweetland.OptiKey.UI.Controls
 
         #region On Loaded
 
-        private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
+        protected void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
             onUnloaded = new CompositeDisposable();
 
             var keyboardHost = VisualAndLogicalTreeHelper.FindVisualParent<KeyboardHost>(this);
 
             // If key isn't visible, it won't have a visual parent and this is okay.
-            if (keyboardHost == null && !this.IsVisible)
-            {
+            if (keyboardHost == null || !(keyboardHost.DataContext is MainViewModel))
                 return;
-            }
 
             var mainViewModel = keyboardHost.DataContext as MainViewModel;
             var keyStateService = mainViewModel.KeyStateService;
             var capturingStateManager = mainViewModel.CapturingStateManager;
+
+            if (GazeRegion != null && GazeRegion != new Rect())
+            {
+                HorizontalOffset = GazeRegion.Left * SystemParameters.VirtualScreenWidth;
+                VerticalOffset = GazeRegion.Top * SystemParameters.VirtualScreenHeight;
+                Width = GazeRegion.Width * SystemParameters.VirtualScreenWidth;
+                Height = GazeRegion.Height * SystemParameters.VirtualScreenHeight;
+            }
 
             //Calculate KeyDownState
             if (Value != null)
@@ -138,7 +144,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             onUnloaded.Add(keySelectionSubscription);
         }
 
-        private void OnUnloaded(object sender, RoutedEventArgs e)
+        protected void OnUnloaded(object sender, RoutedEventArgs e)
         {
             if (onUnloaded != null
                 && !onUnloaded.IsDisposed)
@@ -157,6 +163,22 @@ namespace JuliusSweetland.OptiKey.UI.Controls
         #endregion
 
         #region Properties
+
+        public static readonly DependencyProperty HorizontalOffsetProperty =
+            DependencyProperty.Register("HorizontalOffset", typeof(double), typeof(Key), new PropertyMetadata(default(double)));
+        public double HorizontalOffset
+        {
+            get { return (double)GetValue(HorizontalOffsetProperty); }
+            set { SetValue(HorizontalOffsetProperty, value); }
+        }
+
+        public static readonly DependencyProperty VerticalOffsetProperty =
+            DependencyProperty.Register("VerticalOffset", typeof(double), typeof(Key), new PropertyMetadata(default(double)));
+        public double VerticalOffset
+        {
+            get { return (double)GetValue(VerticalOffsetProperty); }
+            set { SetValue(VerticalOffsetProperty, value); }
+        }
 
         public static readonly DependencyProperty KeyDownStateProperty =
             DependencyProperty.Register("KeyDownState", typeof(KeyDownStates), typeof(Key), new PropertyMetadata(default(KeyDownStates)));
@@ -211,6 +233,14 @@ namespace JuliusSweetland.OptiKey.UI.Controls
         {
             get { return (bool)GetValue(SelectionInProgressProperty); }
             set { SetValue(SelectionInProgressProperty, value); }
+        }
+
+        public static readonly DependencyProperty GazeRegionProperty = DependencyProperty.Register("GazeRegion", typeof(Rect), typeof(Key), new PropertyMetadata(default(Rect)));
+
+        public Rect GazeRegion
+        {
+            get { return (Rect)GetValue(GazeRegionProperty); }
+            set { SetValue(GazeRegionProperty, value); } 
         }
 
         //Specify if this key spans multiple keys horizontally - used to keep the contents proportional to other keys

@@ -1,0 +1,118 @@
+<!--Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved-->
+
+<UserControl x:Class="JuliusSweetland.OptiKey.UI.Controls.InteractorEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:JuliusSweetland.OptiKey.UI.Controls"
+             mc:Ignorable="d" Background="LightBlue">
+  <UserControl.Resources>
+    <CollectionViewSource x:Key="SymbolList" Source="{Binding Source={x:Static controls:InteractorEditor.SymbolList}}"/>
+  </UserControl.Resources>
+  
+  <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+    <Expander Header="Keygroup Membership">
+      <Grid>
+        <ListBox ItemsSource="{Binding Interactor.Profiles}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="{Binding Profile.Name}"/>
+                <CheckBox Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding IsMember, Mode=TwoWay}">
+                  <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+                  </CheckBox.LayoutTransform>
+                </CheckBox>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Expander>
+    <Expander Header="Keygroup Overrides">
+      <StackPanel Orientation="Horizontal">
+        <StackPanel>
+          <Label Content="Values"/>
+          <Border BorderThickness="0,1,1,0" BorderBrush="DeepSkyBlue">
+            <StackPanel>
+              <Label Margin="1,0,1,0" Content="BackgroundColor"/>
+              <Label Margin="1,0,1,0" Content="BorderColor"/>
+              <Label Margin="1,0,1,0" Content="ForegroundColor"/>
+              <Label Margin="1,0,1,0" Content="Opacity"/>
+              <Label Margin="1,0,1,0" Content="LockOnTime"/>
+              <Label Margin="1,0,1,0" Content="CompletionTimes"/>
+              <Label Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+        <StackPanel DataContext="{Binding Interactor}">
+          <Label Content="From Keygroup"/>
+          <Border BorderThickness="0,1,0,0" BorderBrush="DeepSkyBlue">
+            <StackPanel>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.BackgroundColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.BorderColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.ForegroundColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.Opacity}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.LockOnTime}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.CompletionTimes}"/>
+              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.TimeRequiredToLockDown}"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+        <StackPanel>
+          <Label Content="Override"/>
+          <Border BorderThickness="1,1,0,0" BorderBrush="DeepSkyBlue">
+            <controls:ProfileEditor Profile="{Binding Interactor, Mode=TwoWay}"/>
+          </Border>
+        </StackPanel>
+      </StackPanel>
+    </Expander>
+    <Expander Header="Properties" IsExpanded="True">
+      <StackPanel>
+        <StackPanel Orientation="Horizontal" DataContext="{Binding Interactor}">
+          <StackPanel>
+            <Label Margin="1,0,1,0" Content="Type"/>
+            <Label Margin="1,0,1,0" Content="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
+            <Label Margin="1,0,1,0" Content="Top" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
+            <Label Margin="1,0,1,0" Content="Column" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
+            <Label Margin="1,0,1,0" Content="Row" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
+            <Label Margin="1,0,1,0" Content="Width"/>
+            <Label Margin="1,0,1,0" Content="Height"/>
+            <Label Margin="1,0,1,0" Content="Label"/>
+            <Label Margin="1,0,1,0" Content="ShiftDownLabel"/>
+            <Label Margin="1,0,1,0" Content="Symbol"/>
+          </StackPanel>
+          <StackPanel>
+            <Label Margin="1,0,1,0" Content="{Binding TypeAsString}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Col, UpdateSourceTrigger=PropertyChanged}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Row, UpdateSourceTrigger=PropertyChanged}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left"
+                         Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left"
+                         Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding ShiftDownLabel, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+            <ComboBox Padding="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource SymbolList}}" SelectedItem="{Binding Symbol}"/>
+          </StackPanel>
+        </StackPanel>
+        <Label Margin="1,0,1,0" Content="Commands"/>
+        <controls:CommandsEditor Interactor="{Binding Interactor, Mode=TwoWay}"/>
+      </StackPanel>
+    </Expander>
+  </StackPanel>
+</UserControl>
+
+ 

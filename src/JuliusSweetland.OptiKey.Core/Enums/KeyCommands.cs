@@ -3,8 +3,8 @@ namespace JuliusSweetland.OptiKey.Enums
 {
     public enum KeyCommands
     {
+        Action,
         ChangeKeyboard,
-        Function,
         KeyDown,
         KeyToggle,
         KeyUp,

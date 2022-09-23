@@ -2552,23 +2552,23 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                 if (!keyStateService.KeyRunningStates[singleKeyValue].Value) 
                     return;
 
-                if (keyCommand.Name == KeyCommands.Loop)
+                if (keyCommand is LoopCommand loopCommand)
                 {
-                    var loopCount = int.TryParse(keyCommand.Value, out var i) ? i : 0;
+                    var loopCount = int.TryParse(loopCommand.Value, out var i) ? i : 0;
                     var logMessage = loopCount > 0 ? loopCount + " times" : "indefinitely until stopped";
                     Log.InfoFormat("CommandList: Looping {0}", logMessage);
 
                     while (keyStateService.KeyRunningStates[singleKeyValue].Value)
                     {
                         var loopCommandList = new List<KeyCommand>();
-                        loopCommandList.AddRange(keyCommand.LoopCommands);
+                        loopCommandList.AddRange(loopCommand.Commands);
 
                         //when calling another instance do so with a larger nestLevel
                         await CommandList(singleKeyValue, multiKeySelection, loopCommandList, nestLevel + 1);
 
                         //we need to throttle if in a perpetual loop with no nested loop and no pre-defined wait 
-                        if (loopCount < 1 && !keyCommand.LoopCommands.Exists(x => x.Name == KeyCommands.Loop)
-                            && !keyCommand.LoopCommands.Exists(x => x.Name == KeyCommands.Wait))
+                        if (loopCount < 1 && !loopCommand.Commands.Exists(x => x is LoopCommand)
+                            && !loopCommand.Commands.Exists(x => x is WaitCommand))
                         {
                             int waitMs = 500;
                             Log.InfoFormat("Throttling perpetual loop for {0}ms", waitMs);
@@ -2585,45 +2585,44 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                 }
                 else
                 {
-                    if (keyCommand.Name == KeyCommands.Function)
+                    if (keyCommand is ActionCommand actionCommand)
                     {
-                        Log.InfoFormat("CommandList: Press function key: {0}", keyCommand.Value);
-                        if (Enum.TryParse(keyCommand.Value, out FunctionKeys fk))
+                        Log.InfoFormat("CommandList: Press function key: {0}", actionCommand.Value);
+                        switch (actionCommand.FunctionKey)
                         {
-                            if (fk == FunctionKeys.MouseDrag
-                                || fk == FunctionKeys.MouseMoveTo
-                                || fk == FunctionKeys.MouseMoveAndLeftClick
-                                || fk == FunctionKeys.MouseMoveAndLeftDoubleClick
-                                || fk == FunctionKeys.MouseMoveAndMiddleClick
-                                || fk == FunctionKeys.MouseMoveAndRightClick
-                                || fk == FunctionKeys.MouseMoveAndScrollToBottom
-                                || fk == FunctionKeys.MouseMoveAndScrollToLeft
-                                || fk == FunctionKeys.MouseMoveAndScrollToRight
-                                || fk == FunctionKeys.MouseMoveAndScrollToTop
-                                || fk == FunctionKeys.MouseMoveAndMiddleClick)
-                            {
+                            case FunctionKeys.MouseDrag:
+                            case FunctionKeys.MouseMoveTo:
+                            case FunctionKeys.MouseMoveAndLeftClick:
+                            case FunctionKeys.MouseMoveAndLeftDoubleClick:
+                            case FunctionKeys.MouseMoveAndMiddleClick:
+                            case FunctionKeys.MouseMoveAndRightClick:
+                            case FunctionKeys.MouseMoveAndScrollToBottom:
+                            case FunctionKeys.MouseMoveAndScrollToLeft:
+                            case FunctionKeys.MouseMoveAndScrollToRight:
+                            case FunctionKeys.MouseMoveAndScrollToTop:
                                 suspendCommands = true;
-                            }
-                            KeySelectionResult(new KeyValue(fk), multiKeySelection);
-                            while (suspendCommands)
-                                await Task.Delay(10);
+                                break;
                         }
+
+                        KeySelectionResult(new KeyValue(actionCommand.FunctionKey), multiKeySelection);
+                        while (suspendCommands)
+                            await Task.Delay(10);
                     }
-                    else if (keyCommand.Name == KeyCommands.ChangeKeyboard)
+                    else if (keyCommand is ChangeKeyboardCommand)
                     {
                         Log.InfoFormat("CommandList: Change keyboard");
                         var keyValue = Enum.TryParse(keyCommand.Value, out Enums.Keyboards keyboardEnum)
-                            ? new ChangeKeyboardKeyValue(keyboardEnum, (bool)keyCommand.BackAction)
-                            : new ChangeKeyboardKeyValue(keyCommand.Value, (bool)keyCommand.BackAction);
+                            ? new ChangeKeyboardKeyValue(keyboardEnum, (keyCommand as ChangeKeyboardCommand).BackAction)
+                            : new ChangeKeyboardKeyValue(keyCommand.Value, (keyCommand as ChangeKeyboardCommand).BackAction);
                         KeySelectionResult(keyValue, multiKeySelection);
                     }
-                    else if (keyCommand.Name == KeyCommands.KeyDown)
+                    else if (keyCommand is KeyDownCommand)
                     {
                         Log.InfoFormat("CommandList: Key down on [{0}] key", keyCommand.Value);
                         await keyboardOutputService.ProcessSingleKeyPress(keyCommand.Value, KeyPressKeyValue.KeyPressType.Press);
                         keyStateService.KeyDownStates[new KeyValue(keyCommand.Value)].Value = KeyDownStates.LockedDown;
                     }
-                    else if (keyCommand.Name == KeyCommands.KeyToggle)
+                    else if (keyCommand is KeyTogglCommand)
                     {
                         if (keyStateService.KeyDownStates[new KeyValue(keyCommand.Value)].Value != KeyDownStates.Up)
                         {
@@ -2637,7 +2636,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                             keyStateService.KeyDownStates[new KeyValue(keyCommand.Value)].Value = KeyDownStates.LockedDown;
                         }
                     }
-                    else if (keyCommand.Name == KeyCommands.KeyUp)
+                    else if (keyCommand is KeyUpCommand)
                     {
                         Log.InfoFormat("CommandList: Key up on [{0}]", keyCommand.Value);
                         await KeyUpProcessing(singleKeyValue, new KeyValue(keyCommand.Value));
@@ -2654,39 +2653,39 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                             }
                         }
                     }
-                    else if (keyCommand.Name == KeyCommands.MoveWindow)
+                    else if (keyCommand is MoveWindowCommand)
                     {
                         mainWindowManipulationService.InvokeMoveWindow(keyCommand.Value);
                     }
-                    else if (keyCommand.Name == KeyCommands.Text)
+                    else if (keyCommand is TextCommand)
                     {
                         Log.InfoFormat("CommandList: Text of [{0}]", keyCommand.Value);
                         KeySelectionResult(new KeyValue(keyCommand.Value), multiKeySelection);
                     }
-                    else if (keyCommand.Name == KeyCommands.Wait)
+                    else if (keyCommand is WaitCommand)
                     {
                         var waitMs = int.TryParse(keyCommand.Value, out var i) ? i : 500;
                         Log.InfoFormat("CommandList: Wait of {0}ms", waitMs);
                         await Task.Delay(waitMs);
                     }
-                    else if (keyCommand.Name == KeyCommands.Plugin)
+                    else if (keyCommand is PluginCommand pluginCommand)
                     {
                         Log.InfoFormat("CommandList: Plugin [{0}]", keyCommand.Value);
-                        RunDynamicPlugin(keyCommand);
+                        RunDynamicPlugin(pluginCommand);
                     }
                 }
             }
         }
 
-        private async Task KeyUpProcessing(KeyValue singleKeyValue, KeyValue commandKey)
+        private async Task KeyUpProcessing(KeyValue singleKeyValue, KeyValue keyValue)
         {
-            var inKey = commandKey.FunctionKey.HasValue
-                ? commandKey.FunctionKey.Value.ToString() : commandKey.String;
+            var inKey = keyValue.FunctionKey.HasValue
+                ? keyValue.FunctionKey.Value.ToString() : keyValue.String;
             await keyboardOutputService.ProcessSingleKeyPress(inKey, KeyPressKeyValue.KeyPressType.Release);
-            keyStateService.KeyDownStates[commandKey].Value = KeyDownStates.Up;
+            keyStateService.KeyDownStates[keyValue].Value = KeyDownStates.Up;
 
             //if the released key has any children then release them as well 
-            foreach (var childKey in keyStateService.KeyFamily.Where(x => x.Item1 == commandKey
+            foreach (var childKey in keyStateService.KeyFamily.Where(x => x.Item1 == keyValue
                 && KeyStateService.KeyDownStates[x.Item2].Value != KeyDownStates.Up))
             {
                 inKey = childKey.Item2.FunctionKey.HasValue
@@ -2700,7 +2699,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
             //and the parent is not running
             //and the parent has no child that is not released
             //then release the parent
-            foreach (var parentKey in keyStateService.KeyFamily.Where(x => x.Item2 == commandKey
+            foreach (var parentKey in keyStateService.KeyFamily.Where(x => x.Item2 == keyValue
                 && KeyStateService.KeyDownStates[x.Item1].Value != KeyDownStates.Up
                 && !KeyStateService.KeyRunningStates[x.Item1].Value
                 && !keyStateService.KeyFamily.Exists(y => y.Item1 == x.Item1 && KeyStateService.KeyDownStates[y.Item2].Value != KeyDownStates.Up)))
@@ -2709,13 +2708,13 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                 keyStateService.KeyDownStates[parentKey.Item1].Value = KeyDownStates.Up;
             }
 
-            if (commandKey != singleKeyValue && keyStateService.KeyRunningStates[commandKey].Value != false)
-                keyStateService.KeyRunningStates[commandKey].Value = false;
+            if (keyValue != singleKeyValue && keyStateService.KeyRunningStates[keyValue].Value != false)
+                keyStateService.KeyRunningStates[keyValue].Value = false;
         }
 
-        private void RunDynamicPlugin(KeyCommand keyCommand)
+        private void RunDynamicPlugin(PluginCommand pluginCommand)
         {
-            Log.InfoFormat("Running plugin [{0}]", keyCommand.Value);
+            Log.InfoFormat("Running plugin [{0}]", pluginCommand.Value);
 
             // User-friendly messages for common failure modes
             if (!Settings.Default.EnablePlugins)
@@ -2723,9 +2722,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                 DisplayPluginError("Plugins are currently disabled");
                 return;
             }
-            if (!PluginEngine.IsPluginAvailable(keyCommand.Value))
+            if (!PluginEngine.IsPluginAvailable(pluginCommand.Value))
             {
-                DisplayPluginError($"Could not find plugin {keyCommand.Value}");
+                DisplayPluginError($"Could not find plugin {pluginCommand.Value}");
                 return;
             }
 
@@ -2733,7 +2732,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
             Dictionary<string, string> context = BuildPluginContext();
             try
             {
-                PluginEngine.RunDynamicPlugin(context, keyCommand);
+                PluginEngine.RunDynamicPlugin(context, pluginCommand);
             }
             catch (Exception exception)
             {

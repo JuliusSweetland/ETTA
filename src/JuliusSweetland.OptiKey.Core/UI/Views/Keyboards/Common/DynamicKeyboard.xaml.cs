@@ -442,10 +442,10 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
         private bool SetupDynamicItems()
         {
-            var minKeyWidth = keyboard.Content.Items.Select(k => k.Width).Min() > 0
-                ? keyboard.Content.Items.Select(k => k.Width).Min() : 1;
-            var minKeyHeight = keyboard.Content.Items.Select(k => k.Height).Min() > 0
-                ? keyboard.Content.Items.Select(k => k.Height).Min() : 1;
+            //create an item list that excludes popups
+            var itemList = keyboard.Content.Items.Where(x => !(x is XmlDynamicPopup)).ToList();
+            var minKeyWidth = itemList.Select(k => k.Width).Min() > 0 ? itemList.Select(k => k.Width).Min() : 1;
+            var minKeyHeight = itemList.Select(k => k.Height).Min() > 0 ? itemList.Select(k => k.Height).Min() : 1;
 
             //start with a list of all grid cells marked empty
             var openGrid = new List<List<int>>();
@@ -462,7 +462,6 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             //process all items in the order listed in the xml file and place them in position
             //if an item has a row or column designation it is treated as an
             //indication to jump to that position and continue from there
-            var itemList = keyboard.Content.Items.ToList();
             var rowCol = new Tuple<int, int>(0, 0);
             foreach (XmlDynamicItem dynamicItem in itemList)
             {
@@ -485,6 +484,13 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 SetupDynamicItem(dynamicItem, minKeyWidth, minKeyHeight);
                 rowCol = new Tuple<int, int>(rowCol.Item1, rowCol.Item2 + dynamicItem.Width);
             }
+
+            //process popups
+            var popupList = keyboard.Content.Items.Where(x => x is XmlDynamicPopup).ToList();
+            foreach (XmlDynamicKey popup in popupList)
+            {
+                SetupDynamicItem(popup, minKeyWidth, minKeyHeight);
+            }
             return true;
         }
 
@@ -494,65 +500,60 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             {
                 AddDynamicKey(xmlDynamicKey, minKeyWidth, minKeyHeight);
             }
-            else if (dynamicItem is XmlDynamicScratchpad)
+            else if (dynamicItem is XmlDynamicOutputPanel)
             {
-                var scratchpad = new XmlScratchpad();
-                MainGrid.Children.Add(scratchpad);
-                Grid.SetColumn(scratchpad, dynamicItem.Col);
-                Grid.SetRow(scratchpad, dynamicItem.Row);
-                Grid.SetColumnSpan(scratchpad, dynamicItem.Width);
-                Grid.SetRowSpan(scratchpad, dynamicItem.Height);
+                var outputPanel = new Output();
+                MainGrid.Children.Add(outputPanel);
+                Grid.SetColumn(outputPanel, dynamicItem.Col);
+                Grid.SetRow(outputPanel, dynamicItem.Row);
+                Grid.SetColumnSpan(outputPanel, dynamicItem.Width);
+                Grid.SetRowSpan(outputPanel, dynamicItem.Height);
+                if (ValidColor(dynamicItem.BackgroundColor, out var colorBrush))
+                    outputPanel.Background = colorBrush;
+                if (ValidColor(dynamicItem.ForegroundColor, out colorBrush))
+                    outputPanel.Foreground = colorBrush;
+                if (!string.IsNullOrEmpty(dynamicItem.Opacity) && double.TryParse(dynamicItem.Opacity, out var opacity))
+                    outputPanel.Opacity = opacity;
+            }
+            else if (dynamicItem is XmlDynamicSuggestionRow)
+            {
+                var suggestionRow = new SuggestionRow();
+                MainGrid.Children.Add(suggestionRow);
+                Grid.SetColumn(suggestionRow, dynamicItem.Col);
+                Grid.SetRow(suggestionRow, dynamicItem.Row);
+                Grid.SetColumnSpan(suggestionRow, dynamicItem.Width);
+                Grid.SetRowSpan(suggestionRow, dynamicItem.Height);
 
                 if (ValidColor(dynamicItem.BackgroundColor, out var colorBrush))
-                    scratchpad.Scratchpad.BackgroundColourOverride = colorBrush;
+                {
+                    suggestionRow.Background = colorBrush;
+                    suggestionRow.DisabledBackgroundColourOverride = colorBrush;
+                }
                 if (ValidColor(dynamicItem.ForegroundColor, out colorBrush))
-                    scratchpad.Scratchpad.Foreground = colorBrush;
+                    suggestionRow.Foreground = colorBrush;
 
                 if (!string.IsNullOrEmpty(dynamicItem.Opacity) && double.TryParse(dynamicItem.Opacity, out var opacity))
-                    scratchpad.Scratchpad.OpacityOverride = opacity;
+                    suggestionRow.OpacityOverride = opacity;
             }
-            else
+            else if (dynamicItem is XmlDynamicSuggestionCol)
             {
-                if (dynamicItem is XmlDynamicSuggestionRow)
+                var suggestionCol = new SuggestionCol();
+                MainGrid.Children.Add(suggestionCol);
+                Grid.SetColumn(suggestionCol, dynamicItem.Col);
+                Grid.SetRow(suggestionCol, dynamicItem.Row);
+                Grid.SetColumnSpan(suggestionCol, dynamicItem.Width);
+                Grid.SetRowSpan(suggestionCol, dynamicItem.Height);
+
+                if (ValidColor(dynamicItem.BackgroundColor, out var colorBrush))
                 {
-                    var suggestionRow = new XmlSuggestionRow();
-                    MainGrid.Children.Add(suggestionRow);
-                    Grid.SetColumn(suggestionRow, dynamicItem.Col);
-                    Grid.SetRow(suggestionRow, dynamicItem.Row);
-                    Grid.SetColumnSpan(suggestionRow, dynamicItem.Width);
-                    Grid.SetRowSpan(suggestionRow, dynamicItem.Height);
-
-                    if (ValidColor(dynamicItem.BackgroundColor, out var colorBrush))
-                    {
-                        suggestionRow.Background = colorBrush;
-                        suggestionRow.DisabledBackgroundColourOverride = colorBrush;
-                    }
-                    if (ValidColor(dynamicItem.ForegroundColor, out colorBrush))
-                        suggestionRow.Foreground = colorBrush;
-
-                    if (!string.IsNullOrEmpty(dynamicItem.Opacity) && double.TryParse(dynamicItem.Opacity, out var opacity))
-                        suggestionRow.OpacityOverride = opacity;
+                    suggestionCol.Background = colorBrush;
+                    suggestionCol.DisabledBackgroundColourOverride = colorBrush;
                 }
-                else if (dynamicItem is XmlDynamicSuggestionCol)
-                {
-                    var suggestionCol = new XmlSuggestionCol();
-                    MainGrid.Children.Add(suggestionCol);
-                    Grid.SetColumn(suggestionCol, dynamicItem.Col);
-                    Grid.SetRow(suggestionCol, dynamicItem.Row);
-                    Grid.SetColumnSpan(suggestionCol, dynamicItem.Width);
-                    Grid.SetRowSpan(suggestionCol, dynamicItem.Height);
+                if (ValidColor(dynamicItem.ForegroundColor, out colorBrush))
+                    suggestionCol.Foreground = colorBrush;
 
-                    if (ValidColor(dynamicItem.BackgroundColor, out var colorBrush))
-                    {
-                        suggestionCol.Background = colorBrush;
-                        suggestionCol.DisabledBackgroundColourOverride = colorBrush;
-                    }
-                    if (ValidColor(dynamicItem.ForegroundColor, out colorBrush))
-                        suggestionCol.Foreground = colorBrush;
-
-                    if (!string.IsNullOrEmpty(dynamicItem.Opacity) && double.TryParse(dynamicItem.Opacity, out var suggestionColOpacity))
-                        suggestionCol.Opacity = suggestionColOpacity;
-                }
+                if (!string.IsNullOrEmpty(dynamicItem.Opacity) && double.TryParse(dynamicItem.Opacity, out var suggestionColOpacity))
+                    suggestionCol.Opacity = suggestionColOpacity;
             }
         }
 
@@ -560,7 +561,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         {
             if (xmlDynamicKey.Commands.Any())
             {
-                var addCommandList = AddCommandList(xmlDynamicKey, minKeyWidth, minKeyHeight);
+                var addCommandList = AddCommandList(xmlDynamicKey, xmlDynamicKey.Commands, minKeyWidth, minKeyHeight);
                 if (addCommandList != null && addCommandList.Any())
                 {
                     var xmlKeyValue = new KeyValue($"R{xmlDynamicKey.Row}-C{xmlDynamicKey.Col}")
@@ -575,17 +576,17 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 CreateDynamicKey(xmlDynamicKey, null, minKeyWidth, minKeyHeight);
         }
 
-        private List<KeyCommand> AddCommandList(XmlDynamicKey xmlDynamicKey, int minKeyWidth, int minKeyHeight)
+        private List<KeyCommand> AddCommandList(XmlDynamicKey xmlDynamicKey, List<KeyCommand> commands , int minKeyWidth, int minKeyHeight)
         {
             var xmlKeyValue = new KeyValue($"R{xmlDynamicKey.Row}-C{xmlDynamicKey.Col}");
             var commandList = new List<KeyCommand>();
             if (xmlDynamicKey.Commands.Any())
             {
                 var rootDir = Path.GetDirectoryName(inputFilename);
-                foreach (XmlDynamicKey dynamicKey in xmlDynamicKey.Commands)
+                foreach (KeyCommand keyCommand in xmlDynamicKey.Commands)
                 {
                     KeyValue commandKeyValue;
-                    if (dynamicKey is DynamicAction dynamicAction)
+                    if (keyCommand is ActionCommand dynamicAction)
                     {
                         if (!Enum.TryParse(dynamicAction.Value, out FunctionKeys actionEnum))
                             Log.ErrorFormat("Could not parse {0} as function key", dynamicAction.Value);
@@ -598,7 +599,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                                 return null;
                             }
                             else
-                                commandList.Add(new KeyCommand(KeyCommands.Function, dynamicAction.Value));
+                                commandList.Add(new ActionCommand() { FunctionKey = actionEnum });
 
                             if (KeyValues.KeysWhichCanBeLockedDown.Contains(commandKeyValue) 
                                 && !keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
@@ -607,82 +608,82 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                             }
                         }
                     }
-                    else if (dynamicKey is DynamicLink dynamicLink)
+                    else if (keyCommand is ChangeKeyboardCommand dynamicLink)
                     {
                         if (string.IsNullOrEmpty(dynamicLink.Value))
-                            Log.ErrorFormat("Destination Keyboard not found for {0} ", dynamicLink.Label);
+                            Log.ErrorFormat("Destination Keyboard not found for {0} ", dynamicLink.Value);
                         else
                         {
                             var kb_link = Enum.TryParse(dynamicLink.Value, out Enums.Keyboards keyboardEnum)
                                 ? dynamicLink.Value : Path.Combine(rootDir, dynamicLink.Value);
 
-                            commandList.Add(new KeyCommand() { Name = KeyCommands.ChangeKeyboard, Value = kb_link, BackAction = !dynamicLink.BackReturnsHere });
+                            commandList.Add(new ChangeKeyboardCommand() { Value = kb_link, BackAction = dynamicLink.BackAction });
                         }
                     }
-                    else if (dynamicKey is DynamicKeyDown dynamicKeyDown)
+                    else if (keyCommand is KeyDownCommand dynamicKeyDown)
                     {
                         if (string.IsNullOrEmpty(dynamicKeyDown.Value))
-                            Log.ErrorFormat("KeyDown text not found for {0} ", dynamicKeyDown.Label);
+                            Log.ErrorFormat("KeyDown text not found for {0} ", dynamicKeyDown.Value);
                         else
                         {
                             commandKeyValue = new KeyValue(dynamicKeyDown.Value);
-                            commandList.Add(new KeyCommand(KeyCommands.KeyDown, dynamicKeyDown.Value));
+                            commandList.Add(new KeyDownCommand() { Value = dynamicKeyDown.Value });
                             if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
                                 keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
                         }
                     }
-                    else if (dynamicKey is DynamicKeyToggle dynamicKeyToggle)
+                    else if (keyCommand is KeyTogglCommand dynamicKeyToggle)
                     {
                         if (string.IsNullOrEmpty(dynamicKeyToggle.Value))
-                            Log.ErrorFormat("KeyToggle text not found for {0} ", dynamicKeyToggle.Label);
+                            Log.ErrorFormat("KeyToggle text not found for {0} ", dynamicKeyToggle.Value);
                         else
                         {
                             commandKeyValue = new KeyValue(dynamicKeyToggle.Value);
-                            commandList.Add(new KeyCommand(KeyCommands.KeyToggle, dynamicKeyToggle.Value));
+                            commandList.Add(new KeyTogglCommand() { Value = dynamicKeyToggle.Value }); ;
                             if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
                                 keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
                         }
                     }
-                    else if (dynamicKey is DynamicKeyUp dynamicKeyUp)
+                    else if (keyCommand is KeyUpCommand dynamicKeyUp)
                     {
                         if (string.IsNullOrEmpty(dynamicKeyUp.Value))
-                            Log.ErrorFormat("KeyUp text not found for {0} ", dynamicKeyUp.Label);
+                            Log.ErrorFormat("KeyUp text not found for {0} ", dynamicKeyUp.Value);
                         else
-                            commandList.Add(new KeyCommand(KeyCommands.KeyUp, dynamicKeyUp.Value));
+                            commandList.Add(new KeyUpCommand() { Value = dynamicKeyUp.Value });
                     }
-                    else if (dynamicKey is DynamicMove dynamicBounds)
+                    else if (keyCommand is MoveWindowCommand dynamicBounds)
                     {
-                        commandList.Add(new KeyCommand() { Name = KeyCommands.MoveWindow, Value = dynamicBounds.Value } );
+                        commandList.Add(new MoveWindowCommand() { Value = dynamicBounds.Value } );
                     }
-                    else if (dynamicKey is DynamicText dynamicText)
+                    else if (keyCommand is TextCommand dynamicText)
                     {
                         if (string.IsNullOrEmpty(dynamicText.Value))
-                            Log.ErrorFormat("Text not found for {0} ", dynamicText.Label);
+                            Log.ErrorFormat("Text not found for {0} ", dynamicText.Value);
                         else
-                            commandList.Add(new KeyCommand(KeyCommands.Text, dynamicText.Value));
+                            commandList.Add(new TextCommand() { Value = dynamicText.Value });
                     }
-                    else if (dynamicKey is DynamicWait dynamicWait)
+                    else if (keyCommand is WaitCommand dynamicWait)
                     {
                         if (!int.TryParse(dynamicWait.Value, out _))
-                            Log.ErrorFormat("Could not parse wait {0} as int value", dynamicWait.Label);
+                            Log.ErrorFormat("Could not parse wait {0} as int value", dynamicWait.Value);
                         else
-                            commandList.Add(new KeyCommand() { Name = KeyCommands.Wait, Value = dynamicWait.Value } );
+                            commandList.Add(new WaitCommand() { Value = dynamicWait.Value } );
                     }
-                    else if (dynamicKey is DynamicPlugin dynamicPlugin)
+                    else if (keyCommand is PluginCommand dynamicPlugin)
                     {
-                        if (string.IsNullOrWhiteSpace(dynamicPlugin.Name))
-                            Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Label);
+                        if (string.IsNullOrWhiteSpace(dynamicPlugin.Name.ToString()))
+                            Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Value);
                         else if (string.IsNullOrWhiteSpace(dynamicPlugin.Method))
-                            Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Label);
+                            Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Value);
                         else
-                            commandList.Add(new KeyCommand() { Name = KeyCommands.Plugin, Value = dynamicPlugin.Name,
-                                Method = dynamicPlugin.Method, Argument = dynamicPlugin.Argument } );
+                            commandList.Add(new PluginCommand() { Value = dynamicPlugin.Name,
+                                Method = dynamicPlugin.Method, Arguments = dynamicPlugin.Arguments } );
                     }
-                    else if (dynamicKey is DynamicLoop dynamicLoop)
+                    else if (keyCommand is LoopCommand dynamicLoop)
                     {
-                        var vReturn = AddCommandList(dynamicLoop, minKeyWidth, minKeyHeight);
+                        var vReturn = AddCommandList(xmlDynamicKey, dynamicLoop.Commands, minKeyWidth, minKeyHeight);
                         if (vReturn != null && vReturn.Any())
-                            commandList.Add(new KeyCommand() { Name = KeyCommands.Loop, Value = dynamicLoop.Count.ToString(), LoopCommands = vReturn } );
+                            commandList.Add(new LoopCommand() { Value = dynamicLoop.Count.ToString(), Commands = vReturn } );
                         else
                             return null;
                     }
@@ -699,7 +700,9 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         {
             // Add the core properties from XML to a new key
             var newKey = new Key { Value = xmlKeyValue };
-            
+            if (xmlKey is XmlDynamicPopup)
+                newKey = new KeyPopup { Value = xmlKeyValue, GazeRegion = xmlKey.GazeRegion };
+
             //add this item's KeyValue to the 'ALL' KeyGroup list
             if (!keyValueByGroup.ContainsKey("ALL"))
                 keyValueByGroup.Add("ALL", new List<KeyValue> { xmlKeyValue });
@@ -1007,7 +1010,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                     }
                 }
             }
-            
+
             PlaceKeyInPosition(newKey, xmlKey.Row, xmlKey.Col, xmlKey.Height, xmlKey.Width);
         }
 
@@ -1193,10 +1196,13 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         private void PlaceKeyInPosition(Key key, int row, int col, int rowSpan = 1, int colSpan = 1)
         {
             MainGrid.Children.Add(key);
-            Grid.SetColumn(key, col);
-            Grid.SetRow(key, row);
-            Grid.SetColumnSpan(key, colSpan);
-            Grid.SetRowSpan(key, rowSpan);
+            if (!(key is KeyPopup))
+            {
+                Grid.SetColumn(key, col);
+                Grid.SetRow(key, row);
+                Grid.SetColumnSpan(key, colSpan);
+                Grid.SetRowSpan(key, rowSpan);
+            }
         }
 
         public static string StringWithValidNewlines(string s)

@@ -67,9 +67,12 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         </TabItem>
         <TabItem Header="{x:Static resx:Resources.DICTIONARY}">
           <management:DictionaryView DataContext="{Binding DictionaryViewModel, Mode=OneWay}" />
-        </TabItem>
-        <TabItem Header="Gestures">
-          <management:GesturesView DataContext="{Binding GesturesViewModel, Mode=OneWay}" />
+      </TabItem>
+      <TabItem Header="Gestures">
+        <management:GesturesView DataContext="{Binding GesturesViewModel, Mode=OneWay}" />
+      </TabItem>
+      <TabItem Header="Keyboards">
+          <management:LayoutView DataContext="{Binding LayoutViewModel, Mode=OneWay}" />
         </TabItem>
         <TabItem Header="{x:Static resx:Resources.FEATURES_LABEL}">
           <management:FeaturesView DataContext="{Binding FeaturesViewModel, Mode=OneWay}" />

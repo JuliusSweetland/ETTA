@@ -1,0 +1,133 @@
+<!--Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved-->
+<UserControl x:Class="JuliusSweetland.OptiKey.UI.Controls.LayoutEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:JuliusSweetland.OptiKey.UI.Controls"
+             xmlns:valueConverters="clr-namespace:JuliusSweetland.OptiKey.UI.ValueConverters"
+             mc:Ignorable="d" Background="LightBlue">
+  <UserControl.Resources>
+    <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
+    <valueConverters:ListNotEmpty x:Key="ListNotEmpty"/>
+    <CollectionViewSource x:Key="InteractorTypeList" Source="{Binding Source={x:Static controls:LayoutEditor.InteractorTypeList}}"/>
+    <CollectionViewSource x:Key="PositionList" Source="{Binding Source={x:Static controls:LayoutEditor.PositionList}}"/>
+  </UserControl.Resources>
+  <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Expander Grid.Row="0" Header="Properties" IsExpanded="True">
+      <StackPanel Orientation="Horizontal">
+        <StackPanel>
+          <Label Margin="1,0,1,0" Content="Name"/>
+          <Label Margin="1,0,1,0" Content="Columns"/>
+          <Label Margin="1,0,1,0" Content="Rows"/>
+          <Label Margin="1,0,1,0" Content="Position"/>
+          <Label Margin="1,0,1,0" Content="Width"/>
+          <Label Margin="1,0,1,0" Content="Height"/>
+          <Label Margin="1,0,1,0" Content="HorizontalOffset"/>
+          <Label Margin="1,0,1,0" Content="VerticaOffset"/>
+        </StackPanel>
+        <StackPanel>
+          <TextBox Margin="1,0,1,0" Text="{Binding Layout.Name, UpdateSourceTrigger=PropertyChanged}"/>
+          <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
+                         Value="{Binding Layout.Columns, UpdateSourceTrigger=PropertyChanged}"/>
+          <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
+                         Value="{Binding Layout.Rows, UpdateSourceTrigger=PropertyChanged}"/>
+          <ComboBox Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource PositionList}}" SelectedItem="{Binding Layout.Position, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Margin="1,0,1,0" Text="{Binding Layout.WidthString, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Margin="1,0,1,0" Text="{Binding Layout.HeightString, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Margin="1,0,1,0" Text="{Binding Layout.HorizontalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Margin="1,0,1,0" Text="{Binding Layout.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+      </StackPanel>
+    </Expander>
+    <Expander Grid.Row="1" Header="Keygroups" IsExpanded="True">
+    <StackPanel Orientation="Horizontal">
+        <StackPanel>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Border Margin="5,0" CornerRadius="4" HorizontalAlignment="Center">
+              <Button Width="48" Height="32" Click="AddProfile" Content="Add"/>
+            </Border>
+            <Border Margin="5,0" CornerRadius="4" HorizontalAlignment="Center">
+              <Button Width="48" Height="32" Click="DeleteProfile" Content="Delete"/>
+            </Border>
+          </StackPanel>
+          <ListBox x:Name="LayoutProfileListBox" HorizontalAlignment="Left" Margin="5" MinWidth="120" MinHeight="160" BorderThickness="0"
+                 ItemsSource="{Binding Layout.Profiles, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 SelectedItem="{Binding Layout.SelectedProfile}"
+                 DisplayMemberPath="Name"/>
+        </StackPanel>
+        <Grid>
+          <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Margin="1,0,1,0" Content="Name"/>
+          <TextBox Grid.Column="1" Margin="1,0,1,0" Text="{Binding ElementName=LayoutProfileListBox, Path=SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <StackPanel Grid.Row="1" Grid.Column="0">
+            <Label Margin="1,0,1,0" Content="BackgroundColor"/>
+            <Label Margin="1,0,1,0" Content="BorderColor"/>
+            <Label Margin="1,0,1,0" Content="ForegroundColor"/>
+            <Label Margin="1,0,1,0" Content="Opacity"/>
+            <Label Margin="1,0,1,0" Content="LockOnTime"/>
+            <Label Margin="1,0,1,0" Content="CompletionTimes"/>
+            <Label Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
+          </StackPanel>
+          <controls:ProfileEditor Grid.Row="1" Grid.Column="1"
+                                  Profile="{Binding Layout.SelectedProfile, Mode=TwoWay}" View="{Binding View, Mode=TwoWay}"/>
+          </Grid>
+      </StackPanel>
+    </Expander>
+    <Expander Grid.Row="2" Header="Content" IsExpanded="True">
+    <StackPanel Orientation="Horizontal">
+        <StackPanel>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Border Margin="5,0,0,0" CornerRadius="4" HorizontalAlignment="Center">
+              <Button Width="48" Height="32" Click="AddInteractor"  Content="Add"/>
+            </Border>
+            <ComboBox Padding="0" Margin="0" ItemsSource="{Binding Source={StaticResource InteractorTypeList}}"
+                      SelectedItem="{Binding Layout.SelectedInteractorType, Mode=TwoWay}"/>            
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Border Margin="5,5,5,0"  CornerRadius="4" HorizontalAlignment="Center">
+              <Button Width="48" Height="32" Click="CloneInteractor" Content="Clone"/>
+            </Border>
+            <Border Margin="5,5,5,0"  CornerRadius="4" HorizontalAlignment="Center">
+              <Button Width="48" Height="32" Click="DeleteInteractor" Content="Delete"/>
+            </Border>
+          </StackPanel>
+          <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="5" MinWidth="120" MinHeight="200" BorderThickness="0"
+                            ItemsSource="{Binding Layout.Interactors}"
+                            SelectedItem="{Binding Layout.SelectedInteractor}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="ssg1"/>
+                    <ColumnDefinition SharedSizeGroup="ssg1"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Grid.Column="0" Margin="1,0,1,0" Text="{Binding Label}"/>
+                  <TextBlock Grid.Column="1" Margin="1,0,1,0" Text="{Binding Location}"/>
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+        <controls:InteractorEditor Interactor="{Binding Layout.SelectedInteractor, Mode=TwoWay}" />
+      </StackPanel>
+    </Expander>
+  </Grid>
+</UserControl>

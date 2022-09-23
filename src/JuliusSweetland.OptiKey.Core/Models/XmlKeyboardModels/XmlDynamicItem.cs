@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using System.Collections.Generic;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace JuliusSweetland.OptiKey.Models
@@ -8,15 +9,15 @@ namespace JuliusSweetland.OptiKey.Models
     {
         public XmlDynamicItem() { }
 
+        [XmlElement("Popup", typeof(XmlDynamicPopup))]
         [XmlElement("DynamicKey", typeof(XmlDynamicKey))]
+        [XmlElement("OutputPanel", typeof(XmlDynamicOutputPanel))]
         [XmlElement("Scratchpad", typeof(XmlDynamicScratchpad))]
         [XmlElement("SuggestionRow", typeof(XmlDynamicSuggestionRow))]
         [XmlElement("SuggestionCol", typeof(XmlDynamicSuggestionCol))]
         public List<XmlDynamicItem> Items { get; } = new List<XmlDynamicItem>();
         
-        [XmlElement("KeyGroup")]
-        public List<KeyGroup> KeyGroups
-        { get; set; }
+        [XmlElement("KeyGroup")] public List<KeyGroup> KeyGroups { get; set; }
 
         [XmlAttribute] public int Row { get; set; } = -1;
         [XmlAttribute] public int Col { get; set; } = -1;
@@ -46,14 +47,22 @@ namespace JuliusSweetland.OptiKey.Models
         //It is the amount of time focus can be lost before resetting the key
         //When used this will override the keyFixationTimeout
         [XmlAttribute] public int LockDownAttemptTimeout { get; set; } = -1;
+
+        [XmlIgnore] public Rect GazeRegion { get; set; }
+        [XmlAttribute("GazeRegion")] public string GazeRegionString
+        {
+            get { return GazeRegion.ToString(); }
+            set { try { GazeRegion = Rect.Parse(value); } catch { } }
+        }
     }
 
+    public class XmlDynamicPopup : XmlDynamicKey { }
+    public class XmlDynamicOutputPanel: XmlDynamicItem { }
     public class XmlDynamicScratchpad : XmlDynamicItem { }
     public class XmlDynamicSuggestionRow : XmlDynamicItem { }
     public class XmlDynamicSuggestionCol : XmlDynamicItem { }
     public class KeyGroup
     {
-        [XmlText]
-        public string Value { get; set; }
+        [XmlText] public string Value { get; set; }
     }
 }

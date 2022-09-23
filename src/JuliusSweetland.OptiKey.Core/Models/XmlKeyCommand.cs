@@ -23,7 +23,7 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
-        [XmlIgnore] public bool HideFunctionList { get { return Name != KeyCommands.Function; } }
+        [XmlIgnore] public bool HideFunctionList { get { return Name != KeyCommands.Action; } }
         [XmlAttribute] public string Value { get; set; }
 
         [XmlIgnore] public bool BackAction { get; set; }

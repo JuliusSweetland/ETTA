@@ -213,6 +213,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\InteractorTypes.cs" />
+    <Compile Include="Models\Interactor.cs" />
+    <Compile Include="Models\InteractorProfileMap .cs" />
+    <Compile Include="Models\InteractorProfile.cs" />
+    <Compile Include="Models\ILayout.cs" />
+    <Compile Include="Models\Layout.cs" />
     <Compile Include="Models\Gamepads\GamepadButtonEvents.cs" />
     <Compile Include="Models\Gamepads\DirectInputControllerState.cs" />
     <Compile Include="Models\Gamepads\DirectInputListener.cs" />
@@ -448,8 +454,21 @@
     <Compile Include="UI\Behaviours\TextBoxBehaviours.cs" />
     <Compile Include="UI\Behaviours\KeyBehaviours.cs" />
     <Compile Include="UI\Behaviours\ScrollViewerBehaviours.cs" />
+    <Compile Include="UI\Controls\KeyPopup.cs" />
+    <Compile Include="UI\Controls\ProfileEditor.xaml.cs">
+      <DependentUpon>ProfileEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\CommandsEditor.xaml.cs">
+      <DependentUpon>CommandsEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Controls\CK20Page.xaml.cs">
       <DependentUpon>CK20Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\InteractorEditor.xaml.cs">
+      <DependentUpon>InteractorEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Controls\LayoutEditor.xaml.cs">
+      <DependentUpon>LayoutEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Controls\KeyboardView.cs" />
     <Compile Include="UI\ValueConverters\CompletionTimesValidation.cs" />
@@ -541,6 +560,7 @@
     <Compile Include="UI\ViewModels\MainViewModel.cs" />
     <Compile Include="UI\ViewModels\ManagementViewModel.cs" />
     <Compile Include="UI\ViewModels\Management\DictionaryViewModel.cs" />
+    <Compile Include="UI\ViewModels\Management\LayoutViewModel.cs" />
     <Compile Include="UI\ViewModels\Management\GesturesViewModel.cs" />
     <Compile Include="UI\ViewModels\Management\PointingAndSelectingViewModel.cs" />
     <Compile Include="UI\ViewModels\Management\SoundsViewModel.cs" />
@@ -908,6 +928,9 @@
     </Compile>
     <Compile Include="UI\Controls\GestureEditor.xaml.cs">
       <DependentUpon>GestureEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\Management\LayoutView.xaml.cs">
+      <DependentUpon>LayoutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Views\Management\GesturesView.xaml.cs">
       <DependentUpon>GesturesView.xaml</DependentUpon>
@@ -1482,7 +1505,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Controls\ProfileEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Controls\CommandsEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\Controls\CK20Page.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Controls\InteractorEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Controls\LayoutEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -2016,6 +2055,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Controls\GestureEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\Management\LayoutView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

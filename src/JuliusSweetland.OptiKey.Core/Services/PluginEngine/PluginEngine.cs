@@ -85,11 +85,11 @@ namespace JuliusSweetland.OptiKey.Services.PluginEngine
             return availablePlugins.ContainsKey(key);
         }
 
-        public static void RunDynamicPlugin(Dictionary<string, string> context, KeyCommand key)
+        public static void RunDynamicPlugin(Dictionary<string, string> context, PluginCommand key)
         {
             Plugin plugin = availablePlugins[key.Value];
             List<string> methodArgs = null;
-            if (key.Argument.Any())
+            if (key.Arguments.Any())
             {
                 // FIXME: This logic does not support two methods with the same name and different arguments
                 methodArgs = new List<string>();
@@ -100,7 +100,7 @@ namespace JuliusSweetland.OptiKey.Services.PluginEngine
                         foreach (ParameterInfo pluginMethodParam in pluginMethod.GetParameters())
                         {
                             string argValue = null;
-                            foreach (DynamicArgument arg in key.Argument)
+                            foreach (DynamicArgument arg in key.Arguments)
                             {
                                 if (arg.Name.Equals(pluginMethodParam.Name))
                                 {
