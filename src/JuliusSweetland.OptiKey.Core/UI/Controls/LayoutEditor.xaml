@@ -109,22 +109,22 @@
               <Button Width="48" Height="32" Click="DeleteInteractor" Content="Delete"/>
             </Border>
           </StackPanel>
-          <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="5" MinWidth="120" MinHeight="200" BorderThickness="0"
-                            ItemsSource="{Binding Layout.Interactors}"
+            <ListBox Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="5" MinWidth="120" MinHeight="200" MaxHeight="800" BorderThickness="0"
+                   ItemsSource="{Binding Layout.Interactors}"
                             SelectedItem="{Binding Layout.SelectedInteractor}">
-            <ListBox.ItemTemplate>
-              <DataTemplate>
-                <Grid>
-                  <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="ssg1"/>
-                    <ColumnDefinition SharedSizeGroup="ssg1"/>
-                  </Grid.ColumnDefinitions>
-                  <TextBlock Grid.Column="0" Margin="1,0,1,0" Text="{Binding Label}"/>
-                  <TextBlock Grid.Column="1" Margin="1,0,1,0" Text="{Binding Location}"/>
-                </Grid>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition SharedSizeGroup="ssg1"/>
+                      <ColumnDefinition SharedSizeGroup="ssg1"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="1,0,1,0" Text="{Binding Label}"/>
+                    <TextBlock Grid.Column="1" Margin="1,0,1,0" Text="{Binding Location}"/>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
         </StackPanel>
         <controls:InteractorEditor Interactor="{Binding Layout.SelectedInteractor, Mode=TwoWay}" />
       </StackPanel>

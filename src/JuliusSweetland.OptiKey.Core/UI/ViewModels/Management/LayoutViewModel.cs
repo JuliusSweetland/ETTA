@@ -43,7 +43,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             "SimplifiedAlpha", "SimplifiedConversationAlpha", "SizeAndPosition", "WebBrowsing"
         };
 
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -61,7 +60,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         public Layout Layout
         {
             get { return layout; }
-            set { layout = value; CreateViewbox(); OnPropertyChanged(); }
+            set { layout = value; OnPropertyChanged(); }
         }
 
         private string keyboard;
@@ -112,7 +111,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             }
             try
             {
-                layout = Layout.ReadFromFile(tempFilename);
+                Layout = Layout.ReadFromFile(tempFilename);
             }
             catch (Exception e)
             {
@@ -121,6 +120,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 return;
             }
             KeyboardFile = tempFilename;
+            Layout.KeyboardFile = KeyboardFile;
             InitializeLayout();
         }
 

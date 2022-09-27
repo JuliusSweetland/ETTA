@@ -134,6 +134,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 || !string.IsNullOrWhiteSpace(keyboard.VerticalOffset))
             {
                 Log.InfoFormat("Overriding size and position for dynamic keyboard");
+                if (windowManipulationService != null)
                 windowManipulationService.OverridePersistedState(keyboard.PersistNewState, keyboard.WindowState,
                     keyboard.Position, keyboard.DockSize, keyboard.Width, keyboard.Height, keyboard.HorizontalOffset,
                     keyboard.VerticalOffset);

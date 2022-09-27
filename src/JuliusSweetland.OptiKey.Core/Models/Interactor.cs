@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using JuliusSweetland.OptiKey.Enums;
+using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.UI.Controls;
 using System;
 using System.Collections.Generic;
@@ -42,6 +43,34 @@ namespace JuliusSweetland.OptiKey.Models
             if (name == "Label")
             {
                 ShiftDownLabel = Label != null && Label != Label.ToUpper() ? Label.ToUpper() : null;
+            }
+            if (name == "Label" || name == "Symbol" || name == "SharedSizeGroup")
+            {
+                // Set shared size group
+                if (!string.IsNullOrEmpty(SharedSizeGroup))
+                    Key.SharedSizeGroup = SharedSizeGroup;
+                else if (Profiles != null && Profiles.Count(x => x.Profile.SharedSizeGroup != null) > 0)
+                    Key.SharedSizeGroup = Profiles.First(x => x.Profile.SharedSizeGroup != null).Profile.SharedSizeGroup;
+                else
+                {
+                    bool hasSymbol = !string.IsNullOrWhiteSpace(Symbol);
+                    bool hasString = !string.IsNullOrWhiteSpace(Label) || !string.IsNullOrWhiteSpace(ShiftDownLabel);
+                    if (hasSymbol && hasString)
+                        Key. SharedSizeGroup = "KeyWithSymbolAndText";
+                    else if (hasSymbol)
+                        Key.SharedSizeGroup = "KeyWithSymbol";
+                    else if (hasString)
+                    {
+                        var text = Key.Text != null ? Key.Text.Compose() : Key.ShiftDownText?.Compose();
+
+                        //Strip out circle character used to show diacritic marks
+                        text = text?.Replace("\x25CC", string.Empty);
+
+                        Key.SharedSizeGroup = text != null && text.Length > 5
+                            ? "KeyWithLongText" : text != null && text.Length > 1
+                            ? "KeyWithShortText" : "KeyWithSingleLetter";
+                    }
+                }
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -99,13 +128,13 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public Visibility IsPopup { get { return this is DynamicPopup ? Visibility.Visible : Visibility.Collapsed; } }
         [XmlIgnore] public Visibility IsNotPopup { get { return this is DynamicPopup ? Visibility.Collapsed : Visibility.Visible; } }
 
-        private double row;
+        private double row = -1;
         [XmlIgnore] public double Row { get { return row; } set { row = value; OnPropertyChanged(); } }
-        [XmlAttribute("Row")] public string RowString { get { return this is DynamicPopup ? null : row.ToString(); } set { row = double.TryParse(value, out double result) ? result : 0; } }
+        [XmlAttribute("Row")] public string RowString { get { return this is DynamicPopup ? null : row.ToString(); } set { row = double.TryParse(value, out double result) ? result : -1; } }
 
-        private double col;
+        private double col = -1;
         [XmlIgnore] public double Col { get { return col; } set { col = value; OnPropertyChanged(); } }
-        [XmlAttribute("Col")] public string ColString { get { return this is DynamicPopup ? null : col.ToString(); } set { col = double.TryParse(value, out double result) ? result : 0; } }
+        [XmlAttribute("Col")] public string ColString { get { return this is DynamicPopup ? null : col.ToString(); } set { col = double.TryParse(value, out double result) ? result : -1; } }
 
         private double left;
         [XmlIgnore] public double Left { get { return left; } set { left = value; OnPropertyChanged(); } }
@@ -115,9 +144,11 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public double Top { get { return top; } set { top = value; OnPropertyChanged(); } }
         [XmlAttribute("Top")] public string TopString { get { return this is DynamicPopup ? top.ToString() : null; } set { top = double.TryParse(value, out double result) ? result : 0; } }
 
-        [XmlAttribute] public double Width { get { return Key.WidthSpan; } set { Key.WidthSpan = value; OnPropertyChanged(); } }
+        private double width;
+        [XmlAttribute] public double Width { get { return width; } set { width = value; OnPropertyChanged(); } }
 
-        [XmlAttribute] public double Height { get { return Key.HeightSpan; } set { Key.HeightSpan = value; OnPropertyChanged(); } }
+        private double height;
+        [XmlAttribute] public double Height { get { return height; } set { height = value; OnPropertyChanged(); } }
 
         [XmlElement] public string Label { get { return Key.ShiftUpText; }
             set {
@@ -139,8 +170,6 @@ namespace JuliusSweetland.OptiKey.Models
                 Key.SymbolGeometry = geometry;
             }
         }
-        
-        [XmlAttribute] public string SharedSizeGroup { get { return Key.SharedSizeGroup; } set { Key.SharedSizeGroup = value; OnPropertyChanged(); } }
 
         [XmlIgnore] public double BorderWidth { get { return Width * Layout.Width / Layout.Columns; } }
         [XmlIgnore] public double BorderHeight { get { return Height * Layout.Height / Layout.Rows; } }

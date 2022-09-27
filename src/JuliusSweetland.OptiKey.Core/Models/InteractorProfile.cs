@@ -165,6 +165,9 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
+        private string sharedSizeGroup;
+        [XmlAttribute] public string SharedSizeGroup { get { return sharedSizeGroup; } set { sharedSizeGroup = value; OnPropertyChanged(); } }
+
         public void BuildProfiles()
         {
             inheritenceProfile = new InteractorProfile();
