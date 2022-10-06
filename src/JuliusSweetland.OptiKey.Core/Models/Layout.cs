@@ -498,17 +498,6 @@ namespace JuliusSweetland.OptiKey.Models
             {
                 layout = (Layout)serializer.Deserialize(reader);
             }
-            try
-            {
-                foreach (var interactor in layout.Interactors)
-                {
-                    foreach (var profile in layout.Profiles)
-                    {
-                        interactor.Profiles.Add(new InteractorProfileMap(profile, interactor.ProfileNames.Contains(profile.Name)));
-                    }
-                }
-            }
-            catch { }
 
             return layout;
         }
@@ -522,14 +511,6 @@ namespace JuliusSweetland.OptiKey.Models
             try
             {
                 layout = (Layout)serializer.Deserialize(new StringReader(xmlString));
-                foreach (var interactor in layout.Interactors)
-                {
-                    foreach (var profile in layout.Profiles)
-                    {
-                        interactor.Profiles.Add(new InteractorProfileMap(profile,
-                            interactor.ProfileNames.Contains(profile.Name)));
-                    }
-                }
                 return layout;
             }
             catch

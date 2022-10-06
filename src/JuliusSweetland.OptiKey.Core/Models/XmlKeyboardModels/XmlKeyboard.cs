@@ -217,6 +217,15 @@ namespace JuliusSweetland.OptiKey.Models
             if (string.IsNullOrWhiteSpace(filename))
                 return;
 
+            foreach (var interactor in Interactors)
+            {
+                interactor.ProfileNames.Clear();
+                foreach (var p in interactor.Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name))
+                {
+                    interactor.ProfileNames.Add(new KeyGroup() { Value = p });
+                }
+            }
+
             var serializer = new XmlSerializer(typeof(XmlKeyboard));
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
@@ -229,6 +238,15 @@ namespace JuliusSweetland.OptiKey.Models
 
         public string WriteToString()
         {
+            foreach (var interactor in Interactors)
+            {
+                interactor.ProfileNames.Clear();
+                foreach (var p in interactor.Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name))
+                {
+                    interactor.ProfileNames.Add(new KeyGroup() { Value = p });
+                }
+            }
+
             var serializer = new XmlSerializer(typeof(XmlKeyboard));
 
             var ns = new XmlSerializerNamespaces();
@@ -443,7 +461,7 @@ namespace JuliusSweetland.OptiKey.Models
                 foreach (var profile in Profiles)
                 {
                     interactor.Profiles.Add(new InteractorProfileMap(profile,
-                        interactor.ProfileNames.Contains(profile.Name)));
+                        interactor.ProfileNames.Exists(x => x.Value == profile.Name)));
                 }
             }
         }

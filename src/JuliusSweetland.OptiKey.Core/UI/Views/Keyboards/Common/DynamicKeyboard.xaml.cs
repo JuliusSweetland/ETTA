@@ -426,12 +426,12 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         }
 
             //add this item's KeyValue to each KeyGroup referenced in its definition
-            foreach (var name in xmlKey.ProfileNames)
+            foreach (var name in xmlKey.Profiles.Where(x => x.IsMember).Select(x => x.Profile.Name.ToUpper()))
             {
-                if (!keyValueByGroup.ContainsKey(name.ToUpper()))
-                    keyValueByGroup.Add(name.ToUpper(), new List<KeyValue> { xmlKeyValue });
-                else if (!keyValueByGroup[name.ToUpper()].Contains(xmlKeyValue))
-                    keyValueByGroup[name.ToUpper()].Add(xmlKeyValue);
+                if (!keyValueByGroup.ContainsKey(name))
+                    keyValueByGroup.Add(name, new List<KeyValue> { xmlKeyValue });
+                else if (!keyValueByGroup[name].Contains(xmlKeyValue))
+                    keyValueByGroup[name].Add(xmlKeyValue);
             }
 
             if (xmlKey.Label != null)

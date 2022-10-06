@@ -143,8 +143,7 @@ namespace JuliusSweetland.OptiKey.Models
                     ? "(" + GazeRegion + ")"
                     : "R:" + RowN.ToString() + " C:" + ColN.ToString(); } }
 
-        [XmlElement("KeyGroup")] public List<string> ProfileNames
-        { get { return Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name).ToList(); } }
+        [XmlElement("KeyGroup")] public List<KeyGroup> ProfileNames { get; set; }
 
         private ObservableCollection<KeyCommand> commands;
         [XmlElement("Action", typeof(ActionCommand))]
