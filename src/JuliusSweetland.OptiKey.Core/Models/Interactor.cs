@@ -23,56 +23,16 @@ namespace JuliusSweetland.OptiKey.Models
         new public event PropertyChangedEventHandler PropertyChanged;
         new protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            if (name == "Width")
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BorderWidth"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Margin"));
-            }
-            if (name == "Height")
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BorderHeight"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Margin"));
-            }
 
-            if (name == "Row" || name == "Col" || name == "Left" || name == "Top")
+            if (name == "Row" || name == "Col" || name.StartsWith("Gaze"))
             {
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Margin"));
             }
 
             if (name == "Label")
             {
                 ShiftDownLabel = Label != null && Label != Label.ToUpper() ? Label.ToUpper() : null;
             }
-            if (name == "Label" || name == "Symbol" || name == "SharedSizeGroup")
-            {
-                // Set shared size group
-                if (!string.IsNullOrEmpty(SharedSizeGroup))
-                    Key.SharedSizeGroup = SharedSizeGroup;
-                else if (Profiles != null && Profiles.Count(x => x.Profile.SharedSizeGroup != null) > 0)
-                    Key.SharedSizeGroup = Profiles.First(x => x.Profile.SharedSizeGroup != null).Profile.SharedSizeGroup;
-                else
-                {
-                    bool hasSymbol = !string.IsNullOrWhiteSpace(Symbol);
-                    bool hasString = !string.IsNullOrWhiteSpace(Label) || !string.IsNullOrWhiteSpace(ShiftDownLabel);
-                    if (hasSymbol && hasString)
-                        Key. SharedSizeGroup = "KeyWithSymbolAndText";
-                    else if (hasSymbol)
-                        Key.SharedSizeGroup = "KeyWithSymbol";
-                    else if (hasString)
-                    {
-                        var text = Key.Text != null ? Key.Text.Compose() : Key.ShiftDownText?.Compose();
-
-                        //Strip out circle character used to show diacritic marks
-                        text = text?.Replace("\x25CC", string.Empty);
-
-                        Key.SharedSizeGroup = text != null && text.Length > 5
-                            ? "KeyWithLongText" : text != null && text.Length > 1
-                            ? "KeyWithShortText" : "KeyWithSingleLetter";
-                    }
-                }
-            }
-
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         protected void DescendantPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -83,8 +43,8 @@ namespace JuliusSweetland.OptiKey.Models
 
         public Interactor()
         {
-            InheritenceProfile = new InteractorProfile();
-            FinalProfile = new InteractorProfile();
+            Inherited = new InteractorProfile();
+            Expressed = new InteractorProfile();
             commands = new ObservableCollection<KeyCommand>();
             descendantPropertyChanged = new PropertyChangedEventHandler(DescendantPropertyChanged);
 
@@ -105,13 +65,7 @@ namespace JuliusSweetland.OptiKey.Models
         }
         
         [XmlIgnore] public Key Key { get; set; } = new Key();
-        [XmlIgnore] public Output Output { get; set; } = new Output();
-        [XmlIgnore] public ScratchpadUserControl Scratchpad { get; set; } = new ScratchpadUserControl();
-        [XmlIgnore] public SuggestionCol SuggestionCol { get; set; } = new SuggestionCol();
-        [XmlIgnore] public SuggestionRow SuggestionRow { get; set; } = new SuggestionRow();
-
-        [XmlIgnore]
-        public string TypeAsString
+        [XmlIgnore] public string TypeAsString
         {
             get
             {
@@ -128,60 +82,66 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public Visibility IsPopup { get { return this is DynamicPopup ? Visibility.Visible : Visibility.Collapsed; } }
         [XmlIgnore] public Visibility IsNotPopup { get { return this is DynamicPopup ? Visibility.Collapsed : Visibility.Visible; } }
 
-        private double row = -1;
-        [XmlIgnore] public double Row { get { return row; } set { row = value; OnPropertyChanged(); } }
-        [XmlAttribute("Row")] public string RowString { get { return this is DynamicPopup ? null : row.ToString(); } set { row = double.TryParse(value, out double result) ? result : -1; } }
+        [XmlIgnore] public int RowN { get; set; } = -1;
+        [XmlAttribute] public string Row { get { return this is DynamicPopup ? null : RowN.ToString(); } set { RowN = int.TryParse(value, out int result) ? result : -1; OnPropertyChanged(); } }
 
-        private double col = -1;
-        [XmlIgnore] public double Col { get { return col; } set { col = value; OnPropertyChanged(); } }
-        [XmlAttribute("Col")] public string ColString { get { return this is DynamicPopup ? null : col.ToString(); } set { col = double.TryParse(value, out double result) ? result : -1; } }
+        [XmlIgnore] public int ColN { get; set; } = -1;
+        [XmlAttribute] public string Col { get { return this is DynamicPopup ? null : ColN.ToString(); } set { ColN = int.TryParse(value, out int result) ? result : -1; OnPropertyChanged(); } }
 
-        private double left;
-        [XmlIgnore] public double Left { get { return left; } set { left = value; OnPropertyChanged(); } }
-        [XmlAttribute("Left")] public string LeftString { get { return this is DynamicPopup ? left.ToString() : null; } set { left = double.TryParse(value, out double result) ? result : 0; } }
+        [XmlIgnore] public int WidthN { get; set; } = 1;
+        [XmlAttribute] public string Width { get { return this is DynamicPopup ? null : WidthN.ToString(); } set { WidthN = int.TryParse(value, out int result) && result > 0 ? result : 1; OnPropertyChanged(); } }
 
-        private double top;
-        [XmlIgnore] public double Top { get { return top; } set { top = value; OnPropertyChanged(); } }
-        [XmlAttribute("Top")] public string TopString { get { return this is DynamicPopup ? top.ToString() : null; } set { top = double.TryParse(value, out double result) ? result : 0; } }
-
-        private double width;
-        [XmlAttribute] public double Width { get { return width; } set { width = value; OnPropertyChanged(); } }
-
-        private double height;
-        [XmlAttribute] public double Height { get { return height; } set { height = value; OnPropertyChanged(); } }
-
-        [XmlElement] public string Label { get { return Key.ShiftUpText; }
-            set {
-                foreach (var c in commands.Where(x => x.Value == Key.ShiftUpText))
-                    c.Value = value;
-                Key.ShiftUpText = value;
-                OnPropertyChanged(); } }
-
-        [XmlElement] public string ShiftDownLabel { get { return Key.ShiftDownText; } set { Key.ShiftDownText = value; OnPropertyChanged(); } }
-
-        private string symbol;
-        [XmlElement] public string Symbol { get { return symbol; } set { symbol = value; OnPropertyChanged();
-                Geometry geometry;
-                try
+        [XmlIgnore] public int HeightN { get; set; } = 1;
+        [XmlAttribute] public string Height { get { return this is DynamicPopup ? null : HeightN.ToString(); } set { HeightN = int.TryParse(value, out int result) && result > 0 ? result : 1; OnPropertyChanged(); } }
+        
+        private double gazeLeft = -.1;
+        [XmlIgnore] public double GazeLeft { get { return gazeLeft; } set { gazeLeft = value; OnPropertyChanged(); } }
+        private double gazeTop = 1;
+        [XmlIgnore] public double GazeTop { get { return gazeTop; } set { gazeTop = value; OnPropertyChanged(); } }
+        private double gazeWidth = .1;
+        [XmlIgnore] public double GazeWidth { get { return gazeWidth; } set { gazeWidth = value; OnPropertyChanged(); } }
+        private double gazeHeight = .1;
+        [XmlIgnore] public double GazeHeight { get { return gazeHeight; } set { gazeHeight = value; OnPropertyChanged(); } }
+        [XmlAttribute] public string GazeRegion
+        {
+            get { return this is DynamicPopup ? string.Concat(GazeLeft.ToString(), ",", GazeTop.ToString(), ",", GazeWidth.ToString(), ",", GazeHeight.ToString()) : null; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    geometry = (Geometry)new ResourceDictionary() { Source = new Uri("/OptiKey;component/Resources/Icons/KeySymbols.xaml", UriKind.RelativeOrAbsolute) }[symbol];
+                    var list = new List<double>();
+                    foreach (var item in value.Split(',').ToList())
+                    {
+                        if (double.TryParse(item, out double result))
+                            list.Add(result);
+                    }
+                    if (list.Count == 4)
+                    {
+                        GazeLeft = list[0];
+                        GazeTop = list[1];
+                        GazeWidth = list[2];
+                        GazeHeight = list[3];
+                    }
                 }
-                catch { geometry = Geometry.Empty; }
-                Key.SymbolGeometry = geometry;
             }
         }
 
-        [XmlIgnore] public double BorderWidth { get { return Width * Layout.Width / Layout.Columns; } }
-        [XmlIgnore] public double BorderHeight { get { return Height * Layout.Height / Layout.Rows; } }
-        [XmlIgnore] public string Location { get { return this is DynamicPopup
-                    ? "X:" + Left.ToString() + " Y:" + Top.ToString()
-                    : "R:" + Row.ToString() + " C:" + Col.ToString(); } }
-        [XmlIgnore] public Thickness Margin
-        { get { return this is DynamicPopup
-                    ? new Thickness(Layout.ScreenLeft + left * Layout.Width / Layout.Columns, Layout.ScreenTop + top * Layout.Height / Layout.Rows, 0, 0)
-                    : new Thickness(Layout.Left + col * Layout.Width / Layout.Columns, Layout.Top + row * Layout.Height / Layout.Rows, 0, 0); } }
+        private string label;
+        [XmlAttribute] public string Label { get { return label; }
+            set {
+                foreach (var c in commands.Where(x => x.Value == label))
+                    c.Value = value;
+                label = value;
+                OnPropertyChanged(); } }
 
-        [XmlIgnore] public ILayout Layout { get; set; }
+        [XmlAttribute] public string ShiftDownLabel { get { return Key.ShiftDownText; } set { Key.ShiftDownText = value; OnPropertyChanged(); } }
+
+        private string symbol;
+        [XmlAttribute] public string Symbol { get { return symbol; } set { symbol = value; OnPropertyChanged(); } }
+
+        [XmlIgnore] public string Location { get { return this is DynamicPopup
+                    ? "(" + GazeRegion + ")"
+                    : "R:" + RowN.ToString() + " C:" + ColN.ToString(); } }
 
         [XmlElement("KeyGroup")] public List<string> ProfileNames
         { get { return Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name).ToList(); } }
@@ -199,55 +159,28 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlElement("Wait", typeof(WaitCommand))]
         public ObservableCollection<KeyCommand> Commands { get { return commands; } set { commands = value; } }
 
-        private KeyCommands selectedCommandType;
-        [XmlIgnore]
-        public string SelectedCommandType
-        {
-            get { return selectedCommandType.ToString(); }
-            set { selectedCommandType = Enum.TryParse(value, out KeyCommands kc) ? kc : KeyCommands.Text; }
-        }
-
-        public void AddCommand()
-        {
-            switch (selectedCommandType)
-            {
-                case KeyCommands.Action:
-                    Commands.Add(new ActionCommand());
-                    break;
-                case KeyCommands.ChangeKeyboard:
-                    Commands.Add(new ChangeKeyboardCommand());
-                    break;
-                case KeyCommands.KeyDown:
-                    Commands.Add(new KeyDownCommand() { Value = Label });
-                    break;
-                case KeyCommands.KeyToggle:
-                    Commands.Add(new KeyTogglCommand() { Value = Label });
-                    break;
-                case KeyCommands.KeyUp:
-                    Commands.Add(new KeyUpCommand() { Value = Label });
-                    break;
-                case KeyCommands.Loop:
-                    Commands.Add(new LoopCommand());
-                    break;
-                case KeyCommands.MoveWindow:
-                    Commands.Add(new MoveWindowCommand());
-                    break;
-                case KeyCommands.Plugin:
-                    Commands.Add(new PluginCommand());
-                    break;
-                case KeyCommands.Text:
-                    Commands.Add(new TextCommand() { Value = Label });
-                    break;
-                case KeyCommands.Wait:
-                    Commands.Add(new WaitCommand());
-                    break;
-            }
-        }
+        //Legacy elements
+        [XmlElement("Row")] public string LegacyRow { get; set; }
+        [XmlElement("Col")] public string LegacyCol { get; set; }
+        [XmlElement("Width")] public string LegacyWidth { get; set; }
+        [XmlElement("Height")] public string LegacyHeight { get; set; }
+        [XmlElement("Label")] public string LegacyLabel { get; set; }
+        [XmlElement("ShiftUpLabel")] public string LegacyShiftUpLabel { get; set; }
+        [XmlElement("ShiftDownLabel")] public string LegacyShiftDownLabel { get; set; }
+        [XmlElement("Symbol")] public string LegacySymbol { get; set; }
+        [XmlElement("DestinationKeyboard")] public string LegacyDestinationKeyboard { get; set; }
+        [XmlElement("ReturnToThisKeyboard")] public string LegacyReturnToThisKeyboard { get; set; }
+        [XmlElement("Method")] public string LegacyMethod { get; set; }
+        [XmlElement("Arguments")] public List<DynamicArgument> LegacyArguments { get; set; }
     }
 
+    public class ActionKey : DynamicKey { }
+    public class ChangeKeyboardKey : DynamicKey { }
+    public class PluginKey : DynamicKey { }
+    public class TextKey : DynamicKey { }
     public class DynamicKey : Interactor { }
     public class DynamicOutputPanel : Interactor { }
-    public class DynamicPopup : DynamicKey { }
+    public class DynamicPopup : Interactor { }
     public class DynamicScratchpad : Interactor { }
     public class DynamicSuggestionRow : Interactor { }
     public class DynamicSuggestionCol : Interactor { }

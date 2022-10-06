@@ -11,17 +11,17 @@
     <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
     <valueConverters:ListNotEmpty x:Key="ListNotEmpty"/>
   </UserControl.Resources>
-  <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
-    <TextBox Margin="1,0,1,0" Text="{Binding Profile.BackgroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
-    <TextBox Margin="1,0,1,0" Text="{Binding Profile.BorderColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
-    <TextBox Margin="1,0,1,0" Text="{Binding Profile.ForegroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+  <StackPanel>
+    <TextBox Margin="1,0,1,0" Text="{Binding BackgroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding BorderColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding ForegroundColor, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
     <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="1" Interval="0.1" HideUpDownButtons="True"
-                       Value="{Binding Profile.Opacity, UpdateSourceTrigger=PropertyChanged}"/>
+                       Value="{Binding Opacity, UpdateSourceTrigger=PropertyChanged}"/>
     <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="1000" Interval="10" HideUpDownButtons="True"
-                       Value="{Binding Profile.LockOnTime, UpdateSourceTrigger=PropertyChanged}"/>
-    <TextBox Margin="1,0,1,0" Text="{Binding Profile.CompletionTimes, UpdateSourceTrigger=PropertyChanged}"/>
+                       Value="{Binding LockOnTime, UpdateSourceTrigger=PropertyChanged}"/>
+    <TextBox Margin="1,0,1,0" Text="{Binding CompletionTimes, UpdateSourceTrigger=PropertyChanged}"/>
     <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="0" Maximum="10000" Interval="10" HideUpDownButtons="True"
-                       Value="{Binding Profile.TimeRequiredToLockDown, UpdateSourceTrigger=PropertyChanged}"/>
+                       Value="{Binding TimeRequiredToLockDown, UpdateSourceTrigger=PropertyChanged}"/>
   </StackPanel>
 </UserControl>
 

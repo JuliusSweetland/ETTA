@@ -1,3 +1,5 @@
+using JuliusSweetland.OptiKey.Enums;
+using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.Models;
 using JuliusSweetland.OptiKey.Properties;
 using JuliusSweetland.OptiKey.UI.Controls;
@@ -7,6 +9,8 @@ using log4net;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -14,7 +18,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml;
+using System.Xml.Serialization;
+using Key = JuliusSweetland.OptiKey.UI.Controls.Key;
 
 namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 {
@@ -22,12 +31,64 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
     {
         protected static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public LayoutViewModel() 
+        public LayoutViewModel()
         {
             OpenFileCommand = new DelegateCommand(OpenFile);
             SaveFileCommand = new DelegateCommand(SaveFile);
             AddLayoutCommand = new DelegateCommand(AddLayout);
             AddBuiltInCommand = new DelegateCommand(AddBuiltIn);
+            AddProfileCommand = new DelegateCommand(AddProfile);
+            DeleteProfileCommand = new DelegateCommand(DeleteProfile);
+            AddInteractorCommand = new DelegateCommand(AddInteractor);
+            CloneInteractorCommand = new DelegateCommand(CloneInteractor);
+            DeleteInteractorCommand = new DelegateCommand(DeleteInteractor);
+            InteractorCommand = new DelegateCommand<object>(SelectInteractor);
+
+            XmlKeyboards = new ObservableCollection<XmlKeyboard>();
+            Profiles = new ObservableCollection<InteractorProfile>();
+            Interactors = new ObservableCollection<Interactor>();
+            descendantPropertyChanged = new PropertyChangedEventHandler(DescendantPropertyChanged);
+
+            XmlKeyboards.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.NewItems)
+                        propertyChanged.PropertyChanged += descendantPropertyChanged;
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.OldItems)
+                        propertyChanged.PropertyChanged -= descendantPropertyChanged;
+                }
+            };
+            Profiles.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.NewItems)
+                        propertyChanged.PropertyChanged += descendantPropertyChanged;
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.OldItems)
+                        propertyChanged.PropertyChanged -= descendantPropertyChanged;
+                }
+            };
+            Interactors.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
+            {
+                if (e.Action == NotifyCollectionChangedAction.Add)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.NewItems)
+                        propertyChanged.PropertyChanged += descendantPropertyChanged;
+                }
+                else if (e.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (INotifyPropertyChanged propertyChanged in e.OldItems)
+                        propertyChanged.PropertyChanged -= descendantPropertyChanged;
+                }
+            };
+            XmlKeyboard = new XmlKeyboard();
             Load();
             CreateViewbox();
         }
@@ -36,35 +97,120 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
         public static List<string> KeyboardList = new List<string>()
         {
-            "Alpha1", "Alpha2", "Alpha3", "ConversationAlpha1", "ConversationAlpha2", "ConversationAlpha3",
+            "Alpha1", "Alpha2", "Alpha3",
+            "ConversationAlpha1", "ConversationAlpha2", "ConversationAlpha3",
             "ConversationNumericAndSymbols", "Currencies1", "Currencies2",
             "Diacritics1", "Diacritics2", "Diacritics3", "Language", "Menu", "Mouse",
-            "NumericAndSymbols1", "NumericAndSymbols2", "NumericAndSymbols3", "PhysicalKeys", 
+            "NumericAndSymbols1", "NumericAndSymbols2", "NumericAndSymbols3", "PhysicalKeys",
             "SimplifiedAlpha", "SimplifiedConversationAlpha", "SizeAndPosition", "WebBrowsing"
         };
+
+        public static List<string> WindowStates = new List<string>() { { string.Empty }, { Enums.WindowStates.Docked.ToString() }, { Enums.WindowStates.Floating.ToString() }, { Enums.WindowStates.Maximised.ToString() } };
+
+        public static List<string> PositionList = Enum.GetNames(typeof(MoveToDirections)).ToList();
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+        private PropertyChangedEventHandler descendantPropertyChanged;
+        protected void DescendantPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            CreateViewbox();
+        }
 
         public DelegateCommand OpenFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
         public DelegateCommand AddLayoutCommand { get; private set; }
         public DelegateCommand AddBuiltInCommand { get; private set; }
+        public DelegateCommand AddProfileCommand { get; private set; }
+        public DelegateCommand DeleteProfileCommand { get; private set; }
+        public DelegateCommand AddInteractorCommand { get; private set; }
+        public DelegateCommand CloneInteractorCommand { get; private set; }
+        public DelegateCommand DeleteInteractorCommand { get; private set; }
+        public ICommand InteractorCommand { get; private set; }
 
         public string KeyboardFile { get; set; }
-
-        private Layout layout;
-        public Layout Layout
+        
+        public ObservableCollection<XmlKeyboard> XmlKeyboards { get; private set; }
+        private XmlKeyboard xmlKeyboard = new XmlKeyboard();
+        public XmlKeyboard XmlKeyboard
         {
-            get { return layout; }
-            set { layout = value; OnPropertyChanged(); }
+            get { return xmlKeyboard; }
+            set
+            {
+                xmlKeyboard = value;
+                XmlKeyboards.Clear();
+                XmlKeyboards.Add(value);
+                OnPropertyChanged();
+            }
         }
 
-        private string keyboard;
-        public string Keyboard { get { return keyboard; } set { keyboard = value; OnPropertyChanged(); } }
+        private ObservableCollection<InteractorProfile> profiles;
+        public ObservableCollection<InteractorProfile> Profiles
+        { get { return profiles; } set { profiles = value; OnPropertyChanged(); } }
+        
+        private InteractorProfile profile = new InteractorProfile();
+        public InteractorProfile Profile
+        { get { return profile; } set { profile = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<Interactor> interactors;
+        public ObservableCollection<Interactor> Interactors
+        { get { return interactors; } set { interactors = value; OnPropertyChanged(); } }
+
+        private Interactor interactor;
+        public Interactor Interactor
+        {
+            get { return interactor; }
+            set
+            {
+
+                if (interactor != null && interactor.Key != null)
+                {
+                    interactor.Key.IsCurrent = false;
+                    if (interactor is DynamicPopup)
+                    {
+                        canvas.Children.Remove(gazeRegion);
+                        interactor.Key.Margin = new Thickness(ScreenLeft + interactor.GazeLeft * ScreenWidth, ScreenTop + interactor.GazeTop * ScreenHeight, 0, 0);
+                    }
+                }
+                interactor = value;
+                if (interactor != null)
+                {
+                    if (interactor.Key != null)
+                    {
+                        interactor.Key.IsCurrent = true;
+                        if (interactor is DynamicPopup)
+                        {
+                            gazeRegion.Margin = interactor.Key.Margin;
+                            gazeRegion.Width = interactor.Key.Width;
+                            gazeRegion.Height = interactor.Key.Height;
+                            canvas.Children.Add(gazeRegion);
+                            interactor.Key.Margin = new Thickness((ScreenLeft + interactor.GazeLeft * ScreenWidth).Clamp(ScreenLeft, ScreenLeft + ScreenWidth - interactor.GazeWidth * ScreenWidth), (ScreenTop + interactor.GazeTop * ScreenHeight).Clamp(ScreenTop, ScreenTop + ScreenHeight - interactor.GazeHeight * ScreenHeight), 0, 0);
+                        }
+                    }
+                    SelectedInteractorType = interactor.TypeAsString;
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        private InteractorTypes newType;
+        private InteractorTypes selectedInteractorType;
+        public string SelectedInteractorType
+        {
+            get { return selectedInteractorType.ToString(); }
+            set
+            {
+                selectedInteractorType = Enum.TryParse(value, out InteractorTypes type) ? type : InteractorTypes.Key;
+                if (Interactor != null && Interactor.TypeAsString != value)
+                    ReplaceInteractor();
+            }
+        }
+
+        private string keyboardName;
+        public string KeyboardName { get { return keyboardName; } set { keyboardName = value; OnPropertyChanged(); } }
 
         private Viewbox viewbox;
         public Viewbox Viewbox
@@ -85,13 +231,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         private void Load()
         {
             KeyboardFile = Settings.Default.KeyboardFile;
-            Layout = new Layout();
-            InitializeLayout();
-        }
-
-        private void InitializeLayout()
-        {
-            Layout.Load();
             CreateViewbox();
         }
 
@@ -111,7 +250,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             }
             try
             {
-                Layout = Layout.ReadFromFile(tempFilename);
+                XmlKeyboard = XmlKeyboard.ReadFromFile(tempFilename);
             }
             catch (Exception e)
             {
@@ -120,19 +259,23 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 return;
             }
             KeyboardFile = tempFilename;
-            Layout.KeyboardFile = KeyboardFile;
-            InitializeLayout();
+            Profiles.Clear();
+            Profiles.AddRange(XmlKeyboard.Profiles);
+            Interactors.Clear();
+            Interactors.AddRange(XmlKeyboard.Interactors);
+            CreateViewbox();
         }
 
         private void SaveFile()
         {
             var fp = Settings.Default.DynamicKeyboardsLocation;
-            var fn = Layout.Name + ".xml";
+            var fn = XmlKeyboard.Name + ".xml";
             try
             {
                 fp = Path.GetDirectoryName(KeyboardFile);
                 fn = Path.GetFileName(KeyboardFile);
-            } catch { }
+            }
+            catch { }
             var saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             saveFileDialog.InitialDirectory = fp;
             saveFileDialog.FileName = fn;
@@ -148,7 +291,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             {
                 case System.Windows.Forms.DialogResult.OK:
                     KeyboardFile = saveFileDialog.FileName;
-                    Layout.WriteToFile(KeyboardFile);
+                    XmlKeyboard.WriteToFile(KeyboardFile);
                     break;
                 case System.Windows.Forms.DialogResult.Cancel:
                 default:
@@ -158,13 +301,13 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
         private void AddBuiltIn()
         {
-            Layout = new Layout();
-            InitializeLayout();
+            XmlKeyboard = new XmlKeyboard() { Name = KeyboardName };
+            var profile = new InteractorProfile() { Name = "All" };
+            XmlKeyboard.Profiles = new List<InteractorProfile> { profile };
 
-            Layout.Name = keyboard;
             DependencyObject content = (DependencyObject)new Alpha1().GetContent();
 
-            switch (Keyboard)
+            switch (KeyboardName)
             {
                 case "Alpha2":
                     content = (DependencyObject)new Alpha2().GetContent();
@@ -206,7 +349,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                     content = (DependencyObject)new Keyboards.Menu(null).GetContent();
                     break;
                 case "Mouse":
-                    content = (DependencyObject)new Mouse(null).GetContent();
+                    content = (DependencyObject)new Keyboards.Mouse(null).GetContent();
                     break;
                 case "NumericAndSymbols1":
                     content = (DependencyObject)new NumericAndSymbols1().GetContent();
@@ -234,15 +377,17 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                     break;
             }
             var symbols = new ResourceDictionary() { Source = new Uri("/OptiKey;component/Resources/Icons/KeySymbols.xaml", UriKind.RelativeOrAbsolute) };
-            
+
             var symbolValues = symbols.Values.OfType<Geometry>().Select(x => x.ToString()).ToList();
             var symbolKeys = symbols.Keys.OfType<string>().ToList();
             var allKeys = VisualAndLogicalTreeHelper.FindLogicalChildren<Key>(content).ToList();
+            var outputList = VisualAndLogicalTreeHelper.FindLogicalChildren<Output>(content).ToList();
+            var outputRows = outputList.Any() ? 2 : 0;
             var maxRow = 0d;
             var maxCol = 0d;
             foreach (Key key in allKeys.Where(x => x is Key && VisualAndLogicalTreeHelper.FindLogicalParent<Output>(x) == null))
             {
-                var i = new DynamicKey() { Label = key.ShiftUpText, ShiftDownLabel = key.ShiftDownText, Col = Grid.GetColumn(key), Row = Grid.GetRow(key), Width = Grid.GetColumnSpan(key), Height = Grid.GetRowSpan(key), };
+                var i = new DynamicKey() { Label = key.ShiftUpText, ShiftDownLabel = key.ShiftDownText, ColN = Grid.GetColumn(key), RowN = Grid.GetRow(key) - outputRows, WidthN = Grid.GetColumnSpan(key), HeightN = Grid.GetRowSpan(key) };
                 if (key.Value != null)
                 {
                     var kv = key.Value;
@@ -254,45 +399,287 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 if (key.SymbolGeometry != null)
                     i.Symbol = symbolKeys[symbolValues.IndexOf(key.SymbolGeometry.ToString())];
                 i.SharedSizeGroup = key.SharedSizeGroup;
-                foreach (var p in Layout.Profiles)
-                {
-                    i.Profiles.Add(new InteractorProfileMap(p, p.Name == "All"));
-                }
-                Layout.Interactors.Add(i);
-                maxCol = Math.Max(maxCol, i.Col + i.Width);
-                maxRow = Math.Max(maxRow, i.Row + i.Height);
+                i.Profiles.Add(new InteractorProfileMap(profile, true));
+                XmlKeyboard.Interactors.Add(i);
+                maxCol = Math.Max(maxCol, i.ColN + i.WidthN);
+                maxRow = Math.Max(maxRow, i.RowN + i.HeightN);
             }
-            var output = VisualAndLogicalTreeHelper.FindLogicalChildren<Output>(content).ToList();
-            if (output != null && output.Any())
-            {
-                var o = new DynamicOutputPanel();
-                o.Col = 0;
-                o.Row = 0;
-                o.Width = (int)maxCol;
-                o.Height = 2;
-                layout.Interactors.Insert(0, o);
-            }
-            Layout.Rows = (int)maxRow;
-            Layout.Columns = (int)maxCol;
+            XmlKeyboard.ShowOutputPanel = outputRows > 0 ? "True" : null;
+            XmlKeyboard.Rows = (int)maxRow;
+            XmlKeyboard.Cols = (int)maxCol;
+
+            Profiles.Clear();
+            Profiles.AddRange(XmlKeyboard.Profiles);
+            Interactors.Clear();
+            Interactors.AddRange(XmlKeyboard.Interactors);
+            CreateViewbox();
         }
 
         private void AddLayout()
         {
-            Layout = new Layout();
-            InitializeLayout();
+            XmlKeyboard = new XmlKeyboard() { Name = "NewKeyboard", Grid = new XmlGrid() { Cols = 16, Rows = 14 } };
+            XmlKeyboard.Profiles = new List<InteractorProfile> { new InteractorProfile() {Name = "All" } };
+            Profiles.Clear();
+            Profiles.AddRange(XmlKeyboard.Profiles);
+            Interactors.Clear();
+            Interactors.AddRange(XmlKeyboard.Interactors);
+            CreateViewbox();
+        }
+
+        private void AddProfile()
+        {
+            if (Profiles == null) { return; }
+
+            var name = "Profile";
+            for (int i = 1; i <= Profiles.Count() + 1; i++)
+            {
+                name = "Profile" + i.ToString();
+                if (Profiles.Where(x => x.Name == name).Count() == 0)
+                    break;
+            }
+            Profile = new InteractorProfile() { Name = name };
+            Profiles.Add(Profile);
+            XmlKeyboard.Profiles = Profiles.ToList();
+            foreach (var i in Interactors)
+            {
+                i.Profiles.Add(new InteractorProfileMap(profile, false));
+            }
+        }
+
+        private void DeleteProfile()
+        {
+            if (Profiles == null) { return; }
+            
+            var index = Profiles.IndexOf(Profile);
+            if (index > 0)
+            {
+                foreach (var i in Interactors)
+                {
+                    var map = i.Profiles.Where(x => x.Profile == Profile).FirstOrDefault();
+                    if (map != null)
+                        i.Profiles.Remove(map);
+                }
+                Profiles.RemoveAt(index);
+                XmlKeyboard.Profiles = Profiles.ToList();
+                Profile = Profiles[index - 1];
+            }
+            CreateViewbox();
+        }
+
+        private void AddInteractor()
+        {
+            if (Interactors == null) { return; }
+
+            var minKeyWidth = 1;
+            var minKeyHeight = 1;
+            if (Interactors.Where(x => x is DynamicKey).Any())
+            {
+                minKeyWidth = Interactors.Where(x => x is DynamicKey).Select(k => k.WidthN).Min();
+                minKeyHeight = Interactors.Where(x => x is DynamicKey).Select(k => k.HeightN).Min();
+            }
+
+            var interactor = new Interactor();
+            
+            switch (newType)
+            {
+                case InteractorTypes.Key:
+                    interactor = new DynamicKey() { RowN = 0, ColN = 0, WidthN = minKeyWidth, HeightN = minKeyHeight };
+                    interactor.Commands.Add(new TextCommand() { Value = null });
+                    break;
+                case InteractorTypes.Popup:
+                    interactor = new DynamicPopup() { RowN = 0, ColN = 0 };
+                    interactor.Commands.Add(new TextCommand() { Value = null });
+                    break;
+                case InteractorTypes.OutputPanel:
+                    interactor = new DynamicOutputPanel() { RowN = 0, ColN = 0, WidthN = XmlKeyboard.Cols, HeightN = 2 * minKeyHeight };
+                    break;
+                case InteractorTypes.Scratchpad:
+                    interactor = new DynamicScratchpad() { RowN = 0, ColN = 0, WidthN = 8 * minKeyWidth, HeightN = minKeyHeight};
+                    break;
+                case InteractorTypes.SuggestionRow:
+                    interactor = new DynamicSuggestionRow() { RowN = 0, ColN = 0, WidthN = 8 * minKeyWidth, HeightN = minKeyHeight };
+                    break;
+                case InteractorTypes.SuggestionColumn:
+                    interactor = new DynamicSuggestionCol() { RowN = 0, ColN = 0, HeightN = 4 * minKeyHeight};
+                    break;
+            }
+
+            foreach (var p in Profiles)
+            {
+                interactor.Profiles.Add(new InteractorProfileMap(p, p.Name == "All"));
+            }
+
+            var index = Interactor != null ? Interactors.IndexOf(Interactor) + 1 : 0;
+            Interactors.Insert(index, interactor);
+            XmlKeyboard.Interactors = Interactors.ToList();
+            CreateViewbox();
+            Interactor = interactor;
+        }
+
+        private void CloneInteractor()
+        {
+            if (Interactor == null) { return; }
+
+            var serializer = new XmlSerializer(Interactor.GetType());
+            var sw = new StringWriter();
+            var xmlWriter = XmlWriter.Create(sw, new XmlWriterSettings());
+            serializer.Serialize(xmlWriter, Interactor, new XmlSerializerNamespaces());
+            var newInteractor = (Interactor)serializer.Deserialize(new StringReader(sw.ToString()));
+            foreach (var p in Interactor.Profiles)
+            {
+                newInteractor.Profiles.Add(new InteractorProfileMap(p.Profile, p.IsMember));
+            }
+            newInteractor.ColN += newInteractor.WidthN;
+            Interactors.Insert(Interactors.IndexOf(Interactor) + 1, newInteractor);
+            XmlKeyboard.Interactors = Interactors.ToList();
+            CreateViewbox();
+            Interactor = newInteractor;
+        }
+
+        private void DeleteInteractor()
+        {
+            if (Interactor == null) { return; }
+
+            Interactors.Remove(interactor);
+            XmlKeyboard.Interactors = Interactors.ToList();
+            CreateViewbox();
+            Interactor = null;
+        }
+
+        private void ReplaceInteractor()
+        {
+            newType = selectedInteractorType;
+            var index = Interactors.IndexOf(Interactor);
+            Interactors.RemoveAt(index);
+            if (index > 0)
+                Interactor = Interactors[index - 1];
+            AddInteractor();
+        }
+
+        private void SelectInteractor(object obj)
+        {
+            Interactor = (Interactor)obj;
+        }
+
+        private Canvas canvas;
+        private Border gazeRegion = new Border() { Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#FB6043"), BorderThickness = new Thickness(5), Child = new Viewbox() { Stretch = Stretch.Uniform,
+        StretchDirection = StretchDirection.Both, Child = new TextBlock() { Text = "Gaze\nHere", TextAlignment=TextAlignment.Center, Foreground = Brushes.White } } };
+        public double ScreenWidth { get { return SystemParameters.VirtualScreenWidth; } }
+        public double ScreenHeight { get { return SystemParameters.VirtualScreenHeight; } }
+        public double ScreenLeft { get { return .2 * ScreenWidth; } }
+        public double ScreenTop { get { return .2 * ScreenHeight; } }
+        public Border KeyboardBorder { get; set; }
+        public Thickness Margin { get { return new Thickness(Left, Top, 0, 0); } }
+        public double Width { get { return XmlKeyboard.WidthN.HasValue ? XmlKeyboard.WidthN.Value : Settings.Default.MainWindowFloatingSizeAndPosition.Width; } }
+        public double Height { get { return XmlKeyboard.HeightN.HasValue ? XmlKeyboard.HeightN.Value : Settings.Default.MainWindowFloatingSizeAndPosition.Height; } }
+        public double Left
+        {
+            get
+            {
+                var offset = XmlKeyboard.HorizontalOffsetN.HasValue ? XmlKeyboard.HorizontalOffsetN.Value : 0;
+                return Enum.TryParse(XmlKeyboard.Position, out MoveToDirections newMovePosition)
+                    ? newMovePosition == MoveToDirections.Left || newMovePosition == MoveToDirections.TopLeft || newMovePosition == MoveToDirections.BottomLeft
+                        ? ScreenLeft + offset
+                        : newMovePosition == MoveToDirections.Right || newMovePosition == MoveToDirections.TopRight || newMovePosition == MoveToDirections.BottomRight
+                        ? ScreenLeft + ScreenWidth - Width + offset
+                        : ScreenLeft + ScreenWidth / 2 - Width / 2 + offset
+                    : ScreenLeft + offset;
+            }
+        }
+        public double Top
+        {
+            get
+            {
+                var offset = XmlKeyboard.VerticalOffsetN.HasValue ? XmlKeyboard.VerticalOffsetN.Value : 0;
+                return Enum.TryParse(XmlKeyboard.Position, out MoveToDirections newMovePosition)
+                    ? newMovePosition == MoveToDirections.Top || newMovePosition == MoveToDirections.TopLeft || newMovePosition == MoveToDirections.TopRight
+                        ? ScreenTop + offset
+                        : (newMovePosition == MoveToDirections.Bottom || newMovePosition == MoveToDirections.BottomLeft || newMovePosition == MoveToDirections.BottomRight)
+                        ? ScreenTop + ScreenHeight - Height + offset
+                        : ScreenTop + ScreenHeight / 2 - Height / 2 + offset
+                    : ScreenTop + offset;
+            }
         }
 
         private void CreateViewbox()
         {
             Viewbox = null;
-            if (Layout == null)
-                return;
 
-            Viewbox = Layout.View;
+            var thickness = 20;
+            if (canvas != null && canvas.Children != null)
+                canvas.Children.Clear();
+
+            canvas = new Canvas()
+            {
+                Width = 2 * ScreenLeft + ScreenWidth,
+                Height = 2 * ScreenTop + ScreenHeight,
+            };
+            canvas.Children.Add(new Border()
+            {
+                Background = Brushes.Black,
+                BorderBrush = Brushes.White,
+                BorderThickness = new Thickness(thickness),
+                Width = ScreenWidth + 2 * thickness,
+                Height = ScreenHeight + 2 * thickness,
+                Margin = new Thickness(ScreenLeft - thickness, ScreenTop - thickness, 0, 0),
+            }); ;
+            canvas.Children.Add(new System.Windows.Shapes.Line()
+            {
+                X1 = ScreenLeft + .25 * ScreenWidth,
+                Y1 = ScreenTop + 1.15 * ScreenHeight,
+                X2 = ScreenLeft + .75 * ScreenWidth,
+                Y2 = ScreenTop + 1.15 * ScreenHeight,
+                SnapsToDevicePixels = true,
+                Stroke = Brushes.White,
+                StrokeThickness = 2 * thickness
+            });
+            canvas.Children.Add(new System.Windows.Shapes.Line()
+            {
+                X1 = ScreenLeft + .5 * ScreenWidth,
+                Y1 = ScreenTop + ScreenHeight + thickness,
+                X2 = ScreenLeft + .5 * ScreenWidth,
+                Y2 = ScreenTop + 1.15 * ScreenHeight,
+                SnapsToDevicePixels = true,
+                Stroke = Brushes.White,
+                StrokeThickness = 6 * thickness
+            });
+            KeyboardBorder = new Border() { Background = Brushes.Transparent, BorderBrush = Brushes.Gray, BorderThickness = new Thickness(2) };
+            KeyboardBorder.SetBinding(Border.WidthProperty, new Binding("Width") { Source = this });
+            KeyboardBorder.SetBinding(Border.HeightProperty, new Binding("Height") { Source = this });
+            KeyboardBorder.SetBinding(Border.MarginProperty, new Binding("Margin") { Source = this });
+            canvas.Children.Add(KeyboardBorder);
+            
+            KeyboardBorder.Child = new Views.Keyboards.Common.DynamicKeyboard(XmlKeyboard);
+            foreach (var i in Interactors.Where(x => x.Key != null))
+            {
+                i.Key.InputBindings.Add(new MouseBinding()
+                {
+                    MouseAction = MouseAction.LeftClick,
+                    Command = InteractorCommand,
+                    CommandParameter = i
+                });
+
+                if (i is DynamicPopup)
+                {
+                    VisualAndLogicalTreeHelper.FindVisualParent<Grid>(i.Key).Children.Remove(i.Key);
+                    i.Key.Margin = new Thickness(ScreenLeft + i.Key.GazeRegion.Left * ScreenWidth, ScreenTop + i.Key.GazeRegion.Top * ScreenHeight, 0, 0);
+                    i.Key.Width = i.Key.GazeRegion.Width * ScreenWidth;
+                    i.Key.Height = i.Key.GazeRegion.Height * ScreenHeight;
+                    canvas.Children.Add(i.Key);
+                }
+                if (i == Interactor)
+                {
+                    Interactor = null;
+                    Interactor = i;
+                }
+            }
+            canvas.ClipToBounds = true;
+            Viewbox = new Viewbox();
             Viewbox.Width = .7 * SystemParameters.VirtualScreenWidth;
             Viewbox.Height = .7 * SystemParameters.VirtualScreenHeight;
             Viewbox.Stretch = Stretch.Fill;
             Viewbox.StretchDirection = StretchDirection.Both;
+            Viewbox.Child = canvas;
         }
 
         #endregion

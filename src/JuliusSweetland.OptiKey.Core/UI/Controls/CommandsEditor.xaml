@@ -10,7 +10,6 @@
              mc:Ignorable="d">
   <UserControl.Resources>
     <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
-    <valueConverters:ListNotEmpty x:Key="ListNotEmpty"/>
   </UserControl.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
@@ -22,12 +21,6 @@
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
-      <!--<Button Grid.Row="0" Margin="5,2" Click="MoveUp_Click" Width="35" Height="25" >
-        <Path Fill="Black" Data="M0 6 6 0 12 6Z " Width="12" Height="6" />
-      </Button>
-      <Button Grid.Row="1" Margin="5,2" Click="MoveDown_Click" Width="35" Height="25" >
-        <Path Fill="Black" Data="M0 0 6 6 12 0Z " Width="12" Height="6" VerticalAlignment="Top"/>
-      </Button>-->
     <StackPanel Grid.Column="1" Grid.RowSpan="3">
       <ListBox Name="CommandList" Background="Transparent" ItemsSource="{Binding Interactor.Commands}">
         <ListBox.ItemContainerStyle>
@@ -52,12 +45,20 @@
                                     BorderThickness="0" Width="30" Height="20">
                 <Path Data="M0,0 12,12 M12,0 0,12" Width="12" Height="12" Stroke="Black" StrokeThickness="4"/>
               </Button>
-              <Label Grid.Column="2" Content="{Binding Type}" VerticalAlignment="Center"/>
+              <ComboBox VerticalAlignment="Center" Margin="0"
+                  ItemsSource="{Binding Source={x:Static controls:CommandsEditor.CommandKeyList}}"
+                  SelectedItem="{Binding Type, Mode=OneTime}"
+                        SelectionChanged="SelectType"/>
               <TextBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90"
+                          Visibility="{Binding HideTextBox, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
               <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90" IsTextSearchEnabled="True"
                           Visibility="{Binding HideFunctionList, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                           ItemsSource="{Binding Source={x:Static controls:CommandsEditor.FunctionKeyList}}"
+                          Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90" IsTextSearchEnabled="True"
+                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+                          ItemsSource="{Binding Source={x:Static controls:CommandsEditor.KeyboardList}}"
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
               <Label Grid.Column="4" VerticalAlignment="Center" Content="Link Back:"
                           ToolTip="When checked this keyboard is included as a stop when navigating back from future keyboards"
@@ -77,9 +78,6 @@
       </ListBox>
       <StackPanel Orientation="Horizontal">
         <Button Content="Add" HorizontalAlignment="Left" Click="AddCommand_Click" Margin="3,0,0,0" Width="40"/>
-        <ComboBox VerticalAlignment="Center" Margin="0"
-                  ItemsSource="{Binding Source={x:Static controls:CommandsEditor.CommandKeyList}}"
-                  SelectedItem="{Binding Interactor.SelectedCommandType, Mode=TwoWay}"/>
       </StackPanel>
     </StackPanel>
   </Grid>

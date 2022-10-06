@@ -473,6 +473,7 @@
     <Compile Include="UI\Controls\KeyboardView.cs" />
     <Compile Include="UI\ValueConverters\CompletionTimesValidation.cs" />
     <Compile Include="UI\ValueConverters\HlsColor.cs" />
+    <Compile Include="UI\ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="UI\ValueConverters\InvertedBoolToVisibilityConverter.cs" />
     <Compile Include="UI\ValueConverters\MultiBoolToVisibilityConverter.cs" />
     <Compile Include="UI\ViewModels\Keyboards\Alpha3.cs" />

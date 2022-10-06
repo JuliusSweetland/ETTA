@@ -32,7 +32,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
           </Grid.RowDefinitions>
-          <Label Grid.Row="1" Content="Keyboard Files:" Margin="5"/>
+          <Label Grid.Row="1" Content="File:" Margin="5"/>
           <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
             <Button Command="{Binding AddLayoutCommand}" MinWidth="48" Margin="5"
                     VerticalAlignment="Center" Content="New"/>
@@ -45,13 +45,13 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
             <ComboBox HorizontalAlignment="Left" Margin="5" MinWidth="128" BorderThickness="0"
                             ItemsSource="{Binding Source={StaticResource KeyboardList}}"
-                            SelectedItem="{Binding Keyboard}"/>
+                            SelectedItem="{Binding KeyboardName}"/>
             <Button Command="{Binding AddBuiltInCommand}" Width="70" Margin="5" 
                   VerticalAlignment="Center" Content="Load"/>
           </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal">
-            <controls:LayoutEditor Layout="{Binding Layout}"/>
+          <controls:LayoutEditor/>
           <Border Background="Black" BorderBrush="Black" BorderThickness="3" CornerRadius="5">
             <UserControl VerticalAlignment="Top" Content="{Binding Viewbox}"/>
           </Border>

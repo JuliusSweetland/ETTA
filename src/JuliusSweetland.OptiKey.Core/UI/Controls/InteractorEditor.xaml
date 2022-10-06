@@ -9,13 +9,13 @@
              xmlns:controls="clr-namespace:JuliusSweetland.OptiKey.UI.Controls"
              mc:Ignorable="d" Background="LightBlue">
   <UserControl.Resources>
+    <CollectionViewSource x:Key="InteractorTypeList" Source="{Binding Source={x:Static controls:InteractorEditor.InteractorTypeList}}"/>
     <CollectionViewSource x:Key="SymbolList" Source="{Binding Source={x:Static controls:InteractorEditor.SymbolList}}"/>
   </UserControl.Resources>
-  
-  <StackPanel DataContext="{Binding RelativeSource={RelativeSource AncestorType=UserControl}}">
+  <StackPanel DataContext="{Binding Interactor}">
     <Expander Header="Keygroup Membership">
       <Grid>
-        <ListBox ItemsSource="{Binding Interactor.Profiles}">
+        <ListBox ItemsSource="{Binding Profiles}">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid>
@@ -52,31 +52,31 @@
             </StackPanel>
           </Border>
         </StackPanel>
-        <StackPanel DataContext="{Binding Interactor}">
+        <StackPanel>
           <Label Content="From Keygroup"/>
           <Border BorderThickness="0,1,0,0" BorderBrush="DeepSkyBlue">
             <StackPanel>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.BackgroundColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.BorderColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.ForegroundColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.Opacity}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.LockOnTime}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.CompletionTimes}"/>
-              <Label Margin="1,0,1,0" Content="{Binding InheritenceProfile.TimeRequiredToLockDown}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.BackgroundColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.BorderColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.ForegroundColor}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.Opacity}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.LockOnTime}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.CompletionTimes}"/>
+              <Label Margin="1,0,1,0" Content="{Binding Inherited.TimeRequiredToLockDown}"/>
             </StackPanel>
           </Border>
         </StackPanel>
         <StackPanel>
           <Label Content="Override"/>
           <Border BorderThickness="1,1,0,0" BorderBrush="DeepSkyBlue">
-            <controls:ProfileEditor Profile="{Binding Interactor, Mode=TwoWay}"/>
+            <controls:ProfileEditor/>
           </Border>
         </StackPanel>
       </StackPanel>
     </Expander>
     <Expander Header="Properties" IsExpanded="True">
       <StackPanel>
-        <StackPanel Orientation="Horizontal" DataContext="{Binding Interactor}">
+        <StackPanel Orientation="Horizontal">
           <StackPanel>
             <Label Margin="1,0,1,0" Content="Type"/>
             <Label Margin="1,0,1,0" Content="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
@@ -90,26 +90,33 @@
             <Label Margin="1,0,1,0" Content="Symbol"/>
           </StackPanel>
           <StackPanel>
-            <Label Margin="1,0,1,0" Content="{Binding TypeAsString}"/>
+            <ComboBox Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource InteractorTypeList}}"
+                      SelectedItem="{Binding TypeAsString, Mode=OneTime}"
+                      SelectionChanged="SelectType"/>
             <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
-                         Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}"/>
+                         Value="{Binding GazeLeft, UpdateSourceTrigger=PropertyChanged}" Interval=".01"/>
             <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
-                         Value="{Binding Top, UpdateSourceTrigger=PropertyChanged}"/>
+                         Value="{Binding GazeTop, UpdateSourceTrigger=PropertyChanged}" Interval=".01"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+                         Value="{Binding GazeWidth, UpdateSourceTrigger=PropertyChanged}" Minimum=".01" Interval=".01"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+                         Value="{Binding GazeHeight, UpdateSourceTrigger=PropertyChanged}" Minimum=".01" Interval=".01"/>
             <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
-                         Value="{Binding Col, UpdateSourceTrigger=PropertyChanged}"/>
+                         Value="{Binding Col, UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
             <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
-                         Value="{Binding Row, UpdateSourceTrigger=PropertyChanged}"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left"
-                         Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left"
-                         Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
+                         Value="{Binding Row, UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
+            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+                         Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
             <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
             <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding ShiftDownLabel, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
             <ComboBox Padding="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource SymbolList}}" SelectedItem="{Binding Symbol}"/>
           </StackPanel>
         </StackPanel>
         <Label Margin="1,0,1,0" Content="Commands"/>
-        <controls:CommandsEditor Interactor="{Binding Interactor, Mode=TwoWay}"/>
+        <controls:CommandsEditor Interactor="{Binding Interactor}"
+                                 DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:LayoutEditor}}, Path=DataContext}"/>
       </StackPanel>
     </Expander>
   </StackPanel>

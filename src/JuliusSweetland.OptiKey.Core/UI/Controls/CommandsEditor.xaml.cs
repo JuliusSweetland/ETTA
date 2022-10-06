@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using JuliusSweetland.OptiKey.Enums;
 using JuliusSweetland.OptiKey.Models;
 
 namespace JuliusSweetland.OptiKey.UI.Controls
@@ -16,7 +17,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
     /// </summary>
     public partial class CommandsEditor : UserControl
     {
-        private int commandIndex;
+        private int commandIndex = -1;
 
         public CommandsEditor()
         {
@@ -34,33 +35,13 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             set { SetValue(InteractorProperty, value); }
         }
 
-        public static List<string> CommandKeyList = Enum.GetNames(typeof(Enums.KeyCommands)).Cast<string>().OrderBy(mb => mb.ToString()).ToList();
+        private ObservableCollection<KeyCommand> Commands { get { return Interactor.Commands; } }
 
-        public static List<string> KeyboardList = Enum.GetNames(typeof(Enums.Keyboards)).Cast<string>().OrderBy(mb => mb.ToString()).ToList();
+        public static List<string> CommandKeyList = Enum.GetNames(typeof(Enums.KeyCommands)).Cast<string>().OrderBy(x => x).ToList();
 
-        public static List<string> FunctionKeyList = Enum.GetNames(typeof(Enums.FunctionKeys)).Cast<string>().OrderBy(mb => mb.ToString()).ToList();
+        public static List<string> KeyboardList = new DynamicKeyboardFolder().AllKeyboards.Select(x => x.keyboardName).OrderBy(x => x).Concat(Enum.GetNames(typeof(Enums.Keyboards)).Cast<string>().OrderBy(x => x)).ToList();
 
-        #endregion
-
-        #region Methods
-
-        private void MoveUp_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Interactor.Commands.Move(commandIndex - 1, commandIndex);
-            }
-            catch { }
-        }
-
-        private void MoveDown_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Interactor.Commands.Move(commandIndex + 1, commandIndex);
-            }
-            catch { }
-        }
+        public static List<string> FunctionKeyList = Enum.GetNames(typeof(Enums.FunctionKeys)).Cast<string>().OrderBy(x => x).ToList();
 
         private void SelectCommand(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -72,18 +53,56 @@ namespace JuliusSweetland.OptiKey.UI.Controls
 
         private void AddCommand_Click(object sender, RoutedEventArgs e)
         {
-            Interactor.AddCommand();
+            Commands.Add(new TextCommand() { Value = Interactor.Label });
+        }
+
+        private void SelectType(object sender, SelectionChangedEventArgs e)
+        {
+            if (commandIndex < 0)
+                return;
+
+            var newType = Enum.TryParse((string)((ComboBox)sender).SelectedItem, out KeyCommands kc) ? kc : KeyCommands.Text;
+            Commands.RemoveAt(commandIndex);
+            switch (newType)
+            {
+                case KeyCommands.Action:
+                    Commands.Insert(commandIndex, new ActionCommand());
+                    break;
+                case KeyCommands.ChangeKeyboard:
+                    Commands.Insert(commandIndex, new ChangeKeyboardCommand());
+                    break;
+                case KeyCommands.KeyDown:
+                    Commands.Insert(commandIndex, new KeyDownCommand() { Value = Interactor.Label });
+                    break;
+                case KeyCommands.KeyToggle:
+                    Commands.Insert(commandIndex, new KeyTogglCommand() { Value = Interactor.Label });
+                    break;
+                case KeyCommands.KeyUp:
+                    Commands.Insert(commandIndex, new KeyUpCommand() { Value = Interactor.Label });
+                    break;
+                case KeyCommands.Loop:
+                    Commands.Insert(commandIndex, new LoopCommand());
+                    break;
+                case KeyCommands.MoveWindow:
+                    Commands.Insert(commandIndex, new MoveWindowCommand());
+                    break;
+                case KeyCommands.Plugin:
+                    Commands.Insert(commandIndex, new PluginCommand());
+                    break;
+                case KeyCommands.Text:
+                    Commands.Insert(commandIndex, new TextCommand() { Value = Interactor.Label });
+                    break;
+                case KeyCommands.Wait:
+                    Commands.Insert(commandIndex, new WaitCommand());
+                    break;
+            }
         }
 
         private void DeleteCommand_Click(object sender, RoutedEventArgs e)
         {
-            Interactor.Commands.RemoveAt(commandIndex);
+            Commands.RemoveAt(commandIndex);
         }
 
         #endregion
-
-        private void Command_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
     }
 }

@@ -42,12 +42,12 @@ namespace JuliusSweetland.OptiKey.Models
         {
             if (e.PropertyName == "Width")
             {
-                var newMin = Interactors.Select(k => k.Width).Min() > 0 ? Interactors.Select(k => k.Width).Min() : 1;
+                var newMin = Interactors.Select(k => k.WidthN).Min() > 0 ? Interactors.Select(k => k.WidthN).Min() : 1;
                 if (newMin != MinKeyWidth)
                 {
                     foreach (var i in Interactors)
                     {
-                        i.Key.WidthSpan = i.Width / newMin;
+                        i.Key.WidthSpan = i.WidthN / newMin;
                     }
                     CreateView();
                 }
@@ -55,12 +55,12 @@ namespace JuliusSweetland.OptiKey.Models
 
             if (e.PropertyName == "Height")
             {
-                var newMin = Interactors.Select(k => k.Height).Min() > 0 ? Interactors.Select(k => k.Height).Min() : 1;
+                var newMin = Interactors.Select(k => k.HeightN).Min() > 0 ? Interactors.Select(k => k.HeightN).Min() : 1;
                 if (newMin != MinKeyHeight)
                 {
                     foreach (var i in Interactors)
                     {
-                        i.Key.HeightSpan = i.Height / newMin;
+                        i.Key.HeightSpan = i.HeightN / newMin;
                     }
                     CreateView();
                 }
@@ -233,7 +233,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public double MinKeyWidth { get; set; }
         [XmlIgnore] public double MinKeyHeight { get; set; }
 
-                private void SelectInteractor(object obj)
+        private void SelectInteractor(object obj)
         {
             SelectedInteractor = (Interactor)obj;
         }
@@ -366,7 +366,7 @@ namespace JuliusSweetland.OptiKey.Models
             {
                 newInteractor.Profiles.Add(new InteractorProfileMap(p.Profile, p.IsMember));
             }
-            newInteractor.Col += newInteractor.Width;
+            newInteractor.ColN += newInteractor.WidthN;
             Interactors.Insert(Interactors.IndexOf(SelectedInteractor) + 1, newInteractor);
             AddInteractorToView(newInteractor);
             SelectedInteractor = newInteractor;
@@ -440,38 +440,16 @@ namespace JuliusSweetland.OptiKey.Models
             if (Interactors.Any())
             SetupInteractors();
 
-
             canvas.ClipToBounds = true;
             View.Child = canvas;
         }
 
         public void AddInteractorToView(Interactor interactor)
         {
-            interactor.Layout = this;
             if (interactor is DynamicKey || interactor is DynamicPopup)
             {
                 interactor.Key = (Key)BindInteractor(interactor, interactor.Key);
                 canvas.Children.Add(interactor.Key);
-            }
-            if (interactor is DynamicOutputPanel)
-            {
-                interactor.Output = (Output)BindInteractor(interactor, interactor.Output);
-                canvas.Children.Add(interactor.Output);
-            }
-            if (interactor is DynamicScratchpad)
-            {
-                interactor.Scratchpad = (ScratchpadUserControl)BindInteractor(interactor, interactor.Scratchpad);
-                canvas.Children.Add(interactor.Scratchpad);
-            }
-            if (interactor is DynamicSuggestionCol)
-            {
-                interactor.SuggestionCol = (SuggestionCol)BindInteractor(interactor, interactor.SuggestionCol);
-                canvas.Children.Add(interactor.SuggestionCol);
-            }
-            if (interactor is DynamicSuggestionRow)
-            {
-                interactor.SuggestionRow = (SuggestionRow)BindInteractor(interactor, interactor.SuggestionRow);
-                canvas.Children.Add(interactor.SuggestionRow);
             }
         }
 
@@ -491,13 +469,13 @@ namespace JuliusSweetland.OptiKey.Models
             userControl.SetBinding(Border.MarginProperty, new Binding("Margin")
             { Source = interactor });
             userControl.SetBinding(Key.BackgroundColourOverrideProperty, new Binding("BackgroundBrush")
-            { Source = interactor.FinalProfile });
+            { Source = interactor.Expressed });
             userControl.SetBinding(Key.ForegroundColourOverrideProperty, new Binding("ForegroundBrush")
-            { Source = interactor.FinalProfile });
+            { Source = interactor.Expressed });
             userControl.SetBinding(Key.BorderColourOverrideProperty, new Binding("BorderBrush")
-            { Source = interactor.FinalProfile });
+            { Source = interactor.Expressed });
             userControl.SetBinding(Key.OpacityOverrideProperty, new Binding("Opacity")
-            { Source = interactor.FinalProfile });
+            { Source = interactor.Expressed });
             userControl.SetBinding(Key.SharedSizeGroupProperty, new Binding("SharedSizeGroup")
             { Source = interactor });
 
@@ -616,35 +594,35 @@ namespace JuliusSweetland.OptiKey.Models
 
         private Tuple<int, int> FindItemPositions(List<List<int>> list, Interactor dynamicItem, int row, int col)
         {
-            if (dynamicItem.Row > -1 && dynamicItem.Row != row)
+            if (dynamicItem.RowN > -1 && dynamicItem.RowN != row)
             {
-                row = (int)dynamicItem.Row;
+                row = (int)dynamicItem.RowN;
                 col = 0;
             }
 
-            if (dynamicItem.Col > -1)
-                col = (int)dynamicItem.Col;
+            if (dynamicItem.ColN > -1)
+                col = (int)dynamicItem.ColN;
 
-            if (ListContainsWidthAndHeight(list, row, col, (int)dynamicItem.Width, (int)dynamicItem.Height))
+            if (ListContainsWidthAndHeight(list, row, col, (int)dynamicItem.WidthN, (int)dynamicItem.HeightN))
                 return new Tuple<int, int>(row, col);
 
-            if (dynamicItem.Col < 0)
+            if (dynamicItem.ColN < 0)
             {
-                var newCol = FindCol(list, row, col + 1, (int)dynamicItem.Width, (int)dynamicItem.Height);
+                var newCol = FindCol(list, row, col + 1, (int)dynamicItem.WidthN, (int)dynamicItem.HeightN);
                 if (newCol > -1)
                     return new Tuple<int, int>(row, newCol);
-                else if (dynamicItem.Row < 0)
+                else if (dynamicItem.RowN < 0)
                 {
                     for (int newRow = row + 1; newRow < list.Count; newRow++)
                     {
-                        newCol = FindCol(list, newRow, 0, (int)dynamicItem.Width, (int)dynamicItem.Height);
+                        newCol = FindCol(list, newRow, 0, (int)dynamicItem.WidthN, (int)dynamicItem.HeightN);
                         if (newCol > -1)
                             return new Tuple<int, int>(newRow, newCol);
                     }
                 }
             }
-            else if (dynamicItem.Row < 0)
-                return new Tuple<int, int>(FindRow(list, row + 1, col, (int)dynamicItem.Width, (int)dynamicItem.Height), col);
+            else if (dynamicItem.RowN < 0)
+                return new Tuple<int, int>(FindRow(list, row + 1, col, (int)dynamicItem.WidthN, (int)dynamicItem.HeightN), col);
 
             return new Tuple<int, int>(-1, -1);
         }
@@ -653,8 +631,8 @@ namespace JuliusSweetland.OptiKey.Models
         {
             //create an item list that excludes popups
             var itemList = Interactors.Where(x => !(x is DynamicPopup)).ToList();
-            var minKeyWidth = itemList.Select(k => k.Width).Min() > 0 ? itemList.Select(k => k.Width).Min() : 1;
-            var minKeyHeight = itemList.Select(k => k.Height).Min() > 0 ? itemList.Select(k => k.Height).Min() : 1;
+            var minKeyWidth = itemList.Select(k => k.WidthN).Min() > 0 ? itemList.Select(k => k.WidthN).Min() : 1;
+            var minKeyHeight = itemList.Select(k => k.HeightN).Min() > 0 ? itemList.Select(k => k.HeightN).Min() : 1;
 
             //start with a list of all grid cells marked empty
             var openGrid = new List<List<int>>();
@@ -682,15 +660,15 @@ namespace JuliusSweetland.OptiKey.Models
                     return;
                 }
 
-                dynamicItem.Row = rowCol.Item1;
-                dynamicItem.Col = rowCol.Item2;
-                for (int i = (int)dynamicItem.Row; i < dynamicItem.Row + dynamicItem.Height; i++)
+                dynamicItem.RowN = rowCol.Item1;
+                dynamicItem.ColN = rowCol.Item2;
+                for (int i = (int)dynamicItem.RowN; i < dynamicItem.RowN + dynamicItem.HeightN; i++)
                 {
-                    openGrid[i].RemoveAll(x => x >= dynamicItem.Col && x < dynamicItem.Col + dynamicItem.Width);
+                    openGrid[i].RemoveAll(x => x >= dynamicItem.ColN && x < dynamicItem.ColN + dynamicItem.WidthN);
                 }
 
                 //SetupDynamicItem(dynamicItem, minKeyWidth, minKeyHeight);
-                rowCol = new Tuple<int, int>(rowCol.Item1, rowCol.Item2 + (int)dynamicItem.Width);
+                rowCol = new Tuple<int, int>(rowCol.Item1, rowCol.Item2 + (int)dynamicItem.WidthN);
 
                 AddInteractorToView(dynamicItem);
             }

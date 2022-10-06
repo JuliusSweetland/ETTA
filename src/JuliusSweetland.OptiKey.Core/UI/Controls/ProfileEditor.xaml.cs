@@ -14,53 +14,6 @@ namespace JuliusSweetland.OptiKey.UI.Controls
         {
             InitializeComponent();
         }
-
-        #region Properties
-
-        public static readonly DependencyProperty ProfileProperty = DependencyProperty
-            .Register("Profile", typeof(InteractorProfile), typeof(ProfileEditor), new PropertyMetadata(default(InteractorProfile)));
-
-        public InteractorProfile Profile
-        {
-            get { return (InteractorProfile)GetValue(ProfileProperty); }
-            set { SetValue(ProfileProperty, value); }
-        }
-
-        public static readonly DependencyProperty ViewProperty = DependencyProperty
-            .Register("View", typeof(Canvas), typeof(ProfileEditor), new PropertyMetadata(default(Canvas)));
-
-        public Canvas View
-        {
-            get { return (Canvas)GetValue(ViewProperty); }
-            set { SetValue(ViewProperty, value); }
-        }
-
-        #endregion
-
-        #region Methods
-
-
-        private void UpdateView()
-        {
-            View = null;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-
-        private void NumericUpDown_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
-        {
-            UpdateView();
-        }
-
-        #endregion
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateView();
-        }
     }
 }
 

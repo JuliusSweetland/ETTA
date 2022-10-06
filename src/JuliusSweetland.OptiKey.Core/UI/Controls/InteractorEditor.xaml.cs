@@ -1,4 +1,5 @@
 // Copyright(c) 2020 OPTIKEY LTD (UK company number11854839) - All Rights Reserved
+using JuliusSweetland.OptiKey.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,8 +7,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using JuliusSweetland.OptiKey.Enums;
-using JuliusSweetland.OptiKey.Models;
 
 namespace JuliusSweetland.OptiKey.UI.Controls
 {
@@ -23,20 +22,26 @@ namespace JuliusSweetland.OptiKey.UI.Controls
 
         #region Properties
 
-        public static readonly DependencyProperty InteractorProperty = DependencyProperty
-            .Register("Interactor", typeof(Interactor), typeof(InteractorEditor), new PropertyMetadata(default(Interactor)));
+        public static readonly DependencyProperty SelectedInteractorTypeProperty = DependencyProperty
+            .Register("SelectedInteractorType", typeof(string), typeof(InteractorEditor), new PropertyMetadata(default(string)));
 
-        public Interactor Interactor
+        public string SelectedInteractorType
         {
-            get { return (Interactor)GetValue(InteractorProperty); }
-            set { SetValue(InteractorProperty, value); }
+            get { return (string)GetValue(SelectedInteractorTypeProperty); }
+            set { SetValue(SelectedInteractorTypeProperty, value); }
         }
+        public static List<string> InteractorTypeList = Enum.GetNames(typeof(InteractorTypes)).ToList(); 
 
-        public static List<string> SymbolList = new List<string>() { "" }.Concat(new ResourceDictionary() { Source = new Uri("/OptiKey;component/Resources/Icons/KeySymbols.xaml", UriKind.RelativeOrAbsolute) }.Keys.Cast<string>().ToList()).ToList();
+        public static List<string> SymbolList = new List<string>() { "" }.Concat(new ResourceDictionary() { Source = new Uri("/OptiKey;component/Resources/Icons/KeySymbols.xaml", UriKind.RelativeOrAbsolute) }.Keys.Cast<string>()).ToList();
 
         #endregion
 
         #region Methods
+
+        private void SelectType(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedInteractorType = (sender as ComboBox).SelectedItem as string;
+        }
 
         #endregion
 

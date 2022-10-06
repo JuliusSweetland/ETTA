@@ -195,8 +195,8 @@ namespace JuliusSweetland.OptiKey.Observables.TriggerSources
 
                                             //set the timeout to either the override or default value
                                             var fixationTimeout = (overrideTimesByKey != null
-                                                && overrideTimesByKey.TryGetValue(fixationCentrePointAndKeyValueCopy.KeyValue, out TimeSpanOverrides timeSpanOverrides))
-                                                ? timeSpanOverrides.LockDownAttemptTimeout : incompleteFixationTtl;
+                                                && overrideTimesByKey.TryGetValue(fixationCentrePointAndKeyValueCopy.KeyValue, out TimeSpanOverrides timeSpanOverrides) && timeSpanOverrides.LockDownAttemptTimeout.HasValue)
+                                                ? timeSpanOverrides.LockDownAttemptTimeout.Value : incompleteFixationTtl;
 
                                             incompleteFixationTimeouts[fixationCentrePointAndKeyValue.KeyValue] =
                                                 Observable.Timer(fixationTimeout).Subscribe(_ =>
@@ -254,9 +254,9 @@ namespace JuliusSweetland.OptiKey.Observables.TriggerSources
                                             //Temporary logic: if override times exist then we can presume that a dynamic keyboard with overrides is being user
                                             //The logic here would be to NOT require lock on again, hence why fixationCentrePointAndKeyValue is not cleared out.
                                             if (overrideTimesByKey != null &&
-                                                overrideTimesByKey.TryGetValue(fixationCentrePointAndKeyValue.KeyValue, out TimeSpanOverrides tmpOverride))
+                                                overrideTimesByKey.TryGetValue(fixationCentrePointAndKeyValue.KeyValue, out TimeSpanOverrides tmpOverride) && tmpOverride.TimeRequiredToLockDown.HasValue)
                                             {
-                                                tmpOverride.LockDownCancelTime = DateTimeOffset.Now + tmpOverride.TimeRequiredToLockDown; 
+                                                tmpOverride.LockDownCancelTime = DateTimeOffset.Now + tmpOverride.TimeRequiredToLockDown.Value; 
                                             }
                                             incompleteFixationProgress.Clear();
                                             incompleteFixationTimeouts.Clear();
@@ -315,9 +315,9 @@ namespace JuliusSweetland.OptiKey.Observables.TriggerSources
 
             //check if this key has any override times
             var hasOverride = overrideTimesByKey.TryGetValue(keyValue, out TimeSpanOverrides timeSpanOverrides);
-            if (hasOverride && timeSpanOverrides.TimeRequiredToLockDown > TimeSpan.Zero && keystroke == 2)
+            if (hasOverride && timeSpanOverrides.TimeRequiredToLockDown.HasValue && keystroke == 2)
             {
-                return timeSpanOverrides.TimeRequiredToLockDown;
+                return timeSpanOverrides.TimeRequiredToLockDown.Value;
             }
 
             var completionTimes = hasOverride && timeSpanOverrides.CompletionTimes != null && timeSpanOverrides.CompletionTimes.Any()

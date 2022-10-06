@@ -126,14 +126,23 @@ namespace JuliusSweetland.OptiKey.Models
     {
         [XmlText] public string XmlText { get { return Value; } set { Value = value; } }
 
-        public string Name { get; set; }
-        public string Method { get; set; }
+        [XmlAttribute] public string Name { get; set; }
+        [XmlAttribute] public string Method { get; set; }
         [XmlElement("Argument")] public List<DynamicArgument> Arguments { get; set; }
+
+        //Legacy
+        [XmlElement("Name")] public string LegacyName { get; set; }
+        [XmlElement("Method")] public string LegacyMethod{ get; set; }
     }
 
     public class DynamicArgument
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+        [XmlAttribute] public string Name { get; set; }
+        [XmlAttribute] public string Value { get; set; }
+
+        //Legacy
+        [XmlElement("Argument")] public List<DynamicArgument> LegacyArgumentList { get; set; }
+        [XmlElement("Name")] public string LegacyName { get; set; }
+        [XmlElement("Value")] public string LegacyValue { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace JuliusSweetland.OptiKey.Models
                     KeyCommands.Wait.ToString();
             }
         }
+        [XmlIgnore] public bool HideTextBox { get { return (this is ActionCommand || this is ChangeKeyboardCommand); } }
         [XmlIgnore] public bool HideBack { get { return !(this is ChangeKeyboardCommand); } }
         [XmlIgnore] public bool HideFunctionList { get { return !(this is ActionCommand); } }
         [XmlIgnore] public bool HideMethod { get { return !(this is PluginCommand); } }
