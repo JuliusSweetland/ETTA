@@ -122,10 +122,10 @@
                   <Grid>
                     <Grid.ColumnDefinitions>
                       <ColumnDefinition SharedSizeGroup="ssg1"/>
-                      <ColumnDefinition SharedSizeGroup="ssg1"/>
+                      <ColumnDefinition SharedSizeGroup="ssg2"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="1,0,1,0" Text="{Binding Label}"/>
-                    <TextBlock Grid.Column="1" Margin="1,0,1,0" Text="{Binding Location}"/>
+                  <TextBlock Grid.Column="0" Margin="1,0,1,0" Text="{Binding InteractorLabel}"/>
+                  <TextBlock Grid.Column="1" Margin="1,0,1,0" Text="{Binding InteractorLocation}"/>
                   </Grid>
                 </DataTemplate>
               </ListBox.ItemTemplate>

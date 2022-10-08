@@ -146,7 +146,7 @@ namespace JuliusSweetland.OptiKey.Models
         public string HiddenBoolAsString
         {
             get { return this.Hidden ? "True" : "False"; }
-            set { this.Hidden = XmlUtils.ConvertToBoolean(value); }
+            set { this.Hidden = bool.TryParse(value, out bool result) && result; }
         }
 
         [XmlIgnore]
@@ -157,7 +157,7 @@ namespace JuliusSweetland.OptiKey.Models
         public string IsShiftAwareAsString
         {
             get { return this.IsShiftAware ? "True" : "False"; }
-            set { this.IsShiftAware = XmlUtils.ConvertToBoolean(value); }
+            set { this.IsShiftAware = bool.TryParse(value, out bool result) && result; }
         }
 
         public XmlGrid Grid { get; set; } = new XmlGrid();
@@ -219,10 +219,10 @@ namespace JuliusSweetland.OptiKey.Models
 
             foreach (var interactor in Interactors)
             {
-                interactor.ProfileNames.Clear();
+                interactor.ProfileNames = new List<XmlElementValue>();
                 foreach (var p in interactor.Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name))
                 {
-                    interactor.ProfileNames.Add(new KeyGroup() { Value = p });
+                    interactor.ProfileNames.Add(new XmlElementValue() { Value = p });
                 }
             }
 
@@ -243,7 +243,7 @@ namespace JuliusSweetland.OptiKey.Models
                 interactor.ProfileNames.Clear();
                 foreach (var p in interactor.Profiles.Where(x => x.IsMember && x.Profile.Name != "All").Select(y => y.Profile.Name))
                 {
-                    interactor.ProfileNames.Add(new KeyGroup() { Value = p });
+                    interactor.ProfileNames.Add(new XmlElementValue() { Value = p });
                 }
             }
 
@@ -510,24 +510,66 @@ namespace JuliusSweetland.OptiKey.Models
             }
             if (interactor.LegacyDestinationKeyboard != null)
             {
-                interactor.Commands.Add(new ChangeKeyboardCommand() { XmlText = interactor.LegacyDestinationKeyboard, BackReturnsHereAsString = interactor.LegacyReturnToThisKeyboard });
+                interactor.Commands.Add(new ChangeKeyboardCommand() { Value = interactor.LegacyDestinationKeyboard, BackReturnsHereAsString = interactor.LegacyReturnToThisKeyboard });
                 interactor.LegacyDestinationKeyboard = null;
                 interactor.LegacyReturnToThisKeyboard = null;
             }
+            /* Update schema for Plugins from this:
+            <PluginKey>
+                <Plugin>NameOfPlugin</Plugin>
+                <Method>CalledMethod</Method>
+                <Arguments>
+                      <Argument>
+                            <Name>One</Name>
+                            <Value>1</Value>
+                      </Argument>
+                      <Argument>
+                            <Name>Two</Name>
+                            <Value>2</Value>
+                      </Argument>
+                </Arguments>
+            </PluginKey>
+
+            or this:
+            <DynamicKey>
+                <Plugin>
+                    <Name>NameOfPlugin</Name>
+                    <Method>CalledMethod</Method>
+                        <Argument>
+                            <Name>One</Name>
+                            <Value>1</Value>
+                        </Argument>
+                        <Argument>
+                            <Name>Two</Name>
+                            <Value>2</Value>
+                      </Argument>
+                </Plugin>
+            </DynamicKey>
+
+            to this:
+            <DynamicKey>
+                <Plugin Name="NameOfPlugin" Method="CalledMethod">
+                    <Argument Name="One" Value="1"/>
+                    <Argument Name="Two" Value="2"/>
+                </Plugin>
+            </DynamicKey>
+            */
             foreach (PluginCommand command in interactor.Commands.Where(x => x is PluginCommand))
             {
-                if (command.XmlText != null)
+                if (command.Value != null)
                 {
-                    command.Name = command.XmlText;
-                    command.XmlText = null;
+                    command.Name = command.Value;
+                    command.Value = null;
                 }
                 if (interactor.LegacyMethod != null)
                 {
                     command.Method = interactor.LegacyMethod;
+                    interactor.LegacyMethod = null;
                 }
                 if (interactor.LegacyArguments != null)
                 {
                     command.Arguments = interactor.LegacyArguments;
+                    interactor.LegacyArguments = null;
                 }
                 if (command.LegacyName != null)
                 {
@@ -540,32 +582,6 @@ namespace JuliusSweetland.OptiKey.Models
                     command.LegacyMethod = null;
                 }
 
-                /*
-                update schema for Plugins from this:
-                <PluginKey>
-                    <Plugin>NameOfPlugin</Plugin>
-                    <Method>CalledMethod</Method>
-                    <Arguments>
-                          <Argument>
-                                <Name>One</Name>
-                                <Value>1</Value>
-                          </Argument>
-                          <Argument>
-                                <Name>Two</Name>
-                                <Value>2</Value>
-                          </Argument>
-                    </Arguments>
-                </PluginKey>
-
-                to this:
-                <DynamicKey>
-                    <Plugin Name="NameOfPlugin" Method="CalledMethod">
-                        <Argument Name="One" Value="1"/>
-                        <Argument Name="Two" Value="2"/>
-                    </Plugin>
-                </DynamicKey>
-                .
-                */
                 if (command.Arguments != null && command.Arguments.Any()
                     && command.Arguments.First().LegacyArgumentList != null)
                 {
@@ -585,14 +601,6 @@ namespace JuliusSweetland.OptiKey.Models
                         argument.LegacyValue = null;
                     }
                 }
-            }
-            if (interactor.LegacyMethod != null)
-            {
-                interactor.LegacyMethod = null;
-            }
-            if (interactor.LegacyArguments != null)
-            {
-                interactor.LegacyArguments = null;
             }
 
             UpgradeProfileXml(interactor);
@@ -639,20 +647,5 @@ namespace JuliusSweetland.OptiKey.Models
 
         //Legacy
         [XmlElement("Keys")] public XmlInteractors LegacyKeys { get; set; }
-    }
-
-    public class XmlInteractors
-    {
-        [XmlElement("ActionKey", typeof(ActionKey))]
-        [XmlElement("ChangeKeyboardKey", typeof(ChangeKeyboardKey))]
-        [XmlElement("DynamicKey", typeof(DynamicKey))]
-        [XmlElement("PluginKey", typeof(PluginKey))]
-        [XmlElement("TextKey", typeof(TextKey))]
-        [XmlElement("OutputPanel", typeof(DynamicOutputPanel))]
-        [XmlElement("Popup", typeof(DynamicPopup))]
-        [XmlElement("Scratchpad", typeof(DynamicScratchpad))]
-        [XmlElement("SuggestionRow", typeof(DynamicSuggestionRow))]
-        [XmlElement("SuggestionCol", typeof(DynamicSuggestionCol))]
-        public List<Interactor> Interactors { get; set; } = new List<Interactor>();
     }
 }

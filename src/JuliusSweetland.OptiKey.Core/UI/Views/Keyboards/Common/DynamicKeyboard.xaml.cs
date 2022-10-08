@@ -223,13 +223,13 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
                 else if (dynamicItem is DynamicScratchpad)
                 {
-                    var newItem = new Scratchpad();
+                    var newItem = new ScratchpadUserControl();
                     MainGrid.Children.Add(newItem);
                     Grid.SetColumn(newItem, dynamicItem.ColN);
                     Grid.SetRow(newItem, dynamicItem.RowN);
                     Grid.SetColumnSpan(newItem, dynamicItem.WidthN);
                     Grid.SetRowSpan(newItem, dynamicItem.HeightN);
-                    newItem.BackgroundColourOverride = profile.BorderBrush;
+                    newItem.Background = profile.BorderBrush;
                     if (profile.BorderBrush != null)
                         newItem.BorderBrush = profile.BorderBrush;
                     if (profile.BackgroundBrush != null)
@@ -387,12 +387,12 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                     }
                     else if (keyCommand is PluginCommand dynamicPlugin)
                     {
-                        if (string.IsNullOrWhiteSpace(dynamicPlugin.Name.ToString()))
-                            Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Value);
+                        if (string.IsNullOrWhiteSpace(dynamicPlugin.Name))
+                            Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Name);
                         else if (string.IsNullOrWhiteSpace(dynamicPlugin.Method))
-                            Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Value);
+                            Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Name);
                         else
-                            commandList.Add(new PluginCommand() { Value = dynamicPlugin.Name,
+                            commandList.Add(new PluginCommand() { Name = dynamicPlugin.Name,
                                 Method = dynamicPlugin.Method, Arguments = dynamicPlugin.Arguments } );
                     }
                     else if (keyCommand is LoopCommand dynamicLoop)

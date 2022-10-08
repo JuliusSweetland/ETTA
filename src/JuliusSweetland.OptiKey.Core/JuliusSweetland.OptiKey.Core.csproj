@@ -293,8 +293,6 @@
     <Compile Include="Models\TimeSpanOverrides.cs" />
     <Compile Include="Models\KeyValueConverter.cs" />
     <Compile Include="Models\PluginMetadata.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlKeyGroup.cs" />
-    <Compile Include="Models\XmlKeyboardModels\IXmlKey.cs" />
     <Compile Include="Models\XmlKeyboardModels\XmlSuggestionCol.xaml.cs">
       <DependentUpon>XmlSuggestionCol.xaml</DependentUpon>
     </Compile>
@@ -304,13 +302,9 @@
     <Compile Include="Models\XmlKeyboardModels\XmlScratchpad.xaml.cs">
       <DependentUpon>XmlScratchpad.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\XmlKeyboardModels\XmlDynamicItem.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlDynamicKey.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlPluginKey.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlActionKey.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlChangeKeyboardKey.cs" />
+    <Compile Include="Models\XmlKeyboardModels\XmlInteractors.cs" />
+    <Compile Include="Models\XmlKeyboardModels\XmlElementValue.cs" />
     <Compile Include="Models\XmlKeyboardModels\XmlGrid.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlKey.cs" />
     <Compile Include="Models\XmlKeyboardModels\XmlKeyboard.cs" />
     <Compile Include="Models\KeyStateServiceState.cs" />
     <Compile Include="Models\KeyPressKeyValue.cs" />
@@ -326,10 +320,7 @@
     <Compile Include="Models\NotificationWithServicesAndState.cs" />
     <Compile Include="Models\NotificationEventArgs.cs" />
     <Compile Include="Models\SerializableDictionaryOfTimeSpanByKeyValues.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlKeys.cs" />
     <Compile Include="Models\XmlKeyboardModels\XmlKeyStates.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlTextKey.cs" />
-    <Compile Include="Models\XmlKeyboardModels\XmlUtils.cs" />
     <Compile Include="Native\Common\Enums\AppBarEdge.cs" />
     <Compile Include="Native\Common\Enums\AppBarMessages.cs" />
     <Compile Include="Native\Common\Enums\AppBarNotify.cs" />

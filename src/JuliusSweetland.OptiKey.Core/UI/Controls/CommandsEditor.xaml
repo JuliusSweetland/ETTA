@@ -41,43 +41,49 @@
                 <ColumnDefinition Width="*" SharedSizeGroup="cc7" />
                 <ColumnDefinition Width="*" SharedSizeGroup="cc8" />
               </Grid.ColumnDefinitions>
-              <Button Grid.Column="7" Margin="5,0" Background="IndianRed" Click="DeleteCommand_Click"
+              <Button Grid.Column="7" Margin="3,0" Background="IndianRed" Click="DeleteCommand_Click"
                                     BorderThickness="0" Width="30" Height="20">
                 <Path Data="M0,0 12,12 M12,0 0,12" Width="12" Height="12" Stroke="Black" StrokeThickness="4"/>
               </Button>
-              <ComboBox VerticalAlignment="Center" Margin="0"
+              <ComboBox VerticalAlignment="Top" Margin="0"
                   ItemsSource="{Binding Source={x:Static controls:CommandsEditor.CommandKeyList}}"
                   SelectedItem="{Binding Type, Mode=OneTime}"
                         SelectionChanged="SelectType"/>
-              <TextBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90"
+              <TextBox Grid.Column="3" VerticalAlignment="Center" Margin="3,0" MinWidth="90"
                           Visibility="{Binding HideTextBox, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-              <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90" IsTextSearchEnabled="True"
-                          Visibility="{Binding HideFunctionList, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+              <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3,0" MinWidth="90" IsTextSearchEnabled="True"
+                          Visibility="{Binding HideFunction, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                           ItemsSource="{Binding Source={x:Static controls:CommandsEditor.FunctionKeyList}}"
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-              <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3" MinWidth="90" IsTextSearchEnabled="True"
-                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+              <StackPanel Grid.Column="3" Orientation="Horizontal"
+                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                <ComboBox VerticalAlignment="Center" Margin="3,0" MinWidth="90" IsTextSearchEnabled="True"
                           ItemsSource="{Binding Source={x:Static controls:CommandsEditor.KeyboardList}}"
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-              <Label Grid.Column="4" VerticalAlignment="Center" Content="Link Back:"
+                <Label VerticalAlignment="Center" Content="Link Back:"/>
+                <CheckBox VerticalAlignment="Center" HorizontalAlignment="Left"
                           ToolTip="When checked this keyboard is included as a stop when navigating back from future keyboards"
-                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}"/>
-              <CheckBox Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left"
-                          ToolTip="When checked this keyboard is included as a stop when navigating back from future keyboards"
-                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
                           IsChecked="{Binding BackAction}"/>
-              <Label Grid.Column="4" VerticalAlignment="Center" Content="Method:"
-                          Visibility="{Binding HideMethod, Converter={StaticResource InvertedBoolToVisibilityConverter}}"/>
-              <TextBox Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" 
-                          Visibility="{Binding HideMethod, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+              </StackPanel>
+              <StackPanel Grid.Column="3" Orientation="Vertical"
+                          Visibility="{Binding HidePlugin, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                  <TextBox VerticalAlignment="Center" Margin="3,0" HorizontalAlignment="Left" MinWidth="90" 
+                          Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                  <Label VerticalAlignment="Center" Content="Method:"/>
+                  <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" 
                           Text="{Binding Method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                  <TextBox VerticalAlignment="Center" Margin="3,0" HorizontalAlignment="Left" MinWidth="90" IsEnabled="False"
+                         Text="Argument editing disabled"/>
+              </StackPanel>
             </Grid>
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>
       <StackPanel Orientation="Horizontal">
-        <Button Content="Add" HorizontalAlignment="Left" Click="AddCommand_Click" Margin="3,0,0,0" Width="40"/>
+        <Button Content="Add" HorizontalAlignment="Left" Click="AddCommand_Click" Margin="3,0" Width="40"/>
       </StackPanel>
     </StackPanel>
   </Grid>

@@ -109,6 +109,7 @@ namespace JuliusSweetland.OptiKey.Models
             set {
                 opacity = string.IsNullOrWhiteSpace(value) ? null : value;
                 OpacityN = double.TryParse(value, out double result) ? (double?)result : null;
+                OnPropertyChanged();
             }
         }
 

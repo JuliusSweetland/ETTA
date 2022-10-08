@@ -417,7 +417,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
         private void AddLayout()
         {
-            XmlKeyboard = new XmlKeyboard() { Name = "NewKeyboard", Grid = new XmlGrid() { Cols = 16, Rows = 14 } };
+            XmlKeyboard = new XmlKeyboard() { Name = "NewKeyboard", Width = "100%", Height = "100%", Grid = new XmlGrid() { Cols = 16, Rows = 14 } };
             XmlKeyboard.Profiles = new List<InteractorProfile> { new InteractorProfile() {Name = "All" } };
             Profiles.Clear();
             Profiles.AddRange(XmlKeyboard.Profiles);
@@ -649,7 +649,8 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             KeyboardBorder.SetBinding(Border.MarginProperty, new Binding("Margin") { Source = this });
             canvas.Children.Add(KeyboardBorder);
             
-            KeyboardBorder.Child = new Views.Keyboards.Common.DynamicKeyboard(XmlKeyboard);
+            var dynamicKeyboard = new Views.Keyboards.Common.DynamicKeyboard(XmlKeyboard);
+            KeyboardBorder.Child = dynamicKeyboard;
             foreach (var i in Interactors.Where(x => x.Key != null))
             {
                 i.Key.InputBindings.Add(new MouseBinding()
@@ -666,6 +667,58 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                     i.Key.Width = i.Key.GazeRegion.Width * ScreenWidth;
                     i.Key.Height = i.Key.GazeRegion.Height * ScreenHeight;
                     canvas.Children.Add(i.Key);
+                }
+                if (i is DynamicOutputPanel)
+                {
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<Output>(dynamicKeyboard.MainGrid)
+                        .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
+                    {
+                        item.InputBindings.Add(new MouseBinding()
+                        {
+                            MouseAction = MouseAction.LeftClick,
+                            Command = InteractorCommand,
+                            CommandParameter = i
+                        });
+                    }
+                }
+                if (i is DynamicScratchpad)
+                {
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<ScratchpadUserControl>(dynamicKeyboard.MainGrid)
+                        .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
+                    {
+                        item.InputBindings.Add(new MouseBinding()
+                        {
+                            MouseAction = MouseAction.LeftClick,
+                            Command = InteractorCommand,
+                            CommandParameter = i
+                        });
+                    }
+                }
+                if (i is DynamicSuggestionCol)
+                {
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<SuggestionCol>(dynamicKeyboard.MainGrid)
+                        .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
+                    {
+                        item.InputBindings.Add(new MouseBinding()
+                        {
+                            MouseAction = MouseAction.LeftClick,
+                            Command = InteractorCommand,
+                            CommandParameter = i
+                        });
+                    }
+                }
+                if (i is DynamicSuggestionRow)
+                {
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<SuggestionRow>(dynamicKeyboard.MainGrid)
+                        .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
+                    {
+                        item.InputBindings.Add(new MouseBinding()
+                        {
+                            MouseAction = MouseAction.LeftClick,
+                            Command = InteractorCommand,
+                            CommandParameter = i
+                        });
+                    }
                 }
                 if (i == Interactor)
                 {

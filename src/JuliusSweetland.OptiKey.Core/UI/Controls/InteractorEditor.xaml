@@ -109,7 +109,7 @@
                          Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
             <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
                          Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
-            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
+            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding LabelEdit, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
             <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding ShiftDownLabel, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
             <ComboBox Padding="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource SymbolList}}" SelectedItem="{Binding Symbol}"/>
           </StackPanel>

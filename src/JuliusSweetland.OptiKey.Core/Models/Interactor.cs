@@ -26,12 +26,7 @@ namespace JuliusSweetland.OptiKey.Models
 
             if (name == "Row" || name == "Col" || name.StartsWith("Gaze"))
             {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Location"));
-            }
-
-            if (name == "Label")
-            {
-                ShiftDownLabel = Label != null && Label != Label.ToUpper() ? Label.ToUpper() : null;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("InteractorLocation"));
             }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -127,23 +122,43 @@ namespace JuliusSweetland.OptiKey.Models
         }
 
         private string label;
-        [XmlAttribute] public string Label { get { return label; }
-            set {
-                foreach (var c in commands.Where(x => x.Value == label))
+        [XmlIgnore] public string LabelEdit
+        {
+            get { return label; }
+            set
+            {
+                foreach (var c in commands.Where(x => x.Value == Label))
                     c.Value = value;
-                label = value;
-                OnPropertyChanged(); } }
+                Label = value;
+                ShiftDownLabel = Label != null && Label != Label.ToUpper() && Label.Length == 1 ? Label.ToUpper() : null;
+                OnPropertyChanged();
+            }
+        }
+        [XmlAttribute] public string Label { get { return label; } set { label = value; } }
 
-        [XmlAttribute] public string ShiftDownLabel { get { return Key.ShiftDownText; } set { Key.ShiftDownText = value; OnPropertyChanged(); } }
+        private string shiftDownLabel;
+        [XmlAttribute] public string ShiftDownLabel { get { return shiftDownLabel; } set { shiftDownLabel = value; OnPropertyChanged(); } }
 
         private string symbol;
         [XmlAttribute] public string Symbol { get { return symbol; } set { symbol = value; OnPropertyChanged(); } }
 
-        [XmlIgnore] public string Location { get { return this is DynamicPopup
-                    ? "(" + GazeRegion + ")"
-                    : "R:" + RowN.ToString() + " C:" + ColN.ToString(); } }
+        [XmlIgnore] public string InteractorLabel
+        {
+            get
+            {
+                return this is DynamicOutputPanel ? "Output Panel"
+                    : this is DynamicScratchpad ? "Scratchpad"
+                    : this is DynamicSuggestionRow ? "Suggestion Row"
+                    : this is DynamicSuggestionCol ? "Suggestion Col"
+                    : Label;
+            }
+        }
+        [XmlIgnore] public string InteractorLocation
+        { get { return this is DynamicPopup
+                    ? "XY (" + GazeLeft.ToString() + ", " + GazeTop.ToString() + ")"
+                    : "RC (" + Row + ", " + Col + ")"; } }
 
-        [XmlElement("KeyGroup")] public List<KeyGroup> ProfileNames { get; set; }
+        [XmlElement("KeyGroup")] public List<XmlElementValue> ProfileNames { get; set; }
 
         private ObservableCollection<KeyCommand> commands;
         [XmlElement("Action", typeof(ActionCommand))]
@@ -170,7 +185,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlElement("DestinationKeyboard")] public string LegacyDestinationKeyboard { get; set; }
         [XmlElement("ReturnToThisKeyboard")] public string LegacyReturnToThisKeyboard { get; set; }
         [XmlElement("Method")] public string LegacyMethod { get; set; }
-        [XmlElement("Arguments")] public List<DynamicArgument> LegacyArguments { get; set; }
+        [XmlElement("Arguments")] public List<PluginArgument> LegacyArguments { get; set; }
     }
 
     public class ActionKey : DynamicKey { }

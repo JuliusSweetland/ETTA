@@ -38,7 +38,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public bool HideMethod { get { return Name != KeyCommands.Plugin; } }
         [XmlAttribute] public string Method { get; set; }
 
-        public List<DynamicArgument> Argument { get; set; }
+        public List<PluginArgument> Argument { get; set; }
 
         public List<KeyCommand> LoopCommands { get; set; }
 

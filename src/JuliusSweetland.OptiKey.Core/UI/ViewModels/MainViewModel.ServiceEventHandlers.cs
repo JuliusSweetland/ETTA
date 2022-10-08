@@ -628,7 +628,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                                 else
                                     Log.InfoFormat("Unsupported CommuniKate action: {0}.", thisAction);
                             }
-
                         }
                     }
 
@@ -636,10 +635,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
 
                 case FunctionKeys.SelectVoice:
                     SelectVoice(singleKeyValue.String);
-                    break;
-
-                case FunctionKeys.Plugin:
-                    RunPlugin_Legacy(singleKeyValue.String);
                     break;
 
                 default:
@@ -2670,7 +2665,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                     }
                     else if (keyCommand is PluginCommand pluginCommand)
                     {
-                        Log.InfoFormat("CommandList: Plugin [{0}]", keyCommand.Value);
+                        Log.InfoFormat("CommandList: Plugin [{0}]", pluginCommand.Name);
                         RunDynamicPlugin(pluginCommand);
                     }
                 }
@@ -2714,7 +2709,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
 
         private void RunDynamicPlugin(PluginCommand pluginCommand)
         {
-            Log.InfoFormat("Running plugin [{0}]", pluginCommand.Value);
+            Log.InfoFormat("Running plugin [{0}]", pluginCommand.Name);
 
             // User-friendly messages for common failure modes
             if (!Settings.Default.EnablePlugins)
@@ -2722,9 +2717,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
                 DisplayPluginError("Plugins are currently disabled");
                 return;
             }
-            if (!PluginEngine.IsPluginAvailable(pluginCommand.Value))
+            if (!PluginEngine.IsPluginAvailable(pluginCommand.Name))
             {
-                DisplayPluginError($"Could not find plugin {pluginCommand.Value}");
+                DisplayPluginError($"Could not find plugin {pluginCommand.Name}");
                 return;
             }
 
@@ -2732,7 +2727,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
             Dictionary<string, string> context = BuildPluginContext();
             try
             {
-                PluginEngine.RunDynamicPlugin(context, pluginCommand);
+                PluginEngine.RunPlugin(context, pluginCommand);
             }
             catch (Exception exception)
             {
@@ -2749,31 +2744,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels
             if (RaiseToastNotification(Resources.CRASH_TITLE, message, NotificationTypes.Error, () => inputService.RequestResume()))
             {
                 audioService.PlaySound(Settings.Default.ErrorSoundFile, Settings.Default.ErrorSoundVolume);
-            }
-        }
-
-        private void RunPlugin_Legacy(string command)
-        {
-            //FIXME: Log Message is logging entire XML
-            Log.InfoFormat("Running plugin [{0}]", command);
-
-            // Build plugin context
-            Dictionary<string, string> context = BuildPluginContext();
-
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(XmlPluginKey));
-                StringReader rdr = new StringReader(command);
-                PluginEngine.RunPlugin_Legacy(context, (XmlPluginKey)serializer.Deserialize(rdr));
-            }
-            catch (Exception exception)
-            {
-                Log.Error("Error running plugin.", exception);
-                while (exception.InnerException != null) exception = exception.InnerException;
-                if (RaiseToastNotification(Resources.CRASH_TITLE, exception.Message, NotificationTypes.Error, () => inputService.RequestResume()))
-                {
-                    audioService.PlaySound(Settings.Default.ErrorSoundFile, Settings.Default.ErrorSoundVolume);
-                }
             }
         }
 
