@@ -134,6 +134,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         public string KeyboardFile { get; set; }
         
         public ObservableCollection<XmlKeyboard> XmlKeyboards { get; private set; }
+        
         private XmlKeyboard xmlKeyboard = new XmlKeyboard();
         public XmlKeyboard XmlKeyboard
         {
@@ -165,7 +166,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             get { return interactor; }
             set
             {
-
                 if (interactor != null && interactor.Key != null)
                 {
                     interactor.Key.IsCurrent = false;

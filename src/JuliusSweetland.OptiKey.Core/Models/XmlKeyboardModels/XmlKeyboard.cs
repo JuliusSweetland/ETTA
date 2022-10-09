@@ -566,7 +566,7 @@ namespace JuliusSweetland.OptiKey.Models
                     command.Method = interactor.LegacyMethod;
                     interactor.LegacyMethod = null;
                 }
-                if (interactor.LegacyArguments != null)
+                if (interactor.LegacyArguments != null && interactor.LegacyArguments.Any())
                 {
                     command.Arguments = interactor.LegacyArguments;
                     interactor.LegacyArguments = null;
@@ -583,7 +583,8 @@ namespace JuliusSweetland.OptiKey.Models
                 }
 
                 if (command.Arguments != null && command.Arguments.Any()
-                    && command.Arguments.First().LegacyArgumentList != null)
+                    && command.Arguments.First().LegacyArgumentList != null
+                    && command.Arguments.First().LegacyArgumentList.Any())
                 {
                     command.Arguments = command.Arguments.First().LegacyArgumentList;
                 }
@@ -606,7 +607,7 @@ namespace JuliusSweetland.OptiKey.Models
             UpgradeProfileXml(interactor);
         }
 
-        private void UpgradeProfileXml(InteractorProfile profile)
+        private void UpgradeProfileXml(Interactor profile)
         {
             if (profile.LegacySharedSizeGroup != null)
             {
