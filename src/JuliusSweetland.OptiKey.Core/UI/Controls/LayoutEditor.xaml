@@ -10,8 +10,7 @@
              xmlns:valueConverters="clr-namespace:JuliusSweetland.OptiKey.UI.ValueConverters"
              mc:Ignorable="d" Background="LightBlue">
   <UserControl.Resources>
-    <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
-    <valueConverters:ListNotEmpty x:Key="ListNotEmpty"/>
+    <CollectionViewSource x:Key="WindowStates" Source="{Binding Source={x:Static mgmt:LayoutViewModel.WindowStates}}"/>
     <CollectionViewSource x:Key="PositionList" Source="{Binding Source={x:Static mgmt:LayoutViewModel.PositionList}}"/>
   </UserControl.Resources>
   <Grid>
@@ -25,38 +24,62 @@
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
     <Expander Grid.Row="0" Header="Properties" IsExpanded="True">
-      <StackPanel Orientation="Horizontal">
-        <StackPanel>
-          <Label Margin="1,0,1,0" Content="Name"/>
-          <Label Margin="1,0,1,0" Content="Show Output Panel"/>
-          <Label Margin="1,0,1,0" Content="Columns"/>
-          <Label Margin="1,0,1,0" Content="Rows"/>
-          <Label Margin="1,0,1,0" Content="Position"/>
-          <Label Margin="1,0,1,0" Content="Width"/>
-          <Label Margin="1,0,1,0" Content="Height"/>
-          <Label Margin="1,0,1,0" Content="HorizontalOffset"/>
-          <Label Margin="1,0,1,0" Content="VerticaOffset"/>
-        </StackPanel>
-        <StackPanel>
-          <TextBox Margin="1,0,1,0" Text="{Binding XmlKeyboard.Name, UpdateSourceTrigger=PropertyChanged}"/>
-          <CheckBox Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Margin="1,0,1,0" Content="Name"/>
+        <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="ShowOutputPanel"/>
+        <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="PersistNewState"/>
+        <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="Columns"/>
+        <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Rows"/>
+        <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="WindowState"/>
+        <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="Position"/>
+        <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="Width"/>
+        <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="Height"/>
+        <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="HorizontalOffset"/>
+        <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="VerticaOffset"/>
+        
+        <TextBox Grid.Column="1" Grid.Row="0" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Name, UpdateSourceTrigger=PropertyChanged}"/>
+          <CheckBox Grid.Column="1" Grid.Row="1" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding XmlKeyboard.ShowOutputPanel, UpdateSourceTrigger=PropertyChanged}">
-            <CheckBox.LayoutTransform>
-              <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
-            </CheckBox.LayoutTransform>
-          </CheckBox>
-          <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
+          <CheckBox.LayoutTransform>
+            <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+          </CheckBox.LayoutTransform>
+        </CheckBox>
+        <CheckBox Grid.Column="1" Grid.Row="2" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          IsChecked="{Binding XmlKeyboard.PersistNewState, UpdateSourceTrigger=PropertyChanged}">
+          <CheckBox.LayoutTransform>
+            <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+          </CheckBox.LayoutTransform>
+        </CheckBox>
+        <c:NumericUpDown Grid.Column="1" Grid.Row="3" Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
                          Value="{Binding XmlKeyboard.Cols, UpdateSourceTrigger=PropertyChanged}" />
-          <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
+        <c:NumericUpDown Grid.Column="1" Grid.Row="4" Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
                          Value="{Binding XmlKeyboard.Rows, UpdateSourceTrigger=PropertyChanged}"/>
-          <ComboBox Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource PositionList}}"
+        <ComboBox Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource WindowStates}}"
+                    SelectedItem="{Binding XmlKeyboard.WindowState, UpdateSourceTrigger=PropertyChanged}"/>
+        <ComboBox Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource PositionList}}"
                     SelectedItem="{Binding XmlKeyboard.Position, UpdateSourceTrigger=PropertyChanged}"/>
-          <TextBox Margin="1,0,1,0" Text="{Binding XmlKeyboard.Width, UpdateSourceTrigger=PropertyChanged}"/>
-          <TextBox Margin="1,0,1,0" Text="{Binding XmlKeyboard.Height, UpdateSourceTrigger=PropertyChanged}"/>
-          <TextBox Margin="1,0,1,0" Text="{Binding XmlKeyboard.HorizontalOffset, UpdateSourceTrigger=PropertyChanged}"/>
-          <TextBox Margin="1,0,1,0" Text="{Binding XmlKeyboard.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
-      </StackPanel>
+        <TextBox Grid.Column="1" Grid.Row="7" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Width, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="8" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Height, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="9" Margin="1,0,1,0" Text="{Binding XmlKeyboard.HorizontalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="10" Margin="1,0,1,0" Text="{Binding XmlKeyboard.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+      </Grid>
     </Expander>
     <Expander Grid.Row="1" Header="Keygroups" IsExpanded="True">
     <StackPanel Orientation="Horizontal">
@@ -74,28 +97,7 @@
                  SelectedItem="{Binding Profile}"
                  DisplayMemberPath="Name"/>
         </StackPanel>
-        <Grid>
-          <Grid.RowDefinitions>
-              <RowDefinition Height="Auto"/>
-              <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-          </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Margin="1,0,1,0" Content="Name"/>
-          <TextBox Grid.Column="1" Margin="1,0,1,0" Text="{Binding ElementName=XmlKeyboardProfileListBox, Path=SelectedItem.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-          <StackPanel Grid.Row="1" Grid.Column="0">
-            <Label Margin="1,0,1,0" Content="BackgroundColor"/>
-            <Label Margin="1,0,1,0" Content="BorderColor"/>
-            <Label Margin="1,0,1,0" Content="ForegroundColor"/>
-            <Label Margin="1,0,1,0" Content="Opacity"/>
-            <Label Margin="1,0,1,0" Content="LockOnTime"/>
-            <Label Margin="1,0,1,0" Content="CompletionTimes"/>
-            <Label Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
-          </StackPanel>
-          <controls:ProfileEditor Grid.Row="1" Grid.Column="1" DataContext="{Binding Profile}"/>
-        </Grid>
+          <controls:ProfileEditor DataContext="{Binding Profile}"/>
       </StackPanel>
     </Expander>
     <Expander Grid.Row="2" Header="Content" IsExpanded="True">

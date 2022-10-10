@@ -64,7 +64,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public DockSizes? DockSizeN { get; set; }
         public string DockSize
         {
-            get { return DockSizeN.HasValue ? DockSizeN.Value.ToString() : null; }
+            get { return DockSizeN.HasValue && DockSizeN.Value == DockSizes.Collapsed ? DockSizeN.Value.ToString() : null; }
             set { DockSizeN = Enum.TryParse(value, out DockSizes result) ? (DockSizes?)result : null; OnPropertyChanged(); }
         }
 
@@ -616,12 +616,12 @@ namespace JuliusSweetland.OptiKey.Models
             }
             if (profile.LegacyAutoScaleToOneKeyWidth != null)
             {
-                profile.AutoScaleToOneKeyWidthString = profile.LegacyAutoScaleToOneKeyWidth;
+                profile.AutoScaleToOneKeyWidth = profile.LegacyAutoScaleToOneKeyWidth;
                 profile.LegacyAutoScaleToOneKeyWidth = null;
             }
             if (profile.LegacyAutoScaleToOneKeyHeight != null)
             {
-                profile.AutoScaleToOneKeyHeightString = profile.LegacyAutoScaleToOneKeyHeight;
+                profile.AutoScaleToOneKeyHeight = profile.LegacyAutoScaleToOneKeyHeight;
                 profile.LegacyAutoScaleToOneKeyHeight = null;
             }
             if (profile.LegacyUsePersianCompatibilityFont != null)

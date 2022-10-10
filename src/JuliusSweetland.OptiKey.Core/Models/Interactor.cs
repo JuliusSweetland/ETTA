@@ -40,7 +40,6 @@ namespace JuliusSweetland.OptiKey.Models
         {
             if (!(this is InteractorProfile))
             {
-
                 Inherited = new InteractorProfile();
                 Expressed = new InteractorProfile();
                 commands = new ObservableCollection<KeyCommand>();
@@ -74,10 +73,12 @@ namespace JuliusSweetland.OptiKey.Models
                     this is DynamicPopup ? InteractorTypes.Popup.ToString() :
                     this is DynamicScratchpad ? InteractorTypes.Scratchpad.ToString() :
                     this is DynamicSuggestionRow ? InteractorTypes.SuggestionRow.ToString() :
-                    InteractorTypes.SuggestionColumn.ToString();
+                    this is DynamicSuggestionCol ? InteractorTypes.SuggestionColumn.ToString() :
+                    "InteractorProfile";
             }
         }
 
+        [XmlIgnore] public Visibility IsKey { get { return this is DynamicPopup || this is DynamicKey ? Visibility.Visible : Visibility.Collapsed; } }
         [XmlIgnore] public Visibility IsPopup { get { return this is DynamicPopup ? Visibility.Visible : Visibility.Collapsed; } }
         [XmlIgnore] public Visibility IsNotPopup { get { return this is DynamicPopup ? Visibility.Collapsed : Visibility.Visible; } }
 
@@ -178,134 +179,21 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlElement("Wait", typeof(WaitCommand))]
         public ObservableCollection<KeyCommand> Commands { get { return commands; } set { commands = value; } }
 
-
-
         private ObservableCollection<InteractorProfileMap> profiles;
-        [XmlIgnore]
-        public ObservableCollection<InteractorProfileMap> Profiles
+        [XmlIgnore] public ObservableCollection<InteractorProfileMap> Profiles
         { get { return profiles; } set { profiles = value; } }
 
         private InteractorProfile inherited;
-        [XmlIgnore]
-        public InteractorProfile Inherited
+        [XmlIgnore] public InteractorProfile Inherited
         { get { return inherited; } set { inherited = value; } }
 
         [XmlIgnore] public InteractorProfile Expressed { get; set; }
 
         private string name;
-        [XmlAttribute]
-        public string Name
+        [XmlAttribute] public string Name
         {
             get { return name; }
             set { name = name == "All" ? "All" : value; OnPropertyChanged(); }
-        }
-
-        [XmlIgnore] public SolidColorBrush BackgroundBrush { get; set; }
-        private string backgroundColor;
-        [XmlAttribute]
-        public string BackgroundColor
-        {
-            get { return backgroundColor; }
-            set
-            {
-                backgroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
-                {
-                    BackgroundBrush = brush;
-                    OnPropertyChanged();
-                }
-                else if (BackgroundBrush != null)
-                {
-                    BackgroundBrush = null;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        [XmlIgnore] public SolidColorBrush BorderBrush { get; set; }
-        private string borderColor;
-        [XmlAttribute]
-        public string BorderColor
-        {
-            get { return borderColor; }
-            set
-            {
-                borderColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
-                {
-                    BorderBrush = brush;
-                    OnPropertyChanged();
-                }
-                else if (BorderBrush != null)
-                {
-                    BorderBrush = null;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        [XmlIgnore] public int? BorderThicknessN;
-        private string borderThickness;
-        [XmlAttribute]
-        public string BorderThickness
-        {
-            get { return borderThickness; }
-            set
-            {
-                borderThickness = value;
-                BorderThicknessN = int.TryParse(value, out int result) ? (int?)result : null;
-                OnPropertyChanged();
-            }
-        }
-
-        [XmlIgnore] public int? CornerRadiusN;
-        private string cornerRadius;
-        [XmlAttribute]
-        public string CornerRadius
-        {
-            get { return cornerRadius; }
-            set
-            {
-                cornerRadius = value;
-                CornerRadiusN = int.TryParse(value, out int result) ? (int?)result : null;
-                OnPropertyChanged();
-            }
-        }
-
-        [XmlIgnore] public SolidColorBrush ForegroundBrush { get; set; }
-        private string foregroundColor;
-        [XmlAttribute]
-        public string ForegroundColor
-        {
-            get { return foregroundColor; }
-            set
-            {
-                foregroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
-                {
-                    ForegroundBrush = brush;
-                    OnPropertyChanged();
-                }
-                else if (ForegroundBrush != null)
-                {
-                    ForegroundBrush = null;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        [XmlIgnore] public double? OpacityN { get; set; }
-        private string opacity;
-        [XmlAttribute]
-        public string Opacity
-        {
-            get { return opacity; }
-            set
-            {
-                opacity = string.IsNullOrWhiteSpace(value) ? null : value;
-                OpacityN = double.TryParse(value, out double result) ? (double?)result : null;
-                OnPropertyChanged();
-            }
         }
 
         [XmlIgnore] public TimeSpan? LockOnTimeN { get; set; }
@@ -375,36 +263,113 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
-        [XmlIgnore] public SolidColorBrush KeyDisabledForegroundBrush { get; set; }
-        private string keyDisabledForeground;
+        [XmlIgnore] public double? OpacityN { get; set; }
+        private string opacity;
         [XmlAttribute]
-        public string KeyDisabledForeground
+        public string Opacity
         {
-            get { return keyDisabledForeground; }
+            get { return opacity; }
             set
             {
-                keyDisabledForeground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDisabledForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                opacity = string.IsNullOrWhiteSpace(value) ? null : value;
+                OpacityN = double.TryParse(value, out double result) ? (double?)result : null;
+                OnPropertyChanged();
             }
         }
 
-        [XmlIgnore] public SolidColorBrush KeyDownForegroundBrush { get; set; }
-        private string keyDownForeground;
-        [XmlAttribute]
-        public string KeyDownForeground
+        [XmlIgnore] public SolidColorBrush BackgroundBrush { get; set; }
+        private string backgroundColor;
+        [XmlAttribute] public string BackgroundColor
         {
-            get { return keyDownForeground; }
+            get { return backgroundColor; }
             set
             {
-                keyDownForeground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDownForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                backgroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
+                if (ValidColor(value, out SolidColorBrush brush))
+                {
+                    BackgroundBrush = brush;
+                    OnPropertyChanged();
+                }
+                else if (BackgroundBrush != null)
+                {
+                    BackgroundBrush = null;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [XmlIgnore] public SolidColorBrush ForegroundBrush { get; set; }
+        private string foregroundColor;
+        [XmlAttribute]
+        public string ForegroundColor
+        {
+            get { return foregroundColor; }
+            set
+            {
+                foregroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
+                if (ValidColor(value, out SolidColorBrush brush))
+                {
+                    ForegroundBrush = brush;
+                    OnPropertyChanged();
+                }
+                else if (ForegroundBrush != null)
+                {
+                    ForegroundBrush = null;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [XmlIgnore] public SolidColorBrush BorderBrush { get; set; }
+        private string borderColor;
+        [XmlAttribute] public string BorderColor
+        {
+            get { return borderColor; }
+            set
+            {
+                borderColor = string.IsNullOrWhiteSpace(value) ? null : value;
+                if (ValidColor(value, out SolidColorBrush brush))
+                {
+                    BorderBrush = brush;
+                    OnPropertyChanged();
+                }
+                else if (BorderBrush != null)
+                {
+                    BorderBrush = null;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [XmlIgnore] public int? BorderThicknessN;
+        private string borderThickness;
+        [XmlAttribute] public string BorderThickness
+        {
+            get { return borderThickness; }
+            set
+            {
+                borderThickness = value;
+                BorderThicknessN = int.TryParse(value, out int result) ? (int?)result : null;
+                OnPropertyChanged();
+            }
+        }
+
+        [XmlIgnore] public int? CornerRadiusN;
+        private string cornerRadius;
+        [XmlAttribute] public string CornerRadius
+        {
+            get { return cornerRadius; }
+            set
+            {
+                cornerRadius = value;
+                CornerRadiusN = int.TryParse(value, out int result) ? (int?)result : null;
+                OnPropertyChanged();
             }
         }
 
         [XmlIgnore] public SolidColorBrush KeyDisabledBackgroundBrush { get; set; }
         private string keyDisabledBackground;
-        [XmlAttribute]
-        public string KeyDisabledBackground
+        [XmlAttribute] public string KeyDisabledBackground
         {
             get { return keyDisabledBackground; }
             set
@@ -414,16 +379,15 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
-        [XmlIgnore] public SolidColorBrush KeyDownBackgroundBrush { get; set; }
-        private string keyDownBackground;
-        [XmlAttribute]
-        public string KeyDownBackground
+        [XmlIgnore] public SolidColorBrush KeyDisabledForegroundBrush { get; set; }
+        private string keyDisabledForeground;
+        [XmlAttribute] public string KeyDisabledForeground
         {
-            get { return keyDownBackground; }
+            get { return keyDisabledForeground; }
             set
             {
-                keyDownBackground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDownBackgroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                keyDisabledForeground = string.IsNullOrWhiteSpace(value) ? null : value;
+                KeyDisabledForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
             }
         }
 
@@ -440,10 +404,33 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
+        [XmlIgnore] public SolidColorBrush KeyDownBackgroundBrush { get; set; }
+        private string keyDownBackground;
+        [XmlAttribute] public string KeyDownBackground
+        {
+            get { return keyDownBackground; }
+            set
+            {
+                keyDownBackground = string.IsNullOrWhiteSpace(value) ? null : value;
+                KeyDownBackgroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+            }
+        }
+
+        [XmlIgnore] public SolidColorBrush KeyDownForegroundBrush { get; set; }
+        private string keyDownForeground;
+        [XmlAttribute] public string KeyDownForeground
+        {
+            get { return keyDownForeground; }
+            set
+            {
+                keyDownForeground = string.IsNullOrWhiteSpace(value) ? null : value;
+                KeyDownForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+            }
+        }
+
         [XmlIgnore] public double? KeyDownOpacityN { get; set; }
         private string keyDownOpacity;
-        [XmlAttribute]
-        public string KeyDownOpacity
+        [XmlAttribute] public string KeyDownOpacity
         {
             get { return keyDownOpacity; }
             set
@@ -454,48 +441,63 @@ namespace JuliusSweetland.OptiKey.Models
         }
 
         private string sharedSizeGroup;
-        [XmlAttribute]
-        public string SharedSizeGroup
+        [XmlAttribute] public string SharedSizeGroup
         { get { return sharedSizeGroup; } set { sharedSizeGroup = value; OnPropertyChanged(); } }
 
-        [XmlIgnore] public bool? AutoScaleToOneKeyWidth;
-        [XmlAttribute("AutoScaleToOneKeyWidth")]
-        public string AutoScaleToOneKeyWidthString
+        [XmlIgnore] public bool? AutoScaleToOneKeyWidthN;
+        [XmlAttribute] public string AutoScaleToOneKeyWidth
         {
-            get { return AutoScaleToOneKeyWidth.HasValue ? AutoScaleToOneKeyWidth.Value.ToString() : null; }
-            set { AutoScaleToOneKeyWidth = bool.TryParse(value, out bool result) ? (bool?)result : null; }
+            get { return AutoScaleToOneKeyWidthN.HasValue ? AutoScaleToOneKeyWidthN.Value.ToString() : null; }
+            set { AutoScaleToOneKeyWidthN = bool.TryParse(value, out bool result) ? (bool?)result : null; OnPropertyChanged(); }
         }
 
-        [XmlIgnore] public bool? AutoScaleToOneKeyHeight;
-        [XmlAttribute("AutoScaleToOneKeyHeight")]
-        public string AutoScaleToOneKeyHeightString
+        [XmlIgnore] public bool? AutoScaleToOneKeyHeightN;
+        [XmlAttribute] public string AutoScaleToOneKeyHeight
         {
-            get { return AutoScaleToOneKeyHeight.HasValue ? AutoScaleToOneKeyHeight.Value.ToString() : null; }
-            set { AutoScaleToOneKeyHeight = bool.TryParse(value, out bool result) ? (bool?)result : null; }
+            get { return AutoScaleToOneKeyHeightN.HasValue ? AutoScaleToOneKeyHeightN.Value.ToString() : null; }
+            set { AutoScaleToOneKeyHeightN = bool.TryParse(value, out bool result) ? (bool?)result : null; OnPropertyChanged(); }
         }
 
+        private string compatibilityFont;
+        [XmlAttribute] public string CompatibilityFont
+        {
+            get { return string.IsNullOrWhiteSpace(compatibilityFont) ? null : compatibilityFont; }
+            set
+            {
+                compatibilityFont = value;
+                if (value != "" && value != "Persian" && value != "Unicode" && value != "Urdu")
+                {
+                    UsePersianCompatibilityFont = "False";
+                    UseUnicodeCompatibilityFont = "False";
+                    UseUrduCompatibilityFont = "False";
+                }
+                else
+                {
+                    UsePersianCompatibilityFont = value == "Persian" ? "True" : null;
+                    UseUnicodeCompatibilityFont = value == "Unicode" ? "True" : null;
+                    UseUrduCompatibilityFont = value == "Urdu" ? "True" : null;
+                }
+            }
+        }
         [XmlIgnore] public bool? UsePersianCompatibilityFontN { get; set; }
-        [XmlAttribute]
-        public string UsePersianCompatibilityFont
+        [XmlAttribute] public string UsePersianCompatibilityFont
         {
             get { return UsePersianCompatibilityFontN.HasValue ? UsePersianCompatibilityFontN.Value.ToString() : null; }
-            set { UsePersianCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; }
+            set { UsePersianCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; OnPropertyChanged(); }
         }
 
         [XmlIgnore] public bool? UseUnicodeCompatibilityFontN { get; set; }
-        [XmlAttribute]
-        public string UseUnicodeCompatibilityFont
+        [XmlAttribute] public string UseUnicodeCompatibilityFont
         {
             get { return UseUnicodeCompatibilityFontN.HasValue ? UseUnicodeCompatibilityFontN.Value.ToString() : null; }
-            set { UseUnicodeCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; }
+            set { UseUnicodeCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; OnPropertyChanged(); }
         }
 
         [XmlIgnore] public bool? UseUrduCompatibilityFontN { get; set; }
-        [XmlAttribute]
-        public string UseUrduCompatibilityFont
+        [XmlAttribute] public string UseUrduCompatibilityFont
         {
             get { return UseUrduCompatibilityFontN.HasValue ? UseUrduCompatibilityFontN.Value.ToString() : null; }
-            set { UseUrduCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; }
+            set { UseUrduCompatibilityFontN = bool.TryParse(value, out bool result) ? (bool?)result : null; OnPropertyChanged(); }
         }
 
         public void BuildProfiles()
@@ -512,27 +514,18 @@ namespace JuliusSweetland.OptiKey.Models
                 if (p.LockDownAttemptTimeoutN.HasValue)
                     inherited.LockDownAttemptTimeout = p.LockDownAttemptTimeout;
 
-                if (!string.IsNullOrWhiteSpace(p.SharedSizeGroup))
-                    inherited.SharedSizeGroup = p.SharedSizeGroup;
-                if (!string.IsNullOrWhiteSpace(p.AutoScaleToOneKeyWidthString))
-                    inherited.AutoScaleToOneKeyWidthString = p.AutoScaleToOneKeyWidthString;
-                if (!string.IsNullOrWhiteSpace(p.AutoScaleToOneKeyHeightString))
-                    inherited.AutoScaleToOneKeyHeightString = p.AutoScaleToOneKeyHeightString;
-                if (!string.IsNullOrEmpty(p.UseUrduCompatibilityFont))
-                    inherited.UsePersianCompatibilityFont = p.UsePersianCompatibilityFont;
-                if (!string.IsNullOrEmpty(p.UseUnicodeCompatibilityFont))
-                    inherited.UseUnicodeCompatibilityFont = p.UseUnicodeCompatibilityFont;
-                if (!string.IsNullOrEmpty(p.UseUrduCompatibilityFont))
-                    inherited.UseUrduCompatibilityFont = p.UseUrduCompatibilityFont;
-
+                if (p.OpacityN.HasValue)
+                    inherited.Opacity = p.Opacity;
                 if (p.BackgroundBrush != null)
                     inherited.BackgroundColor = p.BackgroundColor;
                 if (p.ForegroundBrush != null)
                     inherited.ForegroundColor = p.ForegroundColor;
                 if (p.BorderBrush != null)
                     inherited.BorderColor = p.BorderColor;
-                if (p.OpacityN.HasValue)
-                    inherited.Opacity = p.Opacity;
+                if (p.BorderThicknessN.HasValue)
+                    inherited.BorderThickness = p.BorderThickness;
+                if (p.CornerRadiusN.HasValue)
+                    inherited.CornerRadius = p.CornerRadius;
 
                 if (p.KeyDisabledBackgroundBrush != null)
                     inherited.KeyDisabledBackgroundBrush = p.KeyDisabledBackgroundBrush;
@@ -548,10 +541,14 @@ namespace JuliusSweetland.OptiKey.Models
                 if (p.KeyDownOpacityN.HasValue)
                     inherited.KeyDownOpacityN = p.KeyDownOpacityN;
 
-                if (p.BorderThicknessN.HasValue)
-                    inherited.BorderThickness = p.BorderThickness;
-                if (p.CornerRadiusN.HasValue)
-                    inherited.CornerRadius = p.CornerRadius;
+                if (!string.IsNullOrWhiteSpace(p.SharedSizeGroup))
+                    inherited.SharedSizeGroup = p.SharedSizeGroup;
+                if (!string.IsNullOrWhiteSpace(p.AutoScaleToOneKeyWidth))
+                    inherited.AutoScaleToOneKeyWidth = p.AutoScaleToOneKeyWidth;
+                if (!string.IsNullOrWhiteSpace(p.AutoScaleToOneKeyHeight))
+                    inherited.AutoScaleToOneKeyHeight = p.AutoScaleToOneKeyHeight;
+                if (!string.IsNullOrWhiteSpace(p.CompatibilityFont))
+                    inherited.CompatibilityFont = p.CompatibilityFont;
             }
 
             Expressed.LockOnTimeN = LockOnTimeN ?? inherited.LockOnTimeN;
@@ -559,47 +556,27 @@ namespace JuliusSweetland.OptiKey.Models
             Expressed.TimeRequiredToLockDownN = TimeRequiredToLockDownN ?? inherited.TimeRequiredToLockDownN;
             Expressed.LockDownAttemptTimeoutN = LockDownAttemptTimeoutN ?? inherited.LockDownAttemptTimeoutN;
 
-            Expressed.SharedSizeGroup = SharedSizeGroup ?? inherited.SharedSizeGroup;
-
-            Expressed.AutoScaleToOneKeyWidth = AutoScaleToOneKeyWidth.HasValue
-                ? AutoScaleToOneKeyWidth : inherited.AutoScaleToOneKeyWidth.HasValue
-                ? inherited.AutoScaleToOneKeyWidth : true;
-
-            Expressed.AutoScaleToOneKeyHeight = AutoScaleToOneKeyHeight.HasValue
-                ? AutoScaleToOneKeyHeight : inherited.AutoScaleToOneKeyHeight.HasValue
-                ? inherited.AutoScaleToOneKeyHeight : true;
-
-            Expressed.UsePersianCompatibilityFontN = UsePersianCompatibilityFontN.HasValue
-                ? UsePersianCompatibilityFontN.Value : inherited.UsePersianCompatibilityFontN.HasValue
-                ? inherited.UsePersianCompatibilityFontN.Value : false;
-
-            Expressed.UseUnicodeCompatibilityFontN = UseUnicodeCompatibilityFontN.HasValue
-                ? UseUnicodeCompatibilityFontN.Value : inherited.UseUnicodeCompatibilityFontN.HasValue
-                ? inherited.UseUnicodeCompatibilityFontN.Value : false;
-
-            Expressed.UseUrduCompatibilityFontN = UseUrduCompatibilityFontN.HasValue
-                ? UseUrduCompatibilityFontN.Value : inherited.UseUrduCompatibilityFontN.HasValue
-                ? inherited.UseUrduCompatibilityFontN.Value : false;
-
+            Expressed.OpacityN = OpacityN ?? inherited.OpacityN;
             Expressed.BackgroundBrush = BackgroundBrush ?? inherited.BackgroundBrush;
             Expressed.ForegroundBrush = ForegroundBrush ?? inherited.ForegroundBrush;
             Expressed.BorderBrush = BorderBrush ?? inherited.BorderBrush;
-            Expressed.OpacityN = OpacityN ?? inherited.OpacityN;
-
-            Expressed.KeyDisabledBackgroundBrush = KeyDisabledBackgroundBrush ?? (inherited.KeyDisabledBackgroundBrush != null ? Inherited.KeyDisabledBackgroundBrush : Expressed.BackgroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.BackgroundBrush.Color, .15)) : null);
-
-            Expressed.KeyDownBackgroundBrush = KeyDownBackgroundBrush ?? (inherited.KeyDownBackgroundBrush != null ? Inherited.KeyDownBackgroundBrush : Expressed.BackgroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.BackgroundBrush.Color, .15)) : null);
-
-            Expressed.KeyDisabledForegroundBrush = KeyDisabledForegroundBrush ?? (inherited.KeyDisabledForegroundBrush != null ? Inherited.KeyDisabledForegroundBrush : Expressed.ForegroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.ForegroundBrush.Color, .15)) : null);
-
-            Expressed.KeyDownForegroundBrush = KeyDownForegroundBrush ?? (inherited.KeyDownForegroundBrush != null ? Inherited.KeyDownForegroundBrush : Expressed.ForegroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.ForegroundBrush.Color, .15)) : null);
-
-            Expressed.KeyDisabledOpacityN = KeyDisabledOpacityN.HasValue ? KeyDisabledOpacityN : inherited.KeyDisabledOpacityN.HasValue ? Inherited.KeyDisabledOpacityN : Expressed.OpacityN;
-
-            Expressed.KeyDownOpacityN = KeyDownOpacityN.HasValue ? KeyDownOpacityN : inherited.KeyDownOpacityN.HasValue ? Inherited.KeyDownOpacityN : Expressed.OpacityN;
-
             Expressed.BorderThicknessN = BorderThicknessN ?? inherited.BorderThicknessN;
             Expressed.CornerRadiusN = CornerRadiusN ?? inherited.CornerRadiusN;
+
+            Expressed.KeyDisabledBackgroundBrush = KeyDisabledBackgroundBrush ?? inherited.KeyDisabledBackgroundBrush ?? (Expressed.BackgroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.BackgroundBrush.Color, .15)) : null);
+            Expressed.KeyDisabledForegroundBrush = KeyDisabledForegroundBrush ?? inherited.KeyDisabledForegroundBrush ?? (Expressed.ForegroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.ForegroundBrush.Color, .15)) : null);
+            Expressed.KeyDisabledOpacityN = KeyDisabledOpacityN ?? inherited.KeyDisabledOpacityN ?? Expressed.OpacityN;
+
+            Expressed.KeyDownBackgroundBrush = KeyDownBackgroundBrush ?? inherited.KeyDownBackgroundBrush ??(Expressed.BackgroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.BackgroundBrush.Color, .15)) : null);
+            Expressed.KeyDownForegroundBrush = KeyDownForegroundBrush ?? inherited.KeyDownForegroundBrush ?? (Expressed.ForegroundBrush != null ? new SolidColorBrush(HlsColor.Fade(Expressed.ForegroundBrush.Color, .15)) : null);
+            Expressed.KeyDownOpacityN = KeyDownOpacityN ?? inherited.KeyDownOpacityN ?? Expressed.OpacityN;
+
+            Expressed.SharedSizeGroup = SharedSizeGroup ?? inherited.SharedSizeGroup;
+            Expressed.AutoScaleToOneKeyWidthN = AutoScaleToOneKeyWidthN ?? inherited.AutoScaleToOneKeyWidthN ?? true;
+            Expressed.AutoScaleToOneKeyHeightN = AutoScaleToOneKeyHeightN ?? inherited.AutoScaleToOneKeyHeightN ?? true;
+            Expressed.UsePersianCompatibilityFontN = UsePersianCompatibilityFontN ?? inherited.UsePersianCompatibilityFontN ?? false;
+            Expressed.UseUnicodeCompatibilityFontN = UseUnicodeCompatibilityFontN ?? inherited.UseUnicodeCompatibilityFontN ?? false;
+            Expressed.UseUrduCompatibilityFontN = UseUrduCompatibilityFontN ?? inherited.UseUrduCompatibilityFontN ?? false;
         }
 
         private bool ValidColor(string color, out SolidColorBrush colorBrush)
@@ -614,8 +591,8 @@ namespace JuliusSweetland.OptiKey.Models
             colorBrush = null;
             return false;
         }
-
         //Legacy elements
+
         [XmlElement("Row")] public string LegacyRow { get; set; }
         [XmlElement("Col")] public string LegacyCol { get; set; }
         [XmlElement("Width")] public string LegacyWidth { get; set; }
@@ -647,5 +624,6 @@ namespace JuliusSweetland.OptiKey.Models
     public class DynamicScratchpad : Interactor { }
     public class DynamicSuggestionRow : Interactor { }
     public class DynamicSuggestionCol : Interactor { }
+    public class InteractorProfile : Interactor { }
 
 }

@@ -11,6 +11,9 @@
   <UserControl.Resources>
     <CollectionViewSource x:Key="InteractorTypeList" Source="{Binding Source={x:Static controls:InteractorEditor.InteractorTypeList}}"/>
     <CollectionViewSource x:Key="SymbolList" Source="{Binding Source={x:Static controls:InteractorEditor.SymbolList}}"/>
+    <CollectionViewSource x:Key="AutoScaleWidth" Source="{Binding Source={x:Static controls:InteractorEditor.AutoScaleWidth}}"/>
+    <CollectionViewSource x:Key="AutoScaleHeight" Source="{Binding Source={x:Static controls:InteractorEditor.AutoScaleHeight}}"/>
+    <CollectionViewSource x:Key="CompatibilityList" Source="{Binding Source={x:Static controls:InteractorEditor.CompatibilityList}}"/>
   </UserControl.Resources>
   <StackPanel DataContext="{Binding Interactor}">
     <Expander Header="Keygroup Membership">
@@ -37,87 +40,137 @@
       </Grid>
     </Expander>
     <Expander Header="Keygroup Overrides">
-      <StackPanel Orientation="Horizontal">
-        <StackPanel>
-          <Label Content="Values"/>
-          <Border BorderThickness="0,1,1,0" BorderBrush="DeepSkyBlue">
-            <StackPanel>
-              <Label Margin="1,0,1,0" Content="BackgroundColor"/>
-              <Label Margin="1,0,1,0" Content="BorderColor"/>
-              <Label Margin="1,0,1,0" Content="ForegroundColor"/>
-              <Label Margin="1,0,1,0" Content="Opacity"/>
-              <Label Margin="1,0,1,0" Content="LockOnTime"/>
-              <Label Margin="1,0,1,0" Content="CompletionTimes"/>
-              <Label Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
-            </StackPanel>
-          </Border>
-        </StackPanel>
-        <StackPanel>
-          <Label Content="From Keygroup"/>
-          <Border BorderThickness="0,1,0,0" BorderBrush="DeepSkyBlue">
-            <StackPanel>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.BackgroundColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.BorderColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.ForegroundColor}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.Opacity}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.LockOnTime}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.CompletionTimes}"/>
-              <Label Margin="1,0,1,0" Content="{Binding Inherited.TimeRequiredToLockDown}"/>
-            </StackPanel>
-          </Border>
-        </StackPanel>
-        <StackPanel>
-          <Label Content="Override"/>
-          <Border BorderThickness="1,1,0,0" BorderBrush="DeepSkyBlue">
-            <controls:ProfileEditor/>
-          </Border>
-        </StackPanel>
-      </StackPanel>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Content="Values"/>
+        <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="LockOnTime"/>
+        <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="CompletionTimes"/>
+        <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
+        <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Opacity"/>
+        <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="BackgroundColor"/>
+        <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="ForegroundColor"/>
+        <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="BorderColor"/>
+        <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="BorderThickness"/>
+        <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="CornerRadius"/>
+        <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="SharedSizeGroup"/>
+        <Label Grid.Column="0" Grid.Row="11" Margin="1,0,1,0" Content="AutoScaleToOneKeyWidth"/>
+        <Label Grid.Column="0" Grid.Row="12" Margin="1,0,1,0" Content="AutoScaleToOneKeyHeight"/>
+        <Label Grid.Column="0" Grid.Row="13" Margin="1,0,1,0" Content="CompatibilityFont"/>
+        
+        <Label Grid.Column="1" Grid.Row="0" Content="From Keygroup"/>
+        <Label Grid.Column="1" Grid.Row="1" Margin="1,0,1,0" Content="{Binding Inherited.LockOnTime}"/>
+        <Label Grid.Column="1" Grid.Row="2" Margin="1,0,1,0" Content="{Binding Inherited.CompletionTimes}"/>
+        <Label Grid.Column="1" Grid.Row="3" Margin="1,0,1,0" Content="{Binding Inherited.TimeRequiredToLockDown}"/>
+        <Label Grid.Column="1" Grid.Row="4" Margin="1,0,1,0" Content="{Binding Inherited.Opacity}"/>
+        <Label Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" Content="{Binding Inherited.BackgroundColor}"/>
+        <Label Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" Content="{Binding Inherited.ForegroundColor}"/>
+        <Label Grid.Column="1" Grid.Row="7" Margin="1,0,1,0" Content="{Binding Inherited.BorderColor}"/>
+        <Label Grid.Column="1" Grid.Row="8" Margin="1,0,1,0" Content="{Binding Inherited.BorderThickness}"/>
+        <Label Grid.Column="1" Grid.Row="9" Margin="1,0,1,0" Content="{Binding Inherited.CornerRadius}"/>
+        <Label Grid.Column="1" Grid.Row="10" Margin="1,0,1,0" Content="{Binding Inherited.SharedSizeGroup}"/>
+        <Label Grid.Column="1" Grid.Row="11" Margin="1,0,1,0" Content="{Binding Inherited.AutoScaleToOneKeyWidth}"/>
+        <Label Grid.Column="1" Grid.Row="12" Margin="1,0,1,0" Content="{Binding Inherited.AutoScaleToOneKeyHeight}"/>
+        <Label Grid.Column="1" Grid.Row="13" Margin="1,0,1,0" Content="{Binding Inherited.CompatibilityFont}"/>
+        
+        <Label Grid.Column="2" Grid.Row="0" Content="Override"/>
+        <TextBox Grid.Column="2" Grid.Row="1" Margin="1,0,1,0" Text="{Binding LockOnTime}"/>
+        <TextBox Grid.Column="2" Grid.Row="2" Margin="1,0,1,0" Text="{Binding CompletionTimes}"/>
+        <TextBox Grid.Column="2" Grid.Row="3" Margin="1,0,1,0" Text="{Binding TimeRequiredToLockDown}"/>
+        <TextBox Grid.Column="2" Grid.Row="4" Margin="1,0,1,0" Text="{Binding Opacity}"/>
+        <TextBox Grid.Column="2" Grid.Row="5" Margin="1,0,1,0" Text="{Binding BackgroundColor}"/>
+        <TextBox Grid.Column="2" Grid.Row="6" Margin="1,0,1,0" Text="{Binding ForegroundColor}"/>
+        <TextBox Grid.Column="2" Grid.Row="7" Margin="1,0,1,0" Text="{Binding BorderColor}"/>
+        <TextBox Grid.Column="2" Grid.Row="8" Margin="1,0,1,0" Text="{Binding BorderThickness}"/>
+        <TextBox Grid.Column="2" Grid.Row="9" Margin="1,0,1,0" Text="{Binding CornerRadius}"/>
+        <TextBox Grid.Column="2" Grid.Row="10" Margin="1,0,1,0" Text="{Binding SharedSizeGroup}"/>
+        <ComboBox Grid.Column="2" Grid.Row="11" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleWidth}}"
+              SelectedItem="{Binding AutoScaleToOneKeyWidth}"/>
+        <ComboBox Grid.Column="2" Grid.Row="12" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleHeight}}"
+              SelectedItem="{Binding AutoScaleToOneKeyHeight}"/>
+        <ComboBox Grid.Column="2" Grid.Row="13" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource CompatibilityList}}"
+             SelectedItem="{Binding CompatibilityFont}"/>
+      </Grid>
     </Expander>
     <Expander Header="Properties" IsExpanded="True">
-      <StackPanel>
-        <StackPanel Orientation="Horizontal">
-          <StackPanel>
-            <Label Margin="1,0,1,0" Content="Type"/>
-            <Label Margin="1,0,1,0" Content="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
-            <Label Margin="1,0,1,0" Content="Top" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
-            <Label Margin="1,0,1,0" Content="Column" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
-            <Label Margin="1,0,1,0" Content="Row" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
-            <Label Margin="1,0,1,0" Content="Width"/>
-            <Label Margin="1,0,1,0" Content="Height"/>
-            <Label Margin="1,0,1,0" Content="Label"/>
-            <Label Margin="1,0,1,0" Content="ShiftDownLabel"/>
-            <Label Margin="1,0,1,0" Content="Symbol"/>
-          </StackPanel>
-          <StackPanel>
-            <ComboBox Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource InteractorTypeList}}"
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="0" Margin="1,0,1,0" Content="Type"/>
+            <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
+            <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="Top" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"/>
+            <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="Column" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
+            <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Row" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"/>
+            <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="Width"/>
+        <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="Height"/>
+        <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="Label" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="ShiftDownLabel" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="Symbol" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        
+        <ComboBox Grid.Column="1" Grid.Row="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource InteractorTypeList}}"
                       SelectedItem="{Binding TypeAsString, Mode=OneTime}"
                       SelectionChanged="SelectType"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+        <c:NumericUpDown Grid.Column="1" Grid.Row="1" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
                          Value="{Binding GazeLeft, UpdateSourceTrigger=PropertyChanged}" Interval=".01"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="2" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
                          Value="{Binding GazeTop, UpdateSourceTrigger=PropertyChanged}" Interval=".01"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
                          Value="{Binding GazeWidth, UpdateSourceTrigger=PropertyChanged}" Minimum=".01" Interval=".01"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsPopup, FallbackValue=Collapsed}"
                          Value="{Binding GazeHeight, UpdateSourceTrigger=PropertyChanged}" Minimum=".01" Interval=".01"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="3" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
                          Value="{Binding Col, UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="4" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
                          Value="{Binding Row, UpdateSourceTrigger=PropertyChanged}" Minimum="0"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
                          Value="{Binding Width, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
-            <c:NumericUpDown Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
+            <c:NumericUpDown Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" HorizontalContentAlignment="Left" Visibility="{Binding IsNotPopup, FallbackValue=Collapsed}"
                          Value="{Binding Height, UpdateSourceTrigger=PropertyChanged}" Minimum="1"/>
-            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding LabelEdit, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
-            <TextBox Padding="0" Margin="1,0,1,0" Text="{Binding ShiftDownLabel, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True"/>
-            <ComboBox Padding="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource SymbolList}}" SelectedItem="{Binding Symbol}"/>
-          </StackPanel>
-        </StackPanel>
-        <Label Margin="1,0,1,0" Content="Commands"/>
-        <controls:CommandsEditor Interactor="{Binding Interactor}"
-                                 DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:LayoutEditor}}, Path=DataContext}"/>
-      </StackPanel>
+        <TextBox Grid.Column="1" Grid.Row="7" Padding="0" Margin="1,0,1,0" Text="{Binding LabelEdit, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <TextBox Grid.Column="1" Grid.Row="8" Padding="0" Margin="1,0,1,0" Text="{Binding ShiftDownLabel, UpdateSourceTrigger=PropertyChanged}" c:TextBoxHelper.SelectAllOnFocus="True" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <ComboBox Grid.Column="1" Grid.Row="9" Padding="0" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource SymbolList}}" SelectedItem="{Binding Symbol}" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="Commands" Visibility="{Binding IsKey, FallbackValue=Collapsed}"/>
+        <controls:CommandsEditor Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="2" Interactor="{Binding Interactor}"
+                                 DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:LayoutEditor}}, Path=DataContext}"
+                                  Visibility="{Binding Interactor.IsKey, FallbackValue=Collapsed}"/>
+      </Grid>
     </Expander>
   </StackPanel>
 </UserControl>

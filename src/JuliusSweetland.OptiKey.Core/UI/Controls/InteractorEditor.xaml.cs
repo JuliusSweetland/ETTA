@@ -34,6 +34,12 @@ namespace JuliusSweetland.OptiKey.UI.Controls
 
         public static List<string> SymbolList = new List<string>() { "" }.Concat(new ResourceDictionary() { Source = new Uri("/OptiKey;component/Resources/Icons/KeySymbols.xaml", UriKind.RelativeOrAbsolute) }.Keys.Cast<string>()).ToList();
 
+        public static List<string> CompatibilityList = new List<string>() { "", "Any Font", "Persian", "Unicode", "Urdu" };
+
+        public static List<string> AutoScaleWidth = new List<string>() { "", "True", "False" };
+        
+        public static List<string> AutoScaleHeight = new List<string>() { "", "True", "False" };
+
         #endregion
 
         #region Methods

@@ -501,10 +501,10 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
 
             //Auto set width span and height span
-            if (profile.AutoScaleToOneKeyWidth.HasValue && profile.AutoScaleToOneKeyWidth.Value)
+            if (profile.AutoScaleToOneKeyWidthN.HasValue && profile.AutoScaleToOneKeyWidthN.Value)
                 newKey.WidthSpan = (double)xmlKey.WidthN / minKeyWidth;
 
-            if (profile.AutoScaleToOneKeyHeight.HasValue && profile.AutoScaleToOneKeyHeight.Value)
+            if (profile.AutoScaleToOneKeyHeightN.HasValue && profile.AutoScaleToOneKeyHeightN.Value)
                 newKey.HeightSpan = (double)xmlKey.HeightN / minKeyHeight;
 
             if (profile.UseUrduCompatibilityFontN.HasValue)

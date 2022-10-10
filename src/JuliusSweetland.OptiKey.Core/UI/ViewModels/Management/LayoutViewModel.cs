@@ -105,10 +105,10 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             "SimplifiedAlpha", "SimplifiedConversationAlpha", "SizeAndPosition", "WebBrowsing"
         };
 
-        public static List<string> WindowStates = new List<string>() { { string.Empty }, { Enums.WindowStates.Docked.ToString() }, { Enums.WindowStates.Floating.ToString() }, { Enums.WindowStates.Maximised.ToString() } };
+        public static List<string> WindowStates = new List<string>() { { ""}, { Enums.WindowStates.Docked.ToString() }, { Enums.WindowStates.Floating.ToString() }, { Enums.WindowStates.Maximised.ToString() } };
 
         public static List<string> PositionList = Enum.GetNames(typeof(MoveToDirections)).ToList();
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {

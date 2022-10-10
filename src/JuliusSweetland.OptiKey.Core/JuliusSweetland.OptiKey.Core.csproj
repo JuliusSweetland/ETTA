@@ -216,9 +216,6 @@
     <Compile Include="Enums\InteractorTypes.cs" />
     <Compile Include="Models\Interactor.cs" />
     <Compile Include="Models\InteractorProfileMap .cs" />
-    <Compile Include="Models\InteractorProfile.cs" />
-    <Compile Include="Models\ILayout.cs" />
-    <Compile Include="Models\Layout.cs" />
     <Compile Include="Models\Gamepads\GamepadButtonEvents.cs" />
     <Compile Include="Models\Gamepads\DirectInputControllerState.cs" />
     <Compile Include="Models\Gamepads\DirectInputListener.cs" />
