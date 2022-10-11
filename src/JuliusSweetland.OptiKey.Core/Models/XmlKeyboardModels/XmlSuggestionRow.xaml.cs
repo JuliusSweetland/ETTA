@@ -9,16 +9,16 @@ namespace JuliusSweetland.OptiKey.Models
     /// <summary>
     /// Interaction logic for XmlSuggestions.xaml
     /// </summary>
-    public partial class SuggestionRow : UserControl
+    public partial class XmlSuggestionRow : UserControl
     {
-        public SuggestionRow()
+        public XmlSuggestionRow()
         {
             InitializeComponent();
             Loaded += (sender, args) => NumberOfSuggestionsDisplayed = 4;
         }
 
         public static readonly DependencyProperty NumberOfSuggestionsDisplayedProperty =
-            DependencyProperty.Register("NumberOfSuggestionsDisplayed", typeof(int), typeof(SuggestionRow), new PropertyMetadata(default(int)));
+            DependencyProperty.Register("NumberOfSuggestionsDisplayed", typeof(int), typeof(XmlSuggestionRow), new PropertyMetadata(default(int)));
 
         public int NumberOfSuggestionsDisplayed
         {
@@ -27,7 +27,7 @@ namespace JuliusSweetland.OptiKey.Models
         }
 
         public static readonly DependencyProperty BackgroundColourOverrideProperty =
-            DependencyProperty.Register("BackgroundColourOverride", typeof(Brush), typeof(SuggestionRow), new PropertyMetadata(default(Brush)));
+            DependencyProperty.Register("BackgroundColourOverride", typeof(Brush), typeof(XmlSuggestionRow), new PropertyMetadata(default(Brush)));
 
         public Brush BackgroundColourOverride
         {
@@ -36,7 +36,7 @@ namespace JuliusSweetland.OptiKey.Models
         }
 
         public static readonly DependencyProperty DisabledBackgroundColourOverrideProperty =
-            DependencyProperty.Register("DisabledBackgroundColourOverride", typeof(Brush), typeof(SuggestionRow), new PropertyMetadata(default(Brush)));
+            DependencyProperty.Register("DisabledBackgroundColourOverride", typeof(Brush), typeof(XmlSuggestionRow), new PropertyMetadata(default(Brush)));
 
         public Brush DisabledBackgroundColourOverride
         {
@@ -45,7 +45,7 @@ namespace JuliusSweetland.OptiKey.Models
         }
 
         public static readonly DependencyProperty OpacityOverrideProperty =
-            DependencyProperty.Register("OpacityOverride", typeof(double), typeof(SuggestionRow), new PropertyMetadata(defaultValue: 1.0));
+            DependencyProperty.Register("OpacityOverride", typeof(double), typeof(XmlSuggestionRow), new PropertyMetadata(defaultValue: 1.0));
 
         public double OpacityOverride
         {

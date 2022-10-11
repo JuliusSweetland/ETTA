@@ -7,9 +7,9 @@ namespace JuliusSweetland.OptiKey.Models
     /// <summary>
     /// Interaction logic for XmlScratchpad.xaml
     /// </summary>
-    public partial class ScratchpadUserControl : UserControl
+    public partial class XmlScratchpad : UserControl
     {
-        public ScratchpadUserControl()
+        public XmlScratchpad()
         {
             InitializeComponent();
         }

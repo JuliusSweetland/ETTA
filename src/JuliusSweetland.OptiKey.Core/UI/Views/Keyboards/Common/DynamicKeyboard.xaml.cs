@@ -223,7 +223,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
                 else if (dynamicItem is DynamicScratchpad)
                 {
-                    var newItem = new ScratchpadUserControl();
+                    var newItem = new XmlScratchpad();
                     MainGrid.Children.Add(newItem);
                     Grid.SetColumn(newItem, dynamicItem.ColN);
                     Grid.SetRow(newItem, dynamicItem.RowN);
@@ -241,7 +241,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
                 else if (dynamicItem is DynamicSuggestionRow)
                 {
-                    var newItem = new SuggestionRow();
+                    var newItem = new XmlSuggestionRow();
                     MainGrid.Children.Add(newItem);
                     Grid.SetColumn(newItem, dynamicItem.ColN);
                     Grid.SetRow(newItem, dynamicItem.RowN);
@@ -258,7 +258,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
                 else if (dynamicItem is DynamicSuggestionCol)
                 {
-                    var newItem = new SuggestionCol();
+                    var newItem = new XmlSuggestionCol();
                     MainGrid.Children.Add(newItem);
                     Grid.SetColumn(newItem, dynamicItem.ColN);
                     Grid.SetRow(newItem, dynamicItem.RowN);

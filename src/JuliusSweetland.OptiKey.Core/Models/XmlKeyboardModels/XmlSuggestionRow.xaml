@@ -1,7 +1,7 @@
 ﻿<!--
 Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 -->
-<UserControl x:Class="JuliusSweetland.OptiKey.Models.SuggestionRow"
+<UserControl x:Class="JuliusSweetland.OptiKey.Models.XmlSuggestionRow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

@@ -263,6 +263,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             KeyboardFile = tempFilename;
             Profiles.Clear();
             Profiles.AddRange(XmlKeyboard.Profiles);
+            Profile = Profiles[0];
             Interactors.Clear();
             Interactors.AddRange(XmlKeyboard.Interactors);
             CreateViewbox();
@@ -412,6 +413,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
             Profiles.Clear();
             Profiles.AddRange(XmlKeyboard.Profiles);
+            Profile = Profiles[0];
             Interactors.Clear();
             Interactors.AddRange(XmlKeyboard.Interactors);
             CreateViewbox();
@@ -687,7 +689,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 }
                 if (i is DynamicScratchpad)
                 {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<ScratchpadUserControl>(dynamicKeyboard.MainGrid)
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlScratchpad>(dynamicKeyboard.MainGrid)
                         .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
                     {
                         item.InputBindings.Add(new MouseBinding()
@@ -700,7 +702,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 }
                 if (i is DynamicSuggestionCol)
                 {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<SuggestionCol>(dynamicKeyboard.MainGrid)
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlSuggestionCol>(dynamicKeyboard.MainGrid)
                         .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
                     {
                         item.InputBindings.Add(new MouseBinding()
@@ -713,7 +715,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 }
                 if (i is DynamicSuggestionRow)
                 {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<SuggestionRow>(dynamicKeyboard.MainGrid)
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlSuggestionRow>(dynamicKeyboard.MainGrid)
                         .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
                     {
                         item.InputBindings.Add(new MouseBinding()
