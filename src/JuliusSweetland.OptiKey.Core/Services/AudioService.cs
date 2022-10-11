@@ -158,6 +158,8 @@ namespace JuliusSweetland.OptiKey.Services
                 }
                 else
                 {
+                    BASSError err = Bass.BASS_ErrorGetCode();
+                    Log.ErrorFormat($"Error code:{ err } creating audio stream");
                     throw new ApplicationException(string.Format(Resources.BASS_UNABLE_TO_CREATE_STREAM_FROM_FILE, file));
                 }
             }

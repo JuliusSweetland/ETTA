@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Xml.Serialization;
-using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.Properties;
 using JuliusSweetland.OptiKey.UI.Views.Keyboards.Common;
 
@@ -39,10 +37,11 @@ namespace JuliusSweetland.OptiKey.Models
         public List<KeyboardInfo> AllKeyboards = new List<KeyboardInfo>();
         public List<KeyboardInfo> keyboards = new List<KeyboardInfo>();
 
-        public DynamicKeyboardFolder()
+        public DynamicKeyboardFolder(string filePath)
         {
             // Find all possible xml files
-            string filePath = Settings.Default.DynamicKeyboardsLocation;
+            if (string.IsNullOrWhiteSpace(filePath))
+                filePath = Settings.Default.DynamicKeyboardsLocation;
 
             if (Directory.Exists(filePath))
             {

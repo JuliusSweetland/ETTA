@@ -39,7 +39,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
 
         public static List<string> CommandKeyList = Enum.GetNames(typeof(Enums.KeyCommands)).Cast<string>().OrderBy(x => x).ToList();
 
-        public static List<string> KeyboardList = new DynamicKeyboardFolder().AllKeyboards.Select(x => x.keyboardName).OrderBy(x => x).Concat(Enum.GetNames(typeof(Enums.Keyboards)).Cast<string>().OrderBy(x => x)).ToList();
+        public static List<string> KeyboardList = new DynamicKeyboardFolder(null).AllKeyboards.Select(x => x.keyboardName).OrderBy(x => x).Concat(Enum.GetNames(typeof(Enums.Keyboards)).Cast<string>().OrderBy(x => x)).ToList();
 
         public static List<string> FunctionKeyList = Enum.GetNames(typeof(Enums.FunctionKeys)).Cast<string>().OrderBy(x => x).ToList();
 

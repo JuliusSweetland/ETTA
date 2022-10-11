@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -151,6 +151,9 @@ EKLE</value>
   <data name="ANDROID_LIGHT" xml:space="preserve">
     <value>Android Aydınlık Tema</value>
   </data>
+  <data name="ANDROID_TWO_TONE" xml:space="preserve">
+    <value>Android iki ton</value>
+  </data>
   <data name="AUTO_CAPITALISE_WORDS_LABEL" xml:space="preserve">
     <value>Kelimelerin ilk harflerini otomatik olarak büyüt:</value>
   </data>
@@ -162,6 +165,9 @@ EKLE</value>
   </data>
   <data name="AUTO_SPACE_BETWEEN_WORDS_LABEL" xml:space="preserve">
     <value>Kelimeler arasında otomatik boşluk bırak:</value>
+  </data>
+  <data name="BACK_TITLE_CASE" xml:space="preserve">
+    <value>Geri</value>
   </data>
   <data name="BACK" xml:space="preserve">
     <value>GERİ</value>
@@ -218,8 +224,7 @@ Yinede yeniden kalibrasyon yapmak istiyor musunuz?</value>
     <value>TEMİZLE</value>
   </data>
   <data name="CLICK_AND_DRAG_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>TIKLA &amp;
-SÜRÜKLE</value>
+    <value>TIKLA &amp; SÜRÜKLE</value>
   </data>
   <data name="CLICK_SOUND_1" xml:space="preserve">
     <value>Tıkla 1</value>
@@ -262,21 +267,19 @@ KAPAT</value>
     <value>Sadece iletişim modu:</value>
   </data>
   <data name="CORRUPTED_SETTINGS_MESSAGE" xml:space="preserve">
-    <value>Optikey kullanıcı ayarlarınızın bozulduğunu ve tamir edilmesi gerektiğini algıladı. Eski bir versiyona geri yükleyerek bu sorunu çözebilirsiniz. Eğer mümkün değilse mevcut versiyonu deneyin.
+    <value>Optikey, kullanıcı ayarları dosyanızın bozulduğunu ve onarılması gerektiğini tespit etti. Bu, eski bir sürümü veya bu mümkün değilse varsayılan bir sürümü geri yükleyerek yapılacaktır.
 
-Kullanıcı ayarlarınızı sıfırlamak ve yeniden başlatmak için Evet'e tıklayın
+Kullanıcı ayarlarınızı sıfırlamak ve yeniden başlatmak için Evet'e tıklayın.
 
-Dosyaları manuel olarak ya da yedeklemek için Hayır'ı tıklayın</value>
+Kullanıcı ayarları dosyanızı manuel olarak onarabilmeniz veya kopyalayabilmeniz ve kapatmak için Hayır'a tıklayın.</value>
   </data>
   <data name="CORRUPTED_SETTINGS_TITLE" xml:space="preserve">
     <value>Olamaz! Kullanıcı ayarları dosyası bozulmuş gibi görünüyor.</value>
   </data>
   <data name="CRASH_MESSAGE" xml:space="preserve">
-    <value>Kötü haber - Optikey'in ayağı kaydı ve kapanması gerekiyor.
-
-Neler olduğuna dair bir e-posta yollayarak yardımcı olursan seviniriz: crash@optikey.org
-
-Yaşanan sorundan dolayı özür dileriz.</value>
+    <value>Kötü haber - Optikey bir hatayla karşılaştı ve kapanmak zorunda kaldı. 
+Olanların ayrıntılarını içeren bir e-posta bize çok yardımcı olabilir: crash@optikey.org 
+Rahatsızlıktan dolayı özür dileriz.</value>
   </data>
   <data name="CRASH_TITLE" xml:space="preserve">
     <value>Tüh!</value>
@@ -298,6 +301,18 @@ Yaşanan sorundan dolayı özür dileriz.</value>
   </data>
   <data name="CURSOR_WIDTH_LABEL" xml:space="preserve">
     <value>İmleç genişliği (piksel):</value>
+  </data>
+  <data name="CUSTOM_LAYOUT" xml:space="preserve">
+    <value>Dinamik keyboard dosyası </value>
+  </data>
+  <data name="DANISH_DENMARK" xml:space="preserve">
+    <value>Danca (Danimarka) / Dansk (Danmark)</value>
+  </data>
+  <data name="DANISH_DENMARK_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Danca
+(Danimarka)
+Dansk
+(Danmark)</value>
   </data>
   <data name="DEBUGGING_MODE_LABEL" xml:space="preserve">
     <value>Hata giderme modu:</value>
@@ -327,7 +342,7 @@ Yaşanan sorundan dolayı özür dileriz.</value>
     <value>Sözlük</value>
   </data>
   <data name="DICTIONARY_FILE_NOT_FOUND_ERROR" xml:space="preserve">
-    <value>Kullanıcı kayıt defteri bulunmuyor ve orijinal kayıt defteri '{0}' adresinde bulunamadı</value>
+    <value>Kullanıcı sözlüğü bulunmuyor ve orijinal  sözlük '{0}' adresinde bulunamadı</value>
   </data>
   <data name="DISPLAY_FOR_X_SECONDS_PER_CHARACTER_LABEL" xml:space="preserve">
     <value>Herbir mesaj karakteri için X saniye boyunca göster</value>
@@ -347,6 +362,15 @@ OK</value>
   </data>
   <data name="END" xml:space="preserve">
     <value>SON</value>
+  </data>
+  <data name="ENGLISH_CANADA" xml:space="preserve">
+    <value>İngilizce (Kanada)</value>
+  </data>
+  <data name="ENGLISH_UK" xml:space="preserve">
+    <value>İngilizce (Birleşik Krallık)</value>
+  </data>
+  <data name="ENGLISH_US" xml:space="preserve">
+    <value>İngilizce (ABD)</value>
   </data>
   <data name="ENTER" xml:space="preserve">
     <value>GİRİŞ</value>
@@ -368,12 +392,14 @@ OK</value>
 AÇ</value>
   </data>
   <data name="EXPAND_DOWN_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL AŞAĞI
-GENİŞLET</value>
+    <value>GENİŞLET
+AŞAĞI
+&amp; SOLA</value>
   </data>
   <data name="EXPAND_DOWN_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SAĞ AŞAĞI
-GENİŞLET</value>
+    <value>GENİŞLET
+AŞAĞI
+&amp; SAĞA</value>
   </data>
   <data name="EXPAND_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>AŞAĞI
@@ -388,12 +414,14 @@ GENİŞLET</value>
 GENİŞLET</value>
   </data>
   <data name="EXPAND_UP_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL YUKARI
-GENİŞLET</value>
+    <value>GENİŞLET
+YUKARI
+&amp; SOLA</value>
   </data>
   <data name="EXPAND_UP_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SAĞ YUKARI
-GENİŞLET</value>
+    <value>GENİŞLET
+YUKARI
+&amp; SAĞA</value>
   </data>
   <data name="EXPAND_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>YUKARI
@@ -423,8 +451,14 @@ GENİŞLET</value>
   <data name="FONT_WEIGHT_LABEL" xml:space="preserve">
     <value>Yazı tipi kalınlığı:</value>
   </data>
+  <data name="FRENCH_FRANCE" xml:space="preserve">
+    <value>Fransızca (Fransa) / Française (France)</value>
+  </data>
   <data name="FULL_DOCK_THICKNESS_LABEL" xml:space="preserve">
     <value>Tüm panel kalınlığı (ekranın %'si olarak)</value>
+  </data>
+  <data name="GAZE_TRACKER" xml:space="preserve">
+    <value>Bakış İz Sürücüsü</value>
   </data>
   <data name="GROW" xml:space="preserve">
     <value>Büyüme</value>
@@ -457,14 +491,14 @@ GENİŞLET</value>
     <value>ATLA</value>
   </data>
   <data name="JUMP_DOWN_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>GİT
+    <value>GÖNDER
 AŞAĞI
-&amp; SOLA</value>
+&amp;SOLA</value>
   </data>
   <data name="JUMP_DOWN_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>GİT
+    <value>GÖNDER
 AŞAĞI
-&amp; SAĞA</value>
+&amp;SAĞA</value>
   </data>
   <data name="JUMP_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>GİT
@@ -479,14 +513,14 @@ SOLA</value>
 SAĞA</value>
   </data>
   <data name="JUMP_UP_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>GİT
+    <value>GÖNDER
 YUKARI
-&amp; SOLA</value>
+&amp;SOLA</value>
   </data>
   <data name="JUMP_UP_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>GİT
+    <value>GÖNDER
 YUKARI
-&amp; SAĞA</value>
+&amp;SAĞA</value>
   </data>
   <data name="JUMP_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>GİT
@@ -528,24 +562,27 @@ YUKARI</value>
   <data name="KEYBOARD_AND_DICTIONARY_LANGUAGE_LABEL" xml:space="preserve">
     <value>Keyboard language:</value>
   </data>
+  <data name="KEYBOARD_FOLDER_CAN_BE_CHANGED_SPLIT_LINE" xml:space="preserve">
+    <value>Klavye klasörü \n Yönetim Konsolu’nda (Görseller sekmesi) ayarlanabilir </value>
+  </data>
   <data name="LEFT" xml:space="preserve">
     <value>Sol</value>
   </data>
   <data name="LEFT_ARROW_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL OK
-İŞARETİ</value>
+    <value>SOL
+OK İŞARETİ</value>
   </data>
   <data name="LEFT_CLICK_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>SOL
 TIKLA</value>
   </data>
   <data name="LEFT_DOUBLE_CLICK_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL ÇİFT
-TIKLA</value>
+    <value>SOL
+ÇİFT TIKLA</value>
   </data>
   <data name="LEFT_DOWN_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL AŞAĞI
-/ YUKARI</value>
+    <value>SOL
+AŞAĞI/YUKARI</value>
   </data>
   <data name="LOOK" xml:space="preserve">
     <value>Bak</value>
@@ -559,6 +596,9 @@ TIKLA</value>
   </data>
   <data name="MAGNIFIER" xml:space="preserve">
     <value>BÜYÜTEÇ</value>
+  </data>
+  <data name="MAGNIFIER_CENTER_ON_SCREEN" xml:space="preserve">
+    <value>Büyüteç penceresini ekranın ortasında göster</value>
   </data>
   <data name="MAGNIFY_DESTINATION_LABEL" xml:space="preserve">
     <value>Hedefi büyüt (Ekranın % cinsinden)</value>
@@ -586,8 +626,8 @@ TIKLA</value>
 TIKLA</value>
   </data>
   <data name="MIDDLE_DOWN_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>ORTALA AŞAĞI
-/ YUKARI</value>
+    <value>ORTALA
+AŞAĞI/YUKARI</value>
   </data>
   <data name="MINIMISE" xml:space="preserve">
     <value>KÜÇÜLT</value>
@@ -701,51 +741,49 @@ TIKLA</value>
     <value>Hareket ettir</value>
   </data>
   <data name="MOVE_BY" xml:space="preserve">
-    <value>İlerle {0} piksel:|İlerle by {0} piksel:</value>
+    <value>Move by
+{0} pixel:|Move by 
+{0} pixels:</value>
   </data>
   <data name="MOVE_DOWN_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL AŞAĞI
-HAREKET
-ETTİR</value>
+    <value>KAYDIR
+AŞAĞI
+&amp; SOLA</value>
   </data>
   <data name="MOVE_DOWN_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SAĞ AŞAĞI
-HAREKET
-ETTİR</value>
+    <value>KAYDIR
+AŞAĞI
+&amp; SAĞA</value>
   </data>
   <data name="MOVE_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>AŞAĞI
-HAREKET
-ETTİR</value>
+HAREKET ETTİR</value>
   </data>
   <data name="MOVE_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>SOLA
-HAREKET
-ETTİR</value>
+HAREKET ETTİR</value>
   </data>
   <data name="MOVE_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>SAĞA
-HAREKET
-ETTİR</value>
+HAREKET ETTİR</value>
   </data>
   <data name="MOVE_TO_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>BURAYA
 GİT</value>
   </data>
   <data name="MOVE_UP_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SOL YUKARI
-HAREKET
-ETTİR</value>
+    <value>KAYDIR
+YUKARI  &amp;
+SOL</value>
   </data>
   <data name="MOVE_UP_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SAĞ YUKARI
-HAREKET
-ETTİR</value>
+    <value>KAYDIR
+YUKARI &amp;
+SAĞ</value>
   </data>
   <data name="MOVE_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>YUKARI
-HAREKET
-ETTİR</value>
+HAREKET ETTİR</value>
   </data>
   <data name="MULTI_KEY_CAPTURES" xml:space="preserve">
     <value>Çoklu tuş algılama</value>
@@ -757,14 +795,14 @@ ETTİR</value>
     <value>Çoklu tuş seçimi</value>
   </data>
   <data name="MULTI_KEY_SELECTION_ENDING_SOUND_LABEL" xml:space="preserve">
-    <value>Çoklu tuş seçimi sonu:</value>
+    <value>Çok tuşlu seçimi sonlandı:</value>
   </data>
   <data name="MULTI_KEY_SELECTION_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>ÇOKLU TUŞ
 SEÇİMİ</value>
   </data>
   <data name="MULTI_KEY_SELECTION_STARTING_SOUND_LABEL" xml:space="preserve">
-    <value>Çoklu tuş seçme başlangıcı:</value>
+    <value>Çok tuşlu seçimi başladı: </value>
   </data>
   <data name="NEW_DICTIONARY_ENTRY_WILL_CONTAIN_CAPITALS" xml:space="preserve">
     <value>
@@ -775,6 +813,9 @@ SEÇİMİ</value>
   </data>
   <data name="NO" xml:space="preserve">
     <value>HAYIR</value>
+  </data>
+  <data name="NO_KEYBOARDS_FOUND" xml:space="preserve">
+    <value>Klavye bulunamadı </value>
   </data>
   <data name="NO_NEW_ENTRIES_IN_SCRATCHPAD" xml:space="preserve">
     <value>Bloknot, sözlükte yer almayan herhangi bir kelime ya da ifade içermiyor gibi görünüyor.</value>
@@ -797,8 +838,8 @@ LOCK</value>
 SYM</value>
   </data>
   <data name="NUMBERS_AND_SYMBOLS" xml:space="preserve">
-    <value>SAYILAR &amp;
-SEMBOLLER</value>
+    <value>SAYILAR
+&amp; SEMBOLLER</value>
   </data>
   <data name="NUMBERS_SYMBOLS_LAYOUT_1" xml:space="preserve">
     <value>Numaralar &amp; Semboller 1</value>
@@ -811,6 +852,9 @@ SEMBOLLER</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>TAMAM</value>
+  </data>
+  <data name="OPTIKEY_PRO_DESCRIPTION" xml:space="preserve">
+    <value>Optikey Pro : Bilgisayar Kontrolü ve İletişim</value>
   </data>
   <data name="OTHER" xml:space="preserve">
     <value>Diğer</value>
@@ -892,7 +936,7 @@ SCR</value>
     <value>Oran:</value>
   </data>
   <data name="RE_CALIBRATE" xml:space="preserve">
-    <value>YENİDEN AYARLA</value>
+    <value>YENİDEN KALİBRASYON</value>
   </data>
   <data name="REPEAT_LAST_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>SONUNCUYU
@@ -902,10 +946,11 @@ TEKRARLA</value>
     <value>İşitsel ve/veya Sözlük sevisi(servisleri) yönetim penceresinin eylemine aktarılamadı</value>
   </data>
   <data name="RESTART_MESSAGE" xml:space="preserve">
-    <value>Değişikliklerin geçerli olabilmesi için Optikey yeniden başlatılmalıdır. Yeniden başlatmak için OK tuşuna, değişikleri iptal etmek için CANCEL tuşuna tıklayınız.</value>
+    <value>Değişikliklerinizi uygulamak için Optikey'in yeniden başlatılması gerekiyor.
+Lütfen yeniden başlatmaya devam etmek için Tamam'ı veya değişikliklerinizi iptal etmek için İPTAL'i tıklayın.</value>
   </data>
   <data name="RESTORE_DICTIONARY_ENTRY" xml:space="preserve">
-    <value>Geriyükle</value>
+    <value>Eski durumuna getir</value>
   </data>
   <data name="RESUMING_INCOMPLETE_KEY_FIXATION_REQUIRES_NEW_LOCK_ON_LABEL" xml:space="preserve">
     <value>Bitmemiş bir tuş sabitleme işine devam etmek için yeni bir kilitlenme gereklidir.</value>
@@ -922,8 +967,8 @@ OK TUŞU</value>
 TIKLA</value>
   </data>
   <data name="RIGHT_UP_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>SAĞ AŞAĞI
-/ YUKARI</value>
+    <value>SAĞ
+AŞAĞI/YUKARI</value>
   </data>
   <data name="RISING_SOUND_1" xml:space="preserve">
     <value>Yükseliyor 1</value>
@@ -931,18 +976,26 @@ TIKLA</value>
   <data name="RISING_SOUND_2" xml:space="preserve">
     <value>Yükseliyor 2</value>
   </data>
+  <data name="RUSSIAN_RUSSIA" xml:space="preserve">
+    <value>Russian (Russia) / Русский (Россия)</value>
+  </data>
+  <data name="SPANISH_SPAIN" xml:space="preserve">
+    <value>Spanish (Spain) / Español (España)</value>
+  </data>
   <data name="SAME_AS_DOCK_POSITION" xml:space="preserve">
     <value>Panel pozisyonuyla aynı</value>
   </data>
   <data name="SCRATCHPAD_NUMBER_OF_LINES_LABEL" xml:space="preserve">
-    <value>Bloknot çizgi adeti # </value>
+    <value>Yazı alanı  satır sayısı # : </value>
   </data>
   <data name="SCRN_LK_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>SCROLL
 LOCK</value>
   </data>
   <data name="SCROLL_BY" xml:space="preserve">
-    <value>{0} tıklama ile kaydır:|{0} tıklama ile kaydır</value>
+    <value>Scroll by 
+{0} click:|Scroll by 
+{0} clicks:</value>
   </data>
   <data name="SCROLL_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>AŞAĞI
@@ -973,30 +1026,30 @@ KAYDIR</value>
     <value>Seçim ilerleme göstergesi başlangıç ölçüsü (%):</value>
   </data>
   <data name="SHIFT" xml:space="preserve">
-    <value>DEĞİŞTİR</value>
+    <value>SHIFT</value>
   </data>
   <data name="SHOW_SPLASH_SCREEN_ON_STARTUP_LABEL" xml:space="preserve">
-    <value>Program başlarken bilgilendirme penceresini aç:</value>
+    <value>Program başlarken bilgilendirme penceresini göster:</value>
   </data>
   <data name="SHRINK" xml:space="preserve">
     <value>KÜÇÜLT</value>
   </data>
   <data name="SHRINK_DOWN_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>KÜÇÜLT 
- AŞAĞI
-&amp; SOLA</value>
+    <value>KÜÇÜLT
+AŞAĞI
+&amp; SOL</value>
   </data>
   <data name="SHRINK_DOWN_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
 AŞAĞI
-&amp; SAĞA</value>
+&amp; SAĞ</value>
   </data>
   <data name="SHRINK_DOWN_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
 AŞAĞI</value>
   </data>
   <data name="SHRINK_INDICATOR" xml:space="preserve">
-    <value>Shrink</value>
+    <value>Küçült</value>
   </data>
   <data name="SHRINK_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
@@ -1009,12 +1062,12 @@ SAĞA</value>
   <data name="SHRINK_UP_AND_LEFT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
 YUKARI
-&amp; SOLA</value>
+&amp; SOL</value>
   </data>
   <data name="SHRINK_UP_AND_RIGHT_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
 YUKARI
-&amp; SAĞA</value>
+&amp; SAĞ</value>
   </data>
   <data name="SHRINK_UP_SPLIT_WITH_NEWLINE" xml:space="preserve">
     <value>KÜÇÜLT
@@ -1024,7 +1077,7 @@ YUKARI</value>
     <value>(Bilgilendirme: Sözlükte {0} benzer girdiler mevcut)</value>
   </data>
   <data name="SIZE_AND_POSITION_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>BOYUT &amp;
+    <value>BOYUT&amp;
 POZİSYON</value>
   </data>
   <data name="SIZE_POSITION_LAYOUT" xml:space="preserve">
@@ -1054,6 +1107,9 @@ POZİSYON</value>
   <data name="STARTUP_KEYBOARD_LABEL" xml:space="preserve">
     <value>Başlangıç klavyesi:</value>
   </data>
+  <data name="STARTUP_KEYBOARD_FILE_LOCATION_LABEL" xml:space="preserve">
+    <value>Dinamik keyboard dosyası: </value>
+  </data>
   <data name="STOP_SIGNAL_LABEL" xml:space="preserve">
     <value>Durdurma Sinyali:</value>
   </data>
@@ -1066,32 +1122,47 @@ POZİSYON</value>
   <data name="TAB" xml:space="preserve">
     <value>TAB</value>
   </data>
+  <data name="THE_EYE_TRIBE" xml:space="preserve">
+    <value>The Eye Tribe</value>
+  </data>
   <data name="THE_EYE_TRIBE_ACTIVATION_ERROR" xml:space="preserve">
-    <value>TheEyeTribe GazeManager aktive edilemiyor! Sunucunun çalıştığı ve cihazın bağlı olduğundan emin olduktan sonra tekrar deneyin.</value>
+    <value>TheEyeTribe GazeManager aktive edilemiyor! Sunucunun çalıştığından ve cihazın bağlı olduğundan emin olduktan sonra tekrar deneyin.</value>
   </data>
   <data name="THE_EYE_TRIBE_NOT_CALIBRATED" xml:space="preserve">
     <value>TheEyeTribe kalibre edilmedi. Kalibrasyon tamamlanmadan veri alınmayacak.</value>
   </data>
   <data name="THE_EYE_TRIBE_UNABLE_TO_CALIBRATE_NO_ENGINE" xml:space="preserve">
-    <value>EyeTribe software kullanılabilir olmadığı için kalibrasyon denemesi başarısız.</value>
+    <value>EyeX engine kullanılabilir olmadığı için kalibrasyon denemesi başarısız.</value>
   </data>
   <data name="THEME_LABEL" xml:space="preserve">
     <value>Tema:</value>
   </data>
   <data name="TIME_UNTIL_POINT_BECOMES_IRRELEVENT_LABEL" xml:space="preserve">
-    <value>Hedef ilgisiz olana kadar geçen süre (ms)</value>
+    <value>İşaretleyici ilgisiz kalana dek geçen süre (ms): </value>
+  </data>
+  <data name="HIDE_CURSOR_LABEL" xml:space="preserve">
+    <value>İşaretçiyi gizle</value>
   </data>
   <data name="TITLE_CASE" xml:space="preserve">
     <value>Kelimeler büyük harf yapıldı</value>
+  </data>
+  <data name="TOBII_EYEX" xml:space="preserve">
+    <value>Tobii EyeX</value>
   </data>
   <data name="TOBII_EYEX_CALIBRATION_SUCCESS" xml:space="preserve">
     <value>Kalibrasyon tamamlandı ya da büyük ihtimalle iptal edildi ama her şey tekrar çalışıyor.</value>
   </data>
   <data name="TOBII_EYEX_ENGINE_NOT_FOUND" xml:space="preserve">
-    <value>Tobii Service bulunamadı. Lütfen Tobii software sürücüsünü yükledikten sonra tekrar deneyin.</value>
+    <value>Tobii EyeX Engine bulunamadı. Lütfen EyeX sürücüsünü yükledikten sonra tekrar deneyin.</value>
   </data>
   <data name="TOBII_EYEX_ENGINE_NOT_RUNNING" xml:space="preserve">
-    <value>Tobii Service çalışmıyor. Lütfen Tobii service 'i çalıştırın ve daha sonra tekrar deneyin.</value>
+    <value>Tobii EyeX Engine çalışmıyor. Lütfen EyeX Engine'i çalıştırın ve daha sonra tekrar deneyin.</value>
+  </data>
+  <data name="TOBII_PCEYE_GO" xml:space="preserve">
+    <value>Tobii PCEye Go</value>
+  </data>
+  <data name="TOBII_REX" xml:space="preserve">
+    <value>Tobii REX</value>
   </data>
   <data name="TONE_SOUND_1" xml:space="preserve">
     <value>Ton 1</value>
@@ -1115,7 +1186,7 @@ POZİSYON</value>
     <value>Dikkatinizi nereye verdiğinizi algılayamadım. Cihazla alakalı bir sorun mu var ? Bilgisayara bağlı, açık ve kalibre edilmiş vb. durumda mı ?</value>
   </data>
   <data name="UNABLE_TO_DETERMINE_CURRENT_ELEVATION" xml:space="preserve">
-    <value>Mevcut çalıştırma izni belirlenemedi.</value>
+    <value>Mevcut yükseklik belirlenemiyor.</value>
   </data>
   <data name="UNABLE_TO_SET_VOICE_WARNING" xml:space="preserve">
     <value>Sesi '{0}'{1} ayarlarken bir problem oluştu</value>
@@ -1140,7 +1211,7 @@ OK</value>
     <value>En son versiyonu ({0}) indirmek için, lütfen www.optikey.org  adresini ziyaret ediniz. Otomatik güncellemeleri kapatmak için Yönetim panelini kullanınız (ALT +M).</value>
   </data>
   <data name="VERIFY_RESTART" xml:space="preserve">
-    <value>Optikey'i yeniden başlatabilir miyim ?</value>
+    <value>Optikey'i yeniden başlatabilir miyim?</value>
   </data>
   <data name="VERSION_DESCRIPTION" xml:space="preserve">
     <value>Versiyon: {0}</value>
@@ -1161,7 +1232,7 @@ OK</value>
     <value>Ses yükseliği:</value>
   </data>
   <data name="WEBSITE_DESCRIPTION" xml:space="preserve">
-    <value>Websayfası : www.optikey.org</value>
+    <value>Websayfası: www.optikey.org</value>
   </data>
   <data name="WIN" xml:space="preserve">
     <value>Windows Tuşu</value>
@@ -1174,6 +1245,9 @@ OK</value>
   </data>
   <data name="YES" xml:space="preserve">
     <value>EVET</value>
+  </data>
+  <data name="YESNO" xml:space="preserve">
+    <value>EVET/HAYIR</value>
   </data>
   <data name="ALPHA_LAYOUT" xml:space="preserve">
     <value>Harfler</value>
@@ -1193,6 +1267,9 @@ OK</value>
   <data name="TOBII_EYEX_DATA_STREAM_PROCESSING_LEVEL" xml:space="preserve">
     <value>Veri akışı işleme miktarı:</value>
   </data>
+  <data name="GERMAN_GERMANY" xml:space="preserve">
+    <value>German (Germany) / Deutsch (Deutschland)</value>
+  </data>
   <data name="UI_LANGUAGE_DESCRIPTION" xml:space="preserve">
     <value>Kullanıcı arayüzü dili: {0}</value>
   </data>
@@ -1202,8 +1279,44 @@ OK</value>
   <data name="PUBLISH_VIRTUAL_KEY_CODES_FOR_CHARACTERS_LABEL" xml:space="preserve">
     <value>Karakterleri yazarken klavye tuşlama simülasyonu yap:</value>
   </data>
+  <data name="DUTCH_BELGIUM" xml:space="preserve">
+    <value>Flemenkçe (Belçika)
+Nederlands (België)</value>
+  </data>
+  <data name="DUTCH_NETHERLANDS" xml:space="preserve">
+    <value>Flemenkçe (Hollanda)
+Nederlands (Nederland)</value>
+  </data>
+  <data name="FRENCH_FRANCE_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Fransızca
+(Fransa) /
+Française
+(France)
+</value>
+  </data>
+  <data name="GERMAN_GERMANY_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Almanca
+(Almanya) /
+Deutsch
+(Deutschland)</value>
+  </data>
   <data name="MAGNIFY_SUPPRESSED_FOR_SCROLLING_ACTIONS_LABEL" xml:space="preserve">
     <value>Fare yakınlaştırma işlemini fare tekeri döndürürken devre dışı bırak:</value>
+  </data>
+  <data name="RUSSIAN_RUSSIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Rusça
+(Rusya) /
+Русский
+(Россия)</value>
+  </data>
+  <data name="SPANISH_SPAIN_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Spanish
+(Spain) /
+Español
+(España)</value>
+  </data>
+  <data name="DYNAMIC_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>Dynamic keyboard menu</value>
   </data>
   <data name="CONVERSATION_BORDER_THICKNESS_LABEL" xml:space="preserve">
     <value>İletişim klavyesi kenarlık kalınlığı (piksel olarak, sol, üst, sağ, alt)</value>
@@ -1255,6 +1368,27 @@ OK</value>
   </data>
   <data name="F12" xml:space="preserve">
     <value>F12</value>
+  </data>
+  <data name="F13" xml:space="preserve">
+    <value>F13</value>
+  </data>
+  <data name="F14" xml:space="preserve">
+    <value>F14</value>
+  </data>
+  <data name="F15" xml:space="preserve">
+    <value>F15</value>
+  </data>
+  <data name="F16" xml:space="preserve">
+    <value>F16</value>
+  </data>
+  <data name="F17" xml:space="preserve">
+    <value>F17</value>
+  </data>
+  <data name="F18" xml:space="preserve">
+    <value>F18</value>
+  </data>
+  <data name="F19" xml:space="preserve">
+    <value>F19</value>
   </data>
   <data name="F2" xml:space="preserve">
     <value>F2</value>
@@ -1362,7 +1496,7 @@ OK</value>
     <value>ORTA TUŞ TIKLA</value>
   </data>
   <data name="MIDDLE_DOWN_UP" xml:space="preserve">
-    <value>ORTA AŞAĞI / YUKARI</value>
+    <value>ORTA AŞAĞI/YUKARI</value>
   </data>
   <data name="MOVE_AMOUNT_IN_PIXEL" xml:space="preserve">
     <value>PİKSEL BAZINDA HAREKET ETTİRME MİKTARI</value>
@@ -1371,7 +1505,7 @@ OK</value>
     <value>PİKSEL BAZINDA DÜZELTME MİKTARI</value>
   </data>
   <data name="CONVERSATION_ALPHA_1" xml:space="preserve">
-    <value>HARFLER 1</value>
+    <value>SOHBET ALPHA 1</value>
   </data>
   <data name="CONVERSATION_NUMERIC_AND_SYMBOLS" xml:space="preserve">
     <value>RAKAMLAR VE SEMBOLLER</value>
@@ -1407,7 +1541,7 @@ OK</value>
     <value>SOL ÇİFT TIKLAMA</value>
   </data>
   <data name="LEFT_DOWN_UP" xml:space="preserve">
-    <value>SOLA AŞAĞI / YUKARI</value>
+    <value>SOLA AŞAĞI/YUKARI</value>
   </data>
   <data name="MOVE_DOWN" xml:space="preserve">
     <value>AŞAĞI HAREKET ETTİR</value>
@@ -1458,7 +1592,7 @@ OK</value>
     <value>SAĞ TIKLA</value>
   </data>
   <data name="RIGHT_DOWN_UP" xml:space="preserve">
-    <value>SAĞA AŞAĞI / YUKARI</value>
+    <value>SAĞA AŞAĞI/YUKARI</value>
   </data>
   <data name="SCRN_LK" xml:space="preserve">
     <value>SCROLL LOCK</value>
@@ -1485,9 +1619,7 @@ OK</value>
     <value>AŞAĞI &amp; SOLA KÜÇÜLT</value>
   </data>
   <data name="SHRINK_DOWN_AND_RIGHT" xml:space="preserve">
-    <value>AŞAĞI
-&amp; SAĞA
-KÜÇÜLT</value>
+    <value>AŞAĞI &amp; SAĞA KÜÇÜLT</value>
   </data>
   <data name="SHRINK_LEFT" xml:space="preserve">
     <value>SOLA KÜÇÜLT</value>
@@ -1541,75 +1673,830 @@ KÜÇÜLT</value>
     <value>FİZİKSEL TUŞLAR</value>
   </data>
   <data name="SUGGESTION_KEYS_KEY_GROUP" xml:space="preserve">
-    <value>TAVSİYE TUŞLARI:</value>
+    <value>ÖNERİ TUŞLARI:</value>
   </data>
   <data name="KEY_FIXATION_TIME_TO_COMPLETE_ON_INDIVIDUAL_KEYS" xml:space="preserve">
     <value>Belirlenmiş tuşlar için tamamlanma süresini belirle:</value>
   </data>
+  <data name="GREEK_GREECE" xml:space="preserve">
+    <value>Greek (Greece) / Ελληνικά (Ελλάδα)</value>
+  </data>
   <data name="MANAGEMENT_CONSOLE" xml:space="preserve">
-    <value>Yönetim Konsolu</value>
+    <value>Yönetim Panosu (Ayarlar) </value>
   </data>
   <data name="QUIT_TITLE_CASE" xml:space="preserve">
     <value>Çıkış</value>
   </data>
+  <data name="GEORGIAN_GEORGIA" xml:space="preserve">
+    <value>Georgian (Georgia) / ქართული (საქართველო)</value>
+  </data>
+  <data name="GEORGIAN_GEORGIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Georgian
+(Georgia) /
+ქართული
+(საქართველო)</value>
+  </data>
+  <data name="GREEK_GREECE_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Greek
+(Greece) /
+Ελληνικά
+(Ελλάδα)</value>
+  </data>
+  <data name="CROATIAN_CROATIA" xml:space="preserve">
+    <value>Croatian (Croatia) / Hrvatski (Hrvatska)</value>
+  </data>
+  <data name="CROATIAN_CROATIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Croatian
+(Croatia) /
+Hrvatski
+(Hrvatska)</value>
+  </data>
+  <data name="DUTCH_BELGIUM_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Flemenkçe
+(Belçika) /
+Nederlands
+(België)</value>
+  </data>
+  <data name="DUTCH_NETHERLANDS_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Flemenkçe
+(Hollanda) /
+Nederlands
+(Nederland)</value>
+  </data>
   <data name="SUPPRESS_MODIFIERS_FOR_ALL_MOUSE_ACTIONS" xml:space="preserve">
     <value>Fare eylemleri esnasında kombinasyon tuşlarını gizle:</value>
   </data>
-  <data name="CALIBRATION_SUCCESS" xml:space="preserve">
-    <value>Kalibrasyon başarılı!</value>
+  <data name="ENGLISH_CANADA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>İngilizce
+(Kanada) /
+English
+(Canada)</value>
+  </data>
+  <data name="ENGLISH_UK_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>İngilizce
+(Birleşik Krallık) /
+English
+(UK)</value>
+  </data>
+  <data name="ENGLISH_US_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>İngilizce
+(ABD) /
+English
+(UK)</value>
+  </data>
+  <data name="CATALAN_SPAIN" xml:space="preserve">
+    <value>Catalan (Spain) / Català (Espanya)</value>
+  </data>
+  <data name="CATALAN_SPAIN_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Catalan
+(Spain) /
+Català
+(Espanya)</value>
+  </data>
+  <data name="TURKISH_TURKEY" xml:space="preserve">
+    <value>Türkçe
+(Türkiye)</value>
+  </data>
+  <data name="TURKISH_TURKEY_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Türkçe
+(Türkiye)</value>
+  </data>
+  <data name="ITALIAN_ITALY" xml:space="preserve">
+    <value>Italian (Italy) / Italiano (Italia)</value>
+  </data>
+  <data name="ITALIAN_ITALY_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Italian
+(Italy) /
+Italiano
+(Italia)</value>
+  </data>
+  <data name="KOREAN_KOREA" xml:space="preserve">
+    <value>Korean (Korea) / 한국어 (한국)</value>
+  </data>
+  <data name="KOREAN_KOREA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Korean
+(Korea) /
+한국어
+(한국)</value>
+  </data>
+  <data name="SERBIAN_SERBIA" xml:space="preserve">
+    <value>Serbian (Serbia) / Српски (Србија)</value>
+  </data>
+  <data name="SERBIAN_SERBIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Serbian
+(Serbia) /
+Српски
+(Србија)</value>
+  </data>
+  <data name="SLOVENIAN_SLOVENIA" xml:space="preserve">
+    <value>Slovenian (Slovenia) / Slovensko (Slovenija)</value>
+  </data>
+  <data name="SLOVENIAN_SLOVENIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Slovenian
+(Slovenia) /
+Slovensko
+(Slovenija)</value>
+  </data>
+  <data name="MY_GAZE_CONNECT_ERROR" xml:space="preserve">
+    <value>MyGaze'e bağlanılamadı! Lütfen sunucunun çalışıp çalışmadığını ve aygıtın bağlı olup olmadığını kontrol edin ve tekrar deneyin.</value>
+  </data>
+  <data name="VI_MYGAZE" xml:space="preserve">
+    <value>myGaze Görsel Etkileşim </value>
   </data>
   <data name="CALIBRATION_FAIL_NO_MESSAGE" xml:space="preserve">
-    <value>Kalibrasyon başarısız!</value>
+    <value>Kalibrasyon başarısız oldu.</value>
+  </data>
+  <data name="CALIBRATION_SUCCESS" xml:space="preserve">
+    <value>Kalibrasyon sağlandı.</value>
+  </data>
+  <data name="POLISH_POLAND" xml:space="preserve">
+    <value>Polish (Poland) / Polski (Polska)</value>
+  </data>
+  <data name="POLISH_POLAND_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Polish
+(Poland) /
+Polski
+(Polska)</value>
+  </data>
+  <data name="PORTUGUESE_PORTUGAL" xml:space="preserve">
+    <value>Portuguese (Portugal) / Português (Portugal)</value>
+  </data>
+  <data name="PORTUGUESE_PORTUGAL_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Portuguese
+(Portugal) /
+Português
+(Portugal)</value>
+  </data>
+  <data name="SLOVAK_SLOVAKIA" xml:space="preserve">
+    <value>Slovak (Slovakia) / Slovenčina (Slovensko) </value>
+  </data>
+  <data name="SLOVAK_SLOVAKIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Slovak
+(Slovakia) /
+Slovenčina
+(Slovensko)</value>
+  </data>
+  <data name="ALIENWARE_17" xml:space="preserve">
+    <value>Alienware 17 (EyeX)</value>
+  </data>
+  <data name="STEELSERIES_SENTRY" xml:space="preserve">
+    <value>Steelseries Sentry (EyeX)</value>
+  </data>
+  <data name="TOBII_EYE_TRACKER_4C" xml:space="preserve">
+    <value>Tobii Eye Tracker 4C</value>
+  </data>
+  <data name="TOBII_PCEYE_MINI" xml:space="preserve">
+    <value>Tobii PCEye Mini</value>
+  </data>
+  <data name="TOBII_X2_30" xml:space="preserve">
+    <value>Tobii X2-30</value>
+  </data>
+  <data name="TOBII_X2_60" xml:space="preserve">
+    <value>Tobii X2-60</value>
+  </data>
+  <data name="FORCE_CAPS_LOCK" xml:space="preserve">
+    <value>Hepsi BÜYÜK harf (Shift tuşu kilitli):</value>
+  </data>
+  <data name="USE_ALPHABETICAL_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>Alfabetik klavye düzeni kullan</value>
+  </data>
+  <data name="KALMAN_FILTER_ENABLED" xml:space="preserve">
+    <value>Kalman Filtresi</value>
+  </data>
+  <data name="TOGGLE_MANUAL_MODE" xml:space="preserve">
+    <value>Fare Kontrol Modunu Aç/Kapat</value>
+  </data>
+  <data name="CZECH_CZECH_REPUBLIC" xml:space="preserve">
+    <value>Czech (Czech Rep.) / Čeština (Česko)</value>
+  </data>
+  <data name="CZECH_CZECH_REPUBLIC_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Czech
+(Czech Rep.) /
+Čeština
+(Česko)</value>
+  </data>
+  <data name="MANUAL_MODE_CHANGED" xml:space="preserve">
+    <value>Giriş modu değiştirildi</value>
+  </data>
+  <data name="MANUAL_MODE_DISABLED" xml:space="preserve">
+    <value>Fare (manuel) modu devre dışı bırakıldı!</value>
+  </data>
+  <data name="MANUAL_MODE_ENABLED" xml:space="preserve">
+    <value>Fare (manuel) modu etkinleştirildi!</value>
+  </data>
+  <data name="CONVERSATION_CONFIRM_ENABLE_LABEL" xml:space="preserve">
+    <value>Sohbet onaylama klavyesini etkinleştir</value>
+  </data>
+  <data name="CONVERSATION_CONFIRM_ONLY_MODE_LABEL" xml:space="preserve">
+    <value>Sohbet onay modu</value>
+  </data>
+  <data name="ENABLE_QUIT_KEYS_LABEL" xml:space="preserve">
+    <value>İptal tuşları etkinleştirilsin mi? </value>
+  </data>
+  <data name="USE_SIMPLIFIED_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>Basitleştirilmiş klavye düzeni kullan</value>
+  </data>
+  <data name="BROWSER_BACK_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Tarayıcı
+Geri</value>
+  </data>
+  <data name="BROWSER_FORWARD_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Browser
+İleri </value>
+  </data>
+  <data name="BROWSER_HOME_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Tarayıcı
+ Anasayfa</value>
+  </data>
+  <data name="BROWSER_SEARCH_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Tarayıcı
+Ara</value>
+  </data>
+  <data name="WEB_BROWSING_LAYOUT" xml:space="preserve">
+    <value>Web Tarayıcı</value>
+  </data>
+  <data name="WEB_BROWSING_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Web
+Tarayıcı</value>
+  </data>
+  <data name="MARYTTS_ENABLED_LABEL" xml:space="preserve">
+    <value>MaryTTS metin okuyucu kullanılsın mı? </value>
+  </data>
+  <data name="MARYTTS_VOICE_LABEL" xml:space="preserve">
+    <value>MaryTTS sesi:</value>
+  </data>
+  <data name="MARYTTS_LOCATION_LABEL" xml:space="preserve">
+    <value>MaryTTS konumu (marytts-server.bat):</value>
+  </data>
+  <data name="MARYTTS_LOCATION_FIND_LABEL" xml:space="preserve">
+    <value>Ara</value>
+  </data>
+  <data name="MARYTTS_LOCATION_ERROR_LABEL" xml:space="preserve">
+    <value>HATA: geçerli bir 'marytts-server.bat' dosyası seçilmedi. Lütfen tekrar deneyin.</value>
+  </data>
+  <data name="BASIC_SUGGESTION" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="NGRAM_SUGGESTION" xml:space="preserve">
+    <value>NGram</value>
+  </data>
+  <data name="PRESAGE_SUGGESTION" xml:space="preserve">
+    <value>Presage</value>
+  </data>
+  <data name="SUGGESTION_METHOD" xml:space="preserve">
+    <value>Kelime önerme yöntemi: </value>
+  </data>
+  <data name="MARYTTS_UNAVAILABLE" xml:space="preserve">
+    <value>MaryTTS sesi  kullanılamıyor</value>
+  </data>
+  <data name="PRESAGE_UNAVAILABLE" xml:space="preserve">
+    <value>Presage kelime tahmin kullanılamıyor </value>
+  </data>
+  <data name="USING_DEFAULT_SUGGESTION_METHOD" xml:space="preserve">
+    <value>Kelime öneri yöntemi ayarlandı : {0}.
+Bu ayarı Yönetim konsolundan (ALT + M)
+eski durumuna getirebilirsiniz</value>
+  </data>
+  <data name="USING_DEFAULT_VOICE" xml:space="preserve">
+    <value>Metin okuyucu sesi sistem sesi olarak ayarlandı: {0}.
+MaryTTS için dosya yoluna göz atabilirsiniz
+ve Yönetim Konsolundan  (ALT + M) 
+önceki okuyucuya dönebilirsiniz.</value>
+  </data>
+  <data name="SPEECH_DELAY_LABEL" xml:space="preserve">
+    <value>Seslendirme öncesi gecikme (ms) </value>
+  </data>
+  <data name="USE_COMMUNIKATE_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>CommuniKate klavye düzeni kullan</value>
+  </data>
+  <data name="ENABLE_COMMUNIKATE_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>CommuniKate etkinleştirilsin mi?</value>
+  </data>
+  <data name="COMMUNIKATE_TOPPAGE_LABEL" xml:space="preserve">
+    <value>CommuniKate ilk sayfa obf dosyası:</value>
+  </data>
+  <data name="COMMUNIKATE_TOPPAGE_LOCATION_ERROR_LABEL" xml:space="preserve">
+    <value>Geçersiz dosya</value>
+  </data>
+  <data name="COMMUNIKATE_TOPPAGE_LOCATION_LABEL" xml:space="preserve">
+    <value>CommuniKate ilk sayfa .obz dosya konumu: </value>
+  </data>
+  <data name="PRESAGE_CONSTRUCTOR_EXCEPTION_MESSAGE" xml:space="preserve">
+    <value>Optikey, Presage ile tokalaşamadı. Birkaç olası neden vardır:
+1. presage.xml dosyasında belirtilen DBFILENAME konumu mevcut değil (C:\Users\USER_NAME\.presage konumunda bulunur) - lütfen bunu kontrol edin ve düzeltin (veya Presage'ı kaldırın/yeniden yükleyin).
+2. Presage'in 64 bit sürümü yüklü (Optikey yalnızca 32 bit sürümünü destekler) ya da Presage dosyaları taşınmış, silinmiş veya bozulmuş olabilir.
+
+Lütfen Presage'i kaldırın ve 0.9.2'nin 32 bit sürümünü yükleyin.
+Optikey çalışmaya devam edecek, ancak kısa süre içinde çökme ihtimali yüksek.
+Bir sonraki çalıştırmada bir çökmeyi önlemek için tahmin yöntemi NGram olarak değiştirilecektir.</value>
+  </data>
+  <data name="PRESAGE_CONSTRUCTOR_EXCEPTION_TITLE" xml:space="preserve">
+    <value>There is a problem with Presage</value>
+  </data>
+  <data name="DYNAMIC_KEYBOARDS_LOCATION_LABEL" xml:space="preserve">
+    <value>Dinamik keyboard dosyalarını içeren dizin: </value>
+  </data>
+  <data name="PLUGINS_LOCATION_LABEL" xml:space="preserve">
+    <value>Eklentileri içeren dizin: </value>
+  </data>
+  <data name="TOBII_PCEYE_GO_PLUS" xml:space="preserve">
+    <value>Tobii PCEye Plus</value>
   </data>
   <data name="ALPHA_2" xml:space="preserve">
     <value>HARFLER 2</value>
   </data>
   <data name="CONVERSATION_ALPHA_2" xml:space="preserve">
-    <value>HARFLER 2</value>
+    <value>CONVERSATION ALPHA 2</value>
+  </data>
+  <data name="DISCARD_CHANGED_SETTINGS" xml:space="preserve">
+    <value>Ayarlarda yapılan tüm değişiklikler silinecek, devam etmek istiyor musunuz?</value>
+  </data>
+  <data name="SETTINGS_CHANGED" xml:space="preserve">
+    <value>Ayarları iptal et</value>
+  </data>
+  <data name="DICTIONARY_IS_PRESAGE" xml:space="preserve">
+    <value>Presage sözlüğü buradan düzenlenemez.
+Varsayılan konumu "C:\Program Files (x86)\presage\share\presage\database_en.db" şeklindedir.
+SQLite format 3 dosyalarını okuyabilen bir program ile düzenlenebilir.
+Örneğin "SQLite için DB Tarayıcı" (ücretsiz bir programdır).</value>
   </data>
   <data name="ALPHA" xml:space="preserve">
     <value>HARFLER</value>
   </data>
+  <data name="ERROR_MAGNIFYING" xml:space="preserve">
+    <value>Büyütme işlemi sırasında bir hata oluştu. Lütfen büyütmeyi devre dışı bırakın ve daha fazla destek için Optikey ile iletişime geçin.</value>
+  </data>
+  <data name="ERROR_TITLE" xml:space="preserve">
+    <value>Hata:</value>
+  </data>
+  <data name="ATTENTION_SOUND_LABEL" xml:space="preserve">
+    <value>Acil durum! </value>
+  </data>
+  <data name="ENABLE_ATTENTION_KEY_LABEL" xml:space="preserve">
+    <value>Acil durum tuşu eklensin mi? </value>
+  </data>
+  <data name="ENABLE_COPY_SCRATCHPAD_KEY_LABEL" xml:space="preserve">
+    <value>Yazı alanını kopyala tuşu gösterilsin mi?</value>
+  </data>
+  <data name="ATTENTION" xml:space="preserve">
+    <value>ACİL DURUM</value>
+  </data>
+  <data name="ATTENTION_SOUND" xml:space="preserve">
+    <value>Acil Durum </value>
+  </data>
+  <data name="COMMUNIKATE_DISABLED" xml:space="preserve">
+    <value>CommuniKate şu anda etkin değil (QWERTY kullanılıyor) </value>
+  </data>
+  <data name="KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>Yazı yazmak için klavye görünümü: </value>
+  </data>
+  <data name="USE_DEFAULT_KEYBOARD_LAYOUT" xml:space="preserve">
+    <value>Varsayılan klavye düzeni kullan </value>
+  </data>
+  <data name="STARTUP_CRASH_TITLE" xml:space="preserve">
+    <value>Tüh! Başlatma sırasında aşağıdaki hata ile karşılaştık: </value>
+  </data>
+  <data name="SELECT_VOICE" xml:space="preserve">
+    <value>SES SEÇİN </value>
+  </data>
+  <data name="MORE" xml:space="preserve">
+    <value>Daha fazla... </value>
+  </data>
   <data name="LANGUAGE_AND_VOICE" xml:space="preserve">
-    <value>Dil</value>
+    <value>Dil &amp; Seslendirme</value>
   </data>
   <data name="LANGUAGE_AND_VOICE_SPLIT_WITH_NEWLINE" xml:space="preserve">
-    <value>Dil</value>
+    <value>Dil
+&amp; Seslendirme </value>
   </data>
   <data name="LANGUAGE_AND_VOICE_UPPER_CASE" xml:space="preserve">
-    <value>DİL</value>
+    <value>LİSAN &amp; SESLENDİRME</value>
   </data>
-  <data name="ALIENWARE_17_INFO" xml:space="preserve">
-    <value>Bu yerleşik Tobii göz izleyici kullanarak, bir Alienware 17 oyun dizüstü gerektirir.</value>
+  <data name="MORE_UPPER_CASE" xml:space="preserve">
+    <value>DAHA FAZLA... </value>
   </data>
-  <data name="GAZE_TRACKER_INFO" xml:space="preserve">
-      <value>Bu tür web kamerası ve Videokameralara olarak kullanıma hazır bileşenleri kullanarak izleme açık kaynak göz için bir çerçevedir İTÜ Gaze Takip Kütüphane gerektirir.</value>
+  <data name="DISPLAY_VOICES_WHEN_CHANGING_KEYBOARD_LANGUAGE" xml:space="preserve">
+    <value>Klavye lisanı değiştirildiğinde seslendirici seçeneği gösterilsin: </value>
   </data>
-  <data name="IRISBOND_DUO_INFO" xml:space="preserve">
-      <value>Eğer Irisbond Duo göz izleme ile Optikey kullanmayı planlıyorsanız o zaman yüklü Irisbond Duo sürücüleri olduğundan emin olun. Bu https://www.irisbond.com/en/producto/irisbond-duo-2 indirilebilir.</value>
+  <data name="LOOK_TO_SCROLL" xml:space="preserve">
+    <value>Bak ve Kaydır</value>
   </data>
-  <data name="MOUSE_POSITION_INFO" xml:space="preserve">
-      <value>Bu modda, Optikey bir göz izleme doğrudan konuşmak yerine girdi olarak fare imlecini kullanacaktır. Sen Optikey test ediyoruz eğer bunu istiyorum olabilecek veya böyle bir kafa fare veya bu listede herhangi bir göz izleme gibi alternatif bir giriş cihazı ile kullanmak istiyorum. Daha fazla bilgi için, bkz www.optikey.org/help</value>
+  <data name="LOOK_TO_SCROLL_ENABLED_LABEL" xml:space="preserve">
+    <value>Kaydırmak için başka bir "Bak ve Kaydır" yöntemi kullan: </value>
   </data>
-  <data name="TOBII_EYEX_INFO" xml:space="preserve">
-      <value>herhangi Tobii Oyun göz izleme (4C, EyeX, Alienware, SteelSeries, vs) ile çalışacak Bu seçenek</value>
+  <data name="LOOK_TO_SCROLL_DIRECTION_INVERTED_LABEL" xml:space="preserve">
+    <value>Kaydırma yönünü ters çevir </value>
   </data>
-  <data name="TOBII_ASSISTIVE_INFO" xml:space="preserve">
-      <value>Bir yardımcı göz izleme ile Optikey kullanmak için, ya da Tobii Windows Control veya Tobii Eye Tracking motorunun yeni sürümü gerekir. Eğer (Tobii Gaze Interaction Software) Tobii Windows Control eski bir sürümünü kullanmanız gerekiyorsa, o zaman bunun yerine fare konumunu kullanarak Optikey kontrol etmek gerekir. Daha fazla bilgi için, bkz www.optikey.org/help</value>
+  <data name="LOOK_TO_SCROLL_LOCK_DOWN_BOUNDS_KEY_LABEL" xml:space="preserve">
+    <value>Seçili bölgeyi kilitle</value>
   </data>
-  <data name="VI_MYGAZE_INFO" xml:space="preserve">
-      <value>Zaten artık indirilebilir myGaze istemci sürücüleri, yükledim eğer Görsel Etkileşim myGaze desteklenir. Eğer bu sürücülerin yüklü olmayan, bunun yerine kullanılması 'fare konumunu' seçin ve imleci hareket ettirmek için myGaze EyeMousePlay uygulaması ile birlikte Optikey kullanmalıdır.</value>
+  <data name="LOOK_TO_SCROLL_CENTRE_MOUSE_WHEN_ACTIVATED_LABEL" xml:space="preserve">
+    <value>Kaydırma başlamadan fare işaretçisini boş bölgeye konumlandır: </value>
   </data>
-  <data name="OPTIKEY_PRO_DESCRIPTION" xml:space="preserve">
-    <value>Bilgisayar Kontrol ve Haberleşme</value>
+  <data name="LOOK_TO_SCROLL_BRING_WINDOW_TO_FRONT_WHEN_ACTIVATED_LABEL" xml:space="preserve">
+    <value>Pencere içinde kaydırmaya başlamadan en öne getir: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BRING_WINDOW_TO_FRONT_AFTER_CHOOSING_SCREENPOINT_LABEL" xml:space="preserve">
+    <value>Ekranda seçilen noktayı ve ilgili pencereleri en öne getir: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SUSPEND_BEFORE_CHOOSING_POINT_FOR_MOUSE_LABEL" xml:space="preserve">
+    <value>Tıkla, sürükle tuşlarına bakıldığında kaydırmayı durdur: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_RESUME_AFTER_CHOOSING_POINT_FOR_MOUSE_LABEL" xml:space="preserve">
+    <value>Daha sonra kaydırmayı otomatik sürdür: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_DEACTIVATE_UPON_SWITCHING_KEYBOARDS_LABEL" xml:space="preserve">
+    <value>Klavye değişikliğinde kaydırmayı durdur: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SHOW_OVERLAY_WINDOW_LABEL" xml:space="preserve">
+    <value>Yerpaylaşım penceresini göster (bilgisayarı yeniden başlat gerekir): </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_OVERLAY_BOUNDS_COLOUR_LABEL" xml:space="preserve">
+    <value>Bindirme üzerine çizilen kaydırma bağlarının rengi:</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_OVERLAY_DEADZONE_COLOUR_LABEL" xml:space="preserve">
+    <value>Bindirme  üzerine çizilen deadzone kılavuzlarının rengi:</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_OVERLAY_BOUNDS_THICKNESS_LABEL" xml:space="preserve">
+    <value>Bindirme üzerine çizilen kaydırma bağlarının rengi:</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_OVERLAY_DEADZONE_THICKNESS_LABEL" xml:space="preserve">
+    <value>Bindirme  üzerine çizilen deadzone kılavuzlarının rengi:</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_HORIZONTAL_DEADZONE_LABEL" xml:space="preserve">
+    <value>Yatay boş bölge (pixel) </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_VERTICAL_DEADZONE_LABEL" xml:space="preserve">
+    <value>Dikey boş bölge (pixel) </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_INCREMENT_CHOICES_LABEL" xml:space="preserve">
+    <value>Sırasıyla bu kaydırma hızlarını kullan</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BASE_SPEED_SLOW_LABEL" xml:space="preserve">
+    <value>"Yavaş" hız alt sınırı (cps veya saniyede tıklama sayısı): </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BASE_SPEED_MEDIUM_LABEL" xml:space="preserve">
+    <value>"Orta" hızlanma (boş bölgeden mesafe pixel/cps)</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BASE_SPEED_FAST_LABEL" xml:space="preserve">
+    <value>"Hızlı" hızlanma (boş bölgeden mesafe pixel/cps)</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_ACCELERATION_SLOW_LABEL" xml:space="preserve">
+    <value>"Yavaş" hızlanma (boş bölgeden mesafe pixel/cps) : </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_ACCELERATION_MEDIUM_LABEL" xml:space="preserve">
+    <value>"Orta" hızlanma (pixel/cps boş bölgeden mesafe): </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_ACCELERATION_FAST_LABEL" xml:space="preserve">
+    <value>"Hızlı" hızlanma (pixel/cps boş bölgeden mesafe): </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_KEY_GROUP" xml:space="preserve">
+    <value>BAK VE KAYDIR TUŞLARI: </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_ACTIVE_KEY_GROUP_LABEL" xml:space="preserve">
+    <value>KAYDIRMAYA ETKİN</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_GROUP_LABEL" xml:space="preserve">
+    <value>SONRAKİ SINIRLAR</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_INCREMENT_KEY_GROUP_LABEL" xml:space="preserve">
+    <value>SONRAKİ ARTIŞ </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_MODE_KEY_GROUP_LABEL" xml:space="preserve">
+    <value>SONRAKİ MOD </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SPEED_KEY_GROUP_LABEL" xml:space="preserve">
+    <value>BİR SONRAKİ HIZ</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_ACTIVE_KEY_TEXT" xml:space="preserve">
+    <value>Gözlerle
+Kaydır</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_INCREMENT_KEY_FORMAT" xml:space="preserve">
+    <value>Scroll by {0} wheel unit:
+(120 tekerlek birimi = 1 tıklama)|Scroll by {0} wheel units:
+(120 tekerlek birimi = 1 tıklama)</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_TEXT_SCREENPOINT" xml:space="preserve">
+    <value>Kaydır
+Hedef odaklı</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_TEXT_SCREENCENTRED" xml:space="preserve">
+    <value>Kaydır
+Merkez odaklı</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_TEXT_WINDOW" xml:space="preserve">
+    <value>Pencere</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_TEXT_SUBWINDOW" xml:space="preserve">
+    <value>Pencere
+Alan </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_BOUNDS_KEY_TEXT_CUSTOM" xml:space="preserve">
+    <value>Seçilmiş
+Alan</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_MODE_KEY_TEXT_VERTICAL" xml:space="preserve">
+    <value>Dikey</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_MODE_KEY_TEXT_HORIZONTAL" xml:space="preserve">
+    <value>Yatay</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_MODE_KEY_TEXT_CROSS" xml:space="preserve">
+    <value>Çapraz</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_MODE_KEY_TEXT_FREE" xml:space="preserve">
+    <value>Serbest</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SPEED_KEY_TEXT_SLOW" xml:space="preserve">
+    <value>Yavaş </value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SPEED_KEY_TEXT_MEDIUM" xml:space="preserve">
+    <value>Orta</value>
+  </data>
+  <data name="LOOK_TO_SCROLL_SPEED_KEY_TEXT_FAST" xml:space="preserve">
+    <value>Hızlı</value>
+  </data>
+  <data name="FRENCH_CANADA" xml:space="preserve">
+    <value>French (Canada) / Française (Canada)</value>
+  </data>
+  <data name="FRENCH_CANADA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>French
+(Canada) /
+Française
+(Canada)</value>
+  </data>
+  <data name="JAPANESE_JAPAN" xml:space="preserve">
+    <value>Japanese (Japan) / 日本語 (日本)</value>
+  </data>
+  <data name="JAPANESE_JAPAN_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Japanese
+(Japan) /
+日本語
+(日本)</value>
+  </data>
+  <data name="COMMUNIKATE_SOUND_VOLUME_LABEL" xml:space="preserve">
+    <value>CommuniKate ses düzeyi: </value>
+  </data>
+  <data name="COMMUNIKATE_SPEAK_SELECTED_LABEL" xml:space="preserve">
+    <value>CommuniKate  metin düğmesi seçildiğinde metni seslendir:</value>
+  </data>
+  <data name="COMMUNIKATE_SPEAK_SELECTED_RATE_LABEL" xml:space="preserve">
+    <value> CommuniKate metin butonu seçiliyken seslendirme hızı:</value>
+  </data>
+  <data name="COMMUNIKATE_SPEAK_SELECTED_VOLUME_LABEL" xml:space="preserve">
+    <value>CommuniKate metin butonu seçiliyken seslendirme volümü:</value>
+  </data>
+  <data name="MANUAL_MODE_MESSAGE" xml:space="preserve">
+    <value>Manuel moda geçmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="MANUAL_MODE" xml:space="preserve">
+    <value>FARE KONTROL MODU</value>
+  </data>
+  <data name="COMMUNIKATE" xml:space="preserve">
+    <value>CommuniKate</value>
+  </data>
+  <data name="PRESAGE_DATABASE_LOCATION_LABEL" xml:space="preserve">
+    <value>Location of Presage database .db file:</value>
+  </data>
+  <data name="PRESAGE_NUMBER_OF_SUGGESTIONS_LABEL" xml:space="preserve">
+    <value>Number of Presage suggestions to show:</value>
+  </data>
+  <data name="AVAILABLE_PLUGINS_LABEL" xml:space="preserve">
+    <value>Kullanılabilir eklentiler</value>
+  </data>
+  <data name="PLUGINS_LABEL" xml:space="preserve">
+    <value>Eklentiler </value>
+  </data>
+  <data name="REFRESH_PLUGINS_BUTTON" xml:space="preserve">
+    <value>Eklentileri tazele </value>
+  </data>
+  <data name="RESTART" xml:space="preserve">
+    <value>Yeniden başlat </value>
+  </data>
+  <data name="REFRESH_CONFIRMATION_MESSAGE" xml:space="preserve">
+    <value>Optikey'i yeniden başlatmak istediğinizden kesinlikle emin misiniz?</value>
+  </data>
+  <data name="REFRESH_MESSAGE" xml:space="preserve">
+    <value>Optikey'i yeniden başlatmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="DYNAMIC_KEYBOARD" xml:space="preserve">
+    <value>DİNAMİK KLAVYE </value>
+  </data>
+  <data name="WEB_BROWSING" xml:space="preserve">
+    <value>WEB TARAMA</value>
+  </data>
+  <data name="UKRAINIAN_UKRAINE" xml:space="preserve">
+    <value>Ukrainian (Ukraine) / Українська (Україна)</value>
+  </data>
+  <data name="UKRAINIAN_UKRAINE_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Ukrainian
+(Ukraine) /
+Українська
+(Україна)</value>
+  </data>
+  <data name="IRISBOND_DATA_STREAM_PROCESSING_LEVEL" xml:space="preserve">
+    <value>Veri akışı işleme miktarı:</value>
+  </data>
+  <data name="IRISBOND_DUO" xml:space="preserve">
+    <value>Irisbond Duo</value>
+  </data>
+  <data name="IRISBOND_TRACKER_COULD_NOT_BE_STARTED" xml:space="preserve">
+    <value>Irisbond Duo tracker başlatılamadı.</value>
+  </data>
+  <data name="IRISBOND_TRACKER_NOT_FOUND" xml:space="preserve">
+    <value>Irisbond Duo tracker bulunamadı.  Bağlantıyı kontrol edin ve yeniden deneyin. </value>
+  </data>
+  <data name="IRISBOND_CALIBRATION_COMPLETE" xml:space="preserve">
+    <value>Kalibrasyon tamamlandı (başarılı veya başarısız), ama her şey tekrar çalışıyor!</value>
+  </data>
+  <data name="COPY_ALL_FROM_SCRATCHPAD" xml:space="preserve">
+    <value>Tümünü kopyala </value>
+  </data>
+  <data name="DYNAMIC_KEYBOARD_DEFINITION_INVALID" xml:space="preserve">
+    <value>Dinamik klavye tanımı geçersiz</value>
+  </data>
+  <data name="DYNAMIC_KEYBOARD_HEIGHT_ABOVE_THRESHOLD" xml:space="preserve">
+    <value>Bu dinamik klavyenin tanımlı yüksekliği çok büyük (ekranın&gt;% 95'i)</value>
+  </data>
+  <data name="RESTART_UPPERCASE" xml:space="preserve">
+    <value>Yeniden başlat </value>
+  </data>
+  <data name="URDU_PAKISTAN" xml:space="preserve">
+    <value>Urdu (Pakistan) / اردو (پاکستان)</value>
+  </data>
+  <data name="URDU_PAKISTAN_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Urdu
+(Pakistan) /
+اردو
+(پاکستان)</value>
+  </data>
+  <data name="DEFAULT_UILANGUAGE_TO_URDU" xml:space="preserve">
+    <value>Yazılan Urduca metnin, sağdan sola akmasını sağlamak için UiLanguage Urduca olarak değiştirmenizi öneririz.
+Optikey'in UiLanguage otomatik olarak Urduca ayarlamasını ister misiniz?</value>
+  </data>
+  <data name="FONTFAMILY_IS_NOT_COMPATIBLE_WITH_URDU_LANGUAGE" xml:space="preserve">
+    <value>Optikey'de kullanılan yazı tipini Urduca ile tam uyumlu bir yazı tipiyle değiştirmenizi öneririz.
+Urduca'ya özgü olmayan bir yazı tipi kullanılıyorsa, metin ve özellikle sayılar yanlış görüntülenebilir.
+Optikey'in yazı tipini otomatik olarak Nafees Web Naskh olarak ayarlamasını ister misiniz?</value>
+  </data>
+  <data name="LANGUAGE_SPECIFIC_FONT_RECOMMENDED" xml:space="preserve">
+    <value>Dile özgü bir yazı tipi önerilir</value>
+  </data>
+  <data name="UILANGUAGE_AND_KEYBOARDANDDICTIONARYLANGUAGE_DIFFER_TITLE" xml:space="preserve">
+    <value>Kullanıcı arayüzü ve  Klavye/Sözlük dilleri farklıdır</value>
+  </data>
+  <data name="TYPE_DIACRITICS_AFTER_LETTERS" xml:space="preserve">
+    <value>Harflerden sonra aksan işaretleri (aksanlar vb.) ekle:</value>
+  </data>
+  <data name="DEFAULT_UILANGUAGE_TO_PERSIAN" xml:space="preserve">
+    <value>Yazılan Farsça metnin not defterinde sağdan sola akmasını sağlamak için UiLanguage Farsça olarak değiştirmenizi öneririz.
+Optikey'in UiLanguage otomatik olarak Farsçaya ayarlamasını ister misiniz?</value>
+  </data>
+  <data name="FONTFAMILY_IS_NOT_COMPATIBLE_WITH_PERSIAN_LANGUAGE" xml:space="preserve">
+    <value>OptiKey'de kullanılan yazı tipini Farsça ile tam uyumlu bir yazı tipiyle değiştirmenizi öneririz.
+Farsça'ya özgü olmayan bir yazı tipi kullanılırsa, metin ve özellikle sayılar yanlış görüntülenebilir.
+Optikey'in yazı tipini otomatik olarak Nazlı olarak ayarlamasını ister misiniz?</value>
+  </data>
+  <data name="PERSIAN_IRAN" xml:space="preserve">
+    <value>Persian (Iran) / فارسی (ایرانی)</value>
+  </data>
+  <data name="PERSIAN_IRAN_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Persian
+(Iran) /
+فارسی
+(ایرانی)</value>
+  </data>
+  <data name="FINNISH_FINLAND" xml:space="preserve">
+    <value>Finnish (Finland) / suomi (Suomi)</value>
+  </data>
+  <data name="FINNISH_FINLAND_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Finnish
+ (Finland) /
+ suomi
+ (Suomi)</value>
+  </data>
+  <data name="HEBREW_ISRAEL" xml:space="preserve">
+    <value>Hebrew (Israel) / עברית (ישראל)</value>
+  </data>
+  <data name="HEBREW_ISRAEL_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Hebrew
+(Israel) /
+עברית
+(ישראל)</value>
+  </data>
+  <data name="HUNGARIAN_HUNGARY" xml:space="preserve">
+    <value>Hungarian (Hungary) / Magyar (Magyarország)</value>
+  </data>
+  <data name="HUNGARIAN_HUNGARY_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Hungarian
+(Hungary) /
+Magyar
+(Magyarország)</value>
+  </data>
+  <data name="ERROR_HANDLING_INPUT_SERVICE_SELECTION_RESULT" xml:space="preserve">
+    <value>Bir tuş seçiminin işlenmesi sırasında bir hata oluştu</value>
+  </data>
+  <data name="LOAD_DICTIONARY" xml:space="preserve">
+    <value>Sözlüğü yükle</value>
+  </data>
+  <data name="LOAD_DICTIONARY_DESCRIPTION" xml:space="preserve">
+    <value>Sözcükleri incelemek, eklemek veya silmek için sözlüğü yükleyin</value>
+  </data>
+  <data name="ENABLE_PLUGINS" xml:space="preserve">
+    <value>Eklentileri etkinleştir</value>
+  </data>
+  <data name="FEATURES_LABEL" xml:space="preserve">
+    <value>Ekstra özellikler</value>
+  </data>
+  <data name="CONVERSATION_OPTIONS" xml:space="preserve">
+    <value>Konuşma seçenekleri</value>
+  </data>
+  <data name="EXTRA_KEYS" xml:space="preserve">
+    <value>Ekstra tuşlar</value>
+  </data>
+  <data name="TYPING_OPTIONS" xml:space="preserve">
+    <value>Yazma seçenekleri </value>
+  </data>
+  <data name="FEATURES" xml:space="preserve">
+    <value>Ekstra özellikler</value>
+  </data>
+  <data name="VARIOUS" xml:space="preserve">
+    <value>Çeşitli</value>
   </data>
   <data name="OPTIKEY_CHAT_DESCRIPTION" xml:space="preserve">
-      <value>Kolay İletişim</value>
+    <value>Optikey Chat : Kolay İletişim</value>
   </data>
   <data name="OPTIKEY_MOUSE_DESCRIPTION" xml:space="preserve">
-      <value>Tam İmleç Denetimi</value>
+    <value>Optikey Mouse : Tam İmleç Kontrolü</value>
   </data>
   <data name="OPTIKEY_SYMBOL_DESCRIPTION" xml:space="preserve">
-      <value>Sembollerle Haberleşme</value>
+    <value>Optikey Symbol : Açık Sembol İletişimi</value>
+  </data>
+  <data name="ALIENWARE_17_INFO" xml:space="preserve">
+    <value>Bu, bütünleşik Tobii göz izleyiciyi kullanan bir Alienware 17 dizüstü oyun bilgisayarı gerektirir</value>
+  </data>
+  <data name="GAZE_TRACKER_INFO" xml:space="preserve">
+    <value>Bunun için web kamerası ve video kameralar gibi kullanıma hazır bileşenleri kullanarak açık kaynaklı göz takibi için bir çerçeve olan ITU Bakış İzleme Kitaplığı gereklidir.</value>
+  </data>
+  <data name="IRISBOND_DUO_INFO" xml:space="preserve">
+    <value>Optikey'i Irisbond Duo göz takip cihazı ile kullanmayı planlıyorsanız, lütfen Irisbond Duo sürücülerinin kurulu olduğundan emin olun. https://www.irisbond.com/products/downloads</value>
+  </data>
+  <data name="MOUSE_POSITION_INFO" xml:space="preserve">
+    <value>Bu modda Optikey, doğrudan bir göz izleyici yerine fare imlecini girdi olarak kullanacaktır. Optikey'i test ediyorsanız veya kafa faresi veya bu listede olmayan herhangi bir göz izleyici gibi alternatif bir giriş cihazı ile kullanmak istiyorsanız bunu isteyebilirsiniz.</value>
+  </data>
+  <data name="TOBII_ASSISTIVE_INFO" xml:space="preserve">
+    <value>Optikey'i bir göz takip cihazı ile kullanmak için ya Windows Control'ün yeni sürümüne ya da Tobii Eye Tracking engine  ihtiyacınız var. Tobii Windows kontrol uygulamasının eski sürümünü kullanmanız gerekiyorsa (Tobii Gaze Etkileşim ayarları dahil), bunun yerine Optikey'i fare konumunu kullanarak kontrol etmeniz gerekecektir.</value>
+  </data>
+  <data name="TOBII_EYEX_INFO" xml:space="preserve">
+    <value>Bu seçenek, tüm Tobii Gaming göz izleyicileriyle çalışır (5, 4C, EyeX, Alienware, Steelseries, vb.)</value>
+  </data>
+  <data name="VI_MYGAZE_INFO" xml:space="preserve">
+    <value>Görsel Etkileşim myGaze yalnızca, artık desteklenmeyen myGaze istemci sürücülerini zaten yüklediyseniz kullanılabilir.  Bu sürücüler yüklü değilse, bunun yerine 'mouse position'ı kullan'ı seçmeli ve imleci hareket ettirmek için Optikey'i myGaze EyeMousePlay uygulamasıyla birlikte kullanmalısınız.</value>
+  </data>
+  <data name="OPACITY_LABEL" xml:space="preserve">
+    <value>Şeffaflık ayarı: </value>
+  </data>
+  <data name="ALLOW_MULTIPLE_INSTANCES" xml:space="preserve">
+    <value>Optikey uygulamasının aynı anda birden çok örneğinin çalışmasına izin ver</value>
+  </data>
+  <data name="TOP" xml:space="preserve">
+    <value>En yukarı</value>
+  </data>
+  <data name="DOCK_POSITION_LABEL" xml:space="preserve">
+    <value>Yerleşik/dayalı pozisyon </value>
+  </data>
+  <data name="FLOATING_POSITION_LABEL" xml:space="preserve">
+    <value>Yüzer pozisyon (sol, üst, genişlik, yükseklik)</value>
+  </data>
+  <data name="TRANSLATION_TARGET_LANGUAGE_LABEL" xml:space="preserve">
+    <value>Çeviri Hedef Dili:</value>
+  </data>
+  <data name="ERROR_DURING_TRANSLATION" xml:space="preserve">
+    <value>Metnin çevirisi sırasında bir hata oluştu</value>
+  </data>
+  <data name="TRANSLATE" xml:space="preserve">
+    <value>Çevir </value>
+  </data>
+  <data name="ENABLE_OVERRIDE_TRANSLATION_API_KEY_LABEL" xml:space="preserve">
+    <value>Farklı bir Yandex Çeviri API anahtarı mı kullanıyorsunuz?</value>
+  </data>
+  <data name="OVERRIDDEN_TRANSLATION_API_KEY_LABEL" xml:space="preserve">
+    <value>API anahtarı: </value>
+  </data>
+  <data name="ENABLE_TRANSLATION_KEY_LABEL" xml:space="preserve">
+    <value>Çeviri anahtarı etkinleştirilsin mi? (çeviri otomatik kopyalandı)</value>
+  </data>
+  <data name="TOBII_EYE_TRACKER_5" xml:space="preserve">
+    <value>Tobii Eye Tracker 5</value>
+  </data>
+  <data name="HINDI_INDIA" xml:space="preserve">
+    <value>Hindi (India) / हिन्दी (भारत)</value>
+  </data>
+  <data name="HINDI_INDIA_SPLIT_WITH_NEWLINE" xml:space="preserve">
+    <value>Hindi
+(India) /
+हिन्दी
+(भारत)</value>
   </data>
 </root>

@@ -64,7 +64,7 @@
     <TextBox Grid.Column="2" Grid.Row="8" Margin="1,0,1,0" Text="{Binding BorderThickness}"/>
     <TextBox Grid.Column="2" Grid.Row="9" Margin="1,0,1,0" Text="{Binding CornerRadius}"/>
     <TextBox Grid.Column="2" Grid.Row="10" Margin="1,0,1,0" Text="{Binding SharedSizeGroup}"
-                 ToolTip="Useful to override size grloups if you you have long labels"/>
+                 ToolTip="Useful to override size groups if you you have long labels"/>
     <ComboBox Grid.Column="2" Grid.Row="11" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleWidth}}"
                   ToolTip="The most narrow key is used as the base width unless overridden to false"
               SelectedItem="{Binding AutoScaleToOneKeyWidth}"/>

@@ -42,10 +42,11 @@ namespace JuliusSweetland.OptiKey.Pro
     public partial class App : OptiKeyApp
     {
         private static SplashScreen splashScreen;
+        private string startKeyboardOverride = null;
 
         #region Main
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             // Setup derived settings class
             Settings.Initialise();
@@ -53,11 +54,10 @@ namespace JuliusSweetland.OptiKey.Pro
 
             Action runApp = () =>
             {
-
                 splashScreen = new SplashScreen("/Resources/Icons/OptikeyProSplash.png");
                 splashScreen.Show(false);
 
-                var application = new App();
+                var application = new App(args);
                 application.InitializeComponent();
                 application.Run();
             };
@@ -79,10 +79,24 @@ namespace JuliusSweetland.OptiKey.Pro
 
         #region Ctor
 
-        public App()
+        public App(string[] args)
         {
+            // Parse command-line args, 
+            
+            if (args.Length > 0)
+            {
+                // Allow entry straight into specified dynamic keyboard(s)
+                // keyboardArg may be:
+                // - single XML file to load
+                // - folder containing XML files                
+
+                startKeyboardOverride = args[0];
+            }
+
             // Core setup for all OptiKey apps
             Initialise();
+
+            // (Setup specific to this app happens in App_OnStartup)
         }
 
         #endregion
@@ -166,7 +180,7 @@ namespace JuliusSweetland.OptiKey.Pro
                     audioService, calibrationService, dictionaryService, keyStateService,
                     suggestionService, capturingStateManager, lastMouseActionStateManager,
                     inputService, keyboardOutputService, mouseOutputService, mainWindowManipulationService,
-                    errorNotifyingServices);
+                    errorNotifyingServices, startKeyboardOverride);
 
                 mainWindow.SetMainViewModel(mainViewModel);
 

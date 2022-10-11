@@ -6,7 +6,6 @@ using System;
 using System.Linq;
 using System.Windows.Media;
 using System.Reflection;
-
 using log4net;
 using JuliusSweetland.OptiKey.Properties;
 
@@ -32,14 +31,14 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
         #endregion
 
-        public DynamicKeyboardSelector(int pageIndex)
+        public DynamicKeyboardSelector(int pageIndex, string keyboardsPath = null)
         {
             InitializeComponent();
             this.pageIndex = pageIndex;
 
             // Populate model
-            folder = new DynamicKeyboardFolder();
-            
+            folder = new DynamicKeyboardFolder(keyboardsPath);
+
             // Setup grid
             for (int i = 0; i < this.mRows; i++)
             {
@@ -51,15 +50,25 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            // Add back key, bottom right
-            { 
+            // Add back/menu key, bottom right
+            if (keyboardsPath == Settings.Default.DynamicKeyboardsLocation)
+            {
+                Key newKey = new Key();
+                newKey.SharedSizeGroup = "SingleKey";
+                newKey.SymbolGeometry = (Geometry)this.Resources["BackIcon"];
+                newKey.Text = JuliusSweetland.OptiKey.Properties.Resources.BACK;
+                newKey.Value = KeyValues.BackFromKeyboardKey;
+                this.AddKey(newKey, this.mRows - 1, this.mCols - 1);
+            }
+            else
+            {
                 Key newKey = new Key();
                 newKey.SharedSizeGroup = "SingleKey";
                 newKey.SymbolGeometry = (Geometry)this.Resources["MenuIcon"];
                 newKey.Text = JuliusSweetland.OptiKey.Properties.Resources.MENU;
                 newKey.Value = KeyValues.MenuKeyboardKey;
                 this.AddKey(newKey, this.mRows - 1, this.mCols - 1);
-            }
+            }            
 
             // Sleep key for bottom left
             {
