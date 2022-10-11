@@ -89,8 +89,10 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 }
             };
             XmlKeyboard = new XmlKeyboard();
+            Profile = new InteractorProfile() { Name = "All" };
+            Profiles.Add(Profile);
+            XmlKeyboard.Profiles = Profiles.ToList();
             Load();
-            CreateViewbox();
         }
 
         #region Properties
@@ -662,7 +664,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
                 if (i is DynamicPopup)
                 {
-                    VisualAndLogicalTreeHelper.FindVisualParent<Grid>(i.Key).Children.Remove(i.Key);
+                    var parent = VisualAndLogicalTreeHelper.FindVisualParent<Grid>(i.Key);
+                    if (parent != null)
+                        parent.Children.Remove(i.Key);
                     i.Key.Margin = new Thickness(ScreenLeft + i.Key.GazeRegion.Left * ScreenWidth, ScreenTop + i.Key.GazeRegion.Top * ScreenHeight, 0, 0);
                     i.Key.Width = i.Key.GazeRegion.Width * ScreenWidth;
                     i.Key.Height = i.Key.GazeRegion.Height * ScreenHeight;

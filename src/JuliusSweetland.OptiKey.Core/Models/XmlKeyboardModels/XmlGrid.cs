@@ -3,10 +3,7 @@ namespace JuliusSweetland.OptiKey.Models
 {
     public class XmlGrid
     {
-        public int Rows
-        { get; set; }
-
-        public int Cols
-        { get; set; }
+        public int Rows { get; set; } = 1;
+        public int Cols { get; set; } = 1;
     }
 }

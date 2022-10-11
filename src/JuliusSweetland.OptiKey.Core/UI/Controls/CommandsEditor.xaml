@@ -63,7 +63,7 @@
                           Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label VerticalAlignment="Center" Content="Link Back:"/>
                 <CheckBox VerticalAlignment="Center" HorizontalAlignment="Left"
-                          ToolTip="When checked this keyboard is included as a stop when navigating back from future keyboards"
+                          ToolTip="When checked you will be able to navigate back to the new keyboard from future keyboards"
                           IsChecked="{Binding BackAction}"/>
               </StackPanel>
               <StackPanel Grid.Column="3" Orientation="Vertical"
@@ -76,6 +76,7 @@
                           Text="{Binding Method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                   <TextBox VerticalAlignment="Center" Margin="3,0" HorizontalAlignment="Left" MinWidth="90" IsEnabled="False"
+                           ToolTip="Open the saved keyboard file in notepad to edit arguments"
                          Text="Argument editing disabled"/>
               </StackPanel>
             </Grid>

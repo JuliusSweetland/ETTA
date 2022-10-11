@@ -41,44 +41,54 @@
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0" Margin="1,0,1,0" Content="Name"/>
-        <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="ShowOutputPanel"/>
-        <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="PersistNewState"/>
-        <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="Columns"/>
-        <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Rows"/>
-        <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="WindowState"/>
-        <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="Position"/>
-        <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="Width"/>
-        <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="Height"/>
-        <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="HorizontalOffset"/>
-        <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="VerticaOffset"/>
+        <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="Hidden"/>
+        <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="ShowOutputPanel"/>
+        <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="PersistNewState"/>
+        <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Columns"/>
+        <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="Rows"/>
+        <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="WindowState"/>
+        <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="Position"/>
+        <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="Width"/>
+        <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="Height"/>
+        <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="HorizontalOffset"/>
+        <Label Grid.Column="0" Grid.Row="11" Margin="1,0,1,0" Content="VerticaOffset"/>
         
         <TextBox Grid.Column="1" Grid.Row="0" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Name, UpdateSourceTrigger=PropertyChanged}"/>
           <CheckBox Grid.Column="1" Grid.Row="1" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                  ToolTip="Control accessibility from the dynamic keyboard selector"
+                          IsChecked="{Binding XmlKeyboard.Hidden, UpdateSourceTrigger=PropertyChanged}">
+          <CheckBox.LayoutTransform>
+            <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
+          </CheckBox.LayoutTransform>
+        </CheckBox>
+          <CheckBox Grid.Column="1" Grid.Row="2" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
                           IsChecked="{Binding XmlKeyboard.ShowOutputPanel, UpdateSourceTrigger=PropertyChanged}">
           <CheckBox.LayoutTransform>
             <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
           </CheckBox.LayoutTransform>
         </CheckBox>
-        <CheckBox Grid.Column="1" Grid.Row="2" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+        <CheckBox Grid.Column="1" Grid.Row="3" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                  ToolTip="If set all future keyboards will use the new state settings of this keyboard"
                           IsChecked="{Binding XmlKeyboard.PersistNewState, UpdateSourceTrigger=PropertyChanged}">
           <CheckBox.LayoutTransform>
             <ScaleTransform ScaleX="1.3" ScaleY="1.3"/>
           </CheckBox.LayoutTransform>
         </CheckBox>
-        <c:NumericUpDown Grid.Column="1" Grid.Row="3" Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
-                         Value="{Binding XmlKeyboard.Cols, UpdateSourceTrigger=PropertyChanged}" />
         <c:NumericUpDown Grid.Column="1" Grid.Row="4" Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
+                         Value="{Binding XmlKeyboard.Cols, UpdateSourceTrigger=PropertyChanged}" />
+        <c:NumericUpDown Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" HorizontalContentAlignment="Left" Minimum="1"
                          Value="{Binding XmlKeyboard.Rows, UpdateSourceTrigger=PropertyChanged}"/>
-        <ComboBox Grid.Column="1" Grid.Row="5" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource WindowStates}}"
+        <ComboBox Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource WindowStates}}"
                     SelectedItem="{Binding XmlKeyboard.WindowState, UpdateSourceTrigger=PropertyChanged}"/>
-        <ComboBox Grid.Column="1" Grid.Row="6" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource PositionList}}"
+        <ComboBox Grid.Column="1" Grid.Row="7" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource PositionList}}"
                     SelectedItem="{Binding XmlKeyboard.Position, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Column="1" Grid.Row="7" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Width, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Column="1" Grid.Row="8" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Height, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Column="1" Grid.Row="9" Margin="1,0,1,0" Text="{Binding XmlKeyboard.HorizontalOffset, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBox Grid.Column="1" Grid.Row="10" Margin="1,0,1,0" Text="{Binding XmlKeyboard.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="8" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Width, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="9" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Height, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="10" Margin="1,0,1,0" Text="{Binding XmlKeyboard.HorizontalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="11" Margin="1,0,1,0" Text="{Binding XmlKeyboard.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
       </Grid>
     </Expander>
     <Expander Grid.Row="1" Header="Keygroups" IsExpanded="True">

@@ -95,22 +95,29 @@
         <Label Grid.Column="1" Grid.Row="13" Margin="1,0,1,0" Content="{Binding Inherited.CompatibilityFont}"/>
         
         <Label Grid.Column="2" Grid.Row="0" Content="Override"/>
-        <TextBox Grid.Column="2" Grid.Row="1" Margin="1,0,1,0" Text="{Binding LockOnTime}"/>
-        <TextBox Grid.Column="2" Grid.Row="2" Margin="1,0,1,0" Text="{Binding CompletionTimes}"/>
-        <TextBox Grid.Column="2" Grid.Row="3" Margin="1,0,1,0" Text="{Binding TimeRequiredToLockDown}"/>
+        <TextBox Grid.Column="2" Grid.Row="1" Margin="1,0,1,0" Text="{Binding LockOnTime}"
+                 ToolTip="Time to gaze at a key before the selection animation will begin"/>
+        <TextBox Grid.Column="2" Grid.Row="2" Margin="1,0,1,0" Text="{Binding CompletionTimes}"
+                 ToolTip="Comma delimited list of time required to select a key for initial and subsequent activations"/>
+        <TextBox Grid.Column="2" Grid.Row="3" Margin="1,0,1,0" Text="{Binding TimeRequiredToLockDown}"
+                 ToolTip="If used, time of continuous gaze required to lock down the key"/>
         <TextBox Grid.Column="2" Grid.Row="4" Margin="1,0,1,0" Text="{Binding Opacity}"/>
         <TextBox Grid.Column="2" Grid.Row="5" Margin="1,0,1,0" Text="{Binding BackgroundColor}"/>
         <TextBox Grid.Column="2" Grid.Row="6" Margin="1,0,1,0" Text="{Binding ForegroundColor}"/>
         <TextBox Grid.Column="2" Grid.Row="7" Margin="1,0,1,0" Text="{Binding BorderColor}"/>
         <TextBox Grid.Column="2" Grid.Row="8" Margin="1,0,1,0" Text="{Binding BorderThickness}"/>
         <TextBox Grid.Column="2" Grid.Row="9" Margin="1,0,1,0" Text="{Binding CornerRadius}"/>
-        <TextBox Grid.Column="2" Grid.Row="10" Margin="1,0,1,0" Text="{Binding SharedSizeGroup}"/>
+        <TextBox Grid.Column="2" Grid.Row="10" Margin="1,0,1,0" Text="{Binding SharedSizeGroup}"
+                 ToolTip="Useful to override size groups if you you have long labels"/>
         <ComboBox Grid.Column="2" Grid.Row="11" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleWidth}}"
+                  ToolTip="The most narrow key is used as the base width unless overridden to false"
               SelectedItem="{Binding AutoScaleToOneKeyWidth}"/>
         <ComboBox Grid.Column="2" Grid.Row="12" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleHeight}}"
+                  ToolTip="The shotest key is used as the base height unless overridden to false"
               SelectedItem="{Binding AutoScaleToOneKeyHeight}"/>
         <ComboBox Grid.Column="2" Grid.Row="13" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource CompatibilityList}}"
-             SelectedItem="{Binding CompatibilityFont}"/>
+             ToolTip="Select an override to limit the fonts to only those with compatibility"
+                  SelectedItem="{Binding CompatibilityFont}"/>
       </Grid>
     </Expander>
     <Expander Header="Properties" IsExpanded="True">
