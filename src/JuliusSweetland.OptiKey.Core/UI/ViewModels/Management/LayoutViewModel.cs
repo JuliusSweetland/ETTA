@@ -88,11 +88,8 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                         propertyChanged.PropertyChanged -= descendantPropertyChanged;
                 }
             };
-            XmlKeyboard = new XmlKeyboard();
-            Profile = new InteractorProfile() { Name = "All" };
-            Profiles.Add(Profile);
-            XmlKeyboard.Profiles = Profiles.ToList();
             Load();
+            AddLayout();
         }
 
         #region Properties
@@ -107,7 +104,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             "SimplifiedAlpha", "SimplifiedConversationAlpha", "SizeAndPosition", "WebBrowsing"
         };
 
-        public static List<string> WindowStates = new List<string>() { { ""}, { Enums.WindowStates.Docked.ToString() }, { Enums.WindowStates.Floating.ToString() }, { Enums.WindowStates.Maximised.ToString() } };
+        public static List<string> WindowStates = new List<string>() { { "" }, { Enums.WindowStates.Docked.ToString() }, { Enums.WindowStates.Floating.ToString() }, { Enums.WindowStates.Maximised.ToString() } };
 
         public static List<string> PositionList = Enum.GetNames(typeof(MoveToDirections)).ToList();
         
@@ -146,6 +143,12 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 xmlKeyboard = value;
                 XmlKeyboards.Clear();
                 XmlKeyboards.Add(value);
+                Profiles.Clear();
+                Profiles.AddRange(XmlKeyboard.Profiles);
+                Profile = Profiles[0];
+                Interactors.Clear();
+                Interactors.AddRange(XmlKeyboard.Interactors);
+                CreateViewbox();
                 OnPropertyChanged();
             }
         }
@@ -233,7 +236,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         private void Load()
         {
             KeyboardFile = Settings.Default.KeyboardFile;
-            CreateViewbox();
         }
 
         private void OpenFile()
@@ -261,12 +263,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 return;
             }
             KeyboardFile = tempFilename;
-            Profiles.Clear();
-            Profiles.AddRange(XmlKeyboard.Profiles);
-            Profile = Profiles[0];
-            Interactors.Clear();
-            Interactors.AddRange(XmlKeyboard.Interactors);
-            CreateViewbox();
         }
 
         private void SaveFile()
@@ -304,9 +300,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
         private void AddBuiltIn()
         {
-            XmlKeyboard = new XmlKeyboard() { Name = KeyboardName };
+            var newKeyboard = new XmlKeyboard() { Name = KeyboardName };
             var profile = new InteractorProfile() { Name = "All" };
-            XmlKeyboard.Profiles = new List<InteractorProfile> { profile };
+            newKeyboard.Profiles = new List<InteractorProfile> { profile };
 
             DependencyObject content = (DependencyObject)new Alpha1().GetContent();
 
@@ -403,31 +399,22 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                     i.Symbol = symbolKeys[symbolValues.IndexOf(key.SymbolGeometry.ToString())];
                 i.SharedSizeGroup = key.SharedSizeGroup;
                 i.Profiles.Add(new InteractorProfileMap(profile, true));
-                XmlKeyboard.Interactors.Add(i);
+                newKeyboard.Interactors.Add(i);
                 maxCol = Math.Max(maxCol, i.ColN + i.WidthN);
                 maxRow = Math.Max(maxRow, i.RowN + i.HeightN);
             }
-            XmlKeyboard.ShowOutputPanel = outputRows > 0 ? "True" : null;
-            XmlKeyboard.Rows = (int)maxRow;
-            XmlKeyboard.Cols = (int)maxCol;
-
-            Profiles.Clear();
-            Profiles.AddRange(XmlKeyboard.Profiles);
-            Profile = Profiles[0];
-            Interactors.Clear();
-            Interactors.AddRange(XmlKeyboard.Interactors);
-            CreateViewbox();
+            newKeyboard.ShowOutputPanel = outputRows > 0 ? "True" : null;
+            newKeyboard.Rows = (int)maxRow;
+            newKeyboard.Cols = (int)maxCol;
+            XmlKeyboard = newKeyboard;
         }
 
         private void AddLayout()
         {
-            XmlKeyboard = new XmlKeyboard() { Name = "NewKeyboard", Width = "100%", Height = "100%", Grid = new XmlGrid() { Cols = 16, Rows = 14 } };
-            XmlKeyboard.Profiles = new List<InteractorProfile> { new InteractorProfile() {Name = "All" } };
-            Profiles.Clear();
-            Profiles.AddRange(XmlKeyboard.Profiles);
-            Interactors.Clear();
-            Interactors.AddRange(XmlKeyboard.Interactors);
-            CreateViewbox();
+            XmlKeyboard = new XmlKeyboard() {
+                Name = "NewKeyboard",
+                Grid = new XmlGrid() { Cols = 16, Rows = 14 },
+                Profiles = new List<InteractorProfile> { new InteractorProfile() { Name = "All" } } };
         }
 
         private void AddProfile()
@@ -488,11 +475,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             {
                 case InteractorTypes.Key:
                     interactor = new DynamicKey() { RowN = 0, ColN = 0, WidthN = minKeyWidth, HeightN = minKeyHeight };
-                    interactor.Commands.Add(new TextCommand() { Value = null });
                     break;
                 case InteractorTypes.Popup:
                     interactor = new DynamicPopup() { RowN = 0, ColN = 0 };
-                    interactor.Commands.Add(new TextCommand() { Value = null });
                     break;
                 case InteractorTypes.OutputPanel:
                     interactor = new DynamicOutputPanel() { RowN = 0, ColN = 0, WidthN = XmlKeyboard.Cols, HeightN = 2 * minKeyHeight };
@@ -574,8 +559,8 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         public double ScreenTop { get { return .2 * ScreenHeight; } }
         public Border KeyboardBorder { get; set; }
         public Thickness Margin { get { return new Thickness(Left, Top, 0, 0); } }
-        public double Width { get { return XmlKeyboard.WidthN.HasValue ? XmlKeyboard.WidthN.Value : Settings.Default.MainWindowFloatingSizeAndPosition.Width; } }
-        public double Height { get { return XmlKeyboard.HeightN.HasValue ? XmlKeyboard.HeightN.Value : Settings.Default.MainWindowFloatingSizeAndPosition.Height; } }
+        public double Width { get { return XmlKeyboard.WidthN.HasValue ? XmlKeyboard.WidthN.Value : ScreenWidth; } }
+        public double Height { get { return XmlKeyboard.HeightN.HasValue ? XmlKeyboard.HeightN.Value : ScreenHeight; } }
         public double Left
         {
             get

@@ -132,6 +132,10 @@ namespace JuliusSweetland.OptiKey.Models
             get { return label; }
             set
             {
+                if (string.IsNullOrEmpty(label) && !Commands.Any())
+                    Commands.Add(new TextCommand() { Value = value });
+                else if (string.IsNullOrEmpty(value) && Commands.Count == 1 && Commands[0] is TextCommand && Commands[0].Value == label)
+                    Commands.Clear();
                 foreach (var c in commands.Where(x => x.Value == Label))
                     c.Value = value;
                 Label = value;

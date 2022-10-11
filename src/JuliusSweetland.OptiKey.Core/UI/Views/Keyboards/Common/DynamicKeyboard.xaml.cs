@@ -473,8 +473,8 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
 
             // Add same symbol margin to all keys
-            if (keyboard.SymbolMargin.HasValue)
-                newKey.SymbolMargin = keyboard.SymbolMargin.Value;
+            if (keyboard.SymbolMarginN.HasValue)
+                newKey.SymbolMargin = keyboard.SymbolMarginN.Value;
 
             // Set shared size group
             if (!string.IsNullOrEmpty(profile.SharedSizeGroup))
@@ -562,10 +562,10 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         private void SetupStyle()
         {
             // Get border and background values, if specified, to override
-            if (keyboard.BorderThickness.HasValue)
+            if (keyboard.BorderThicknessN.HasValue)
             {
-                Log.InfoFormat("Setting border thickness for custom keyboard: {0}", keyboard.BorderThickness.Value);
-                this.BorderThickness = keyboard.BorderThickness.Value;
+                Log.InfoFormat("Setting border thickness for custom keyboard: {0}", keyboard.BorderThicknessN.Value);
+                this.BorderThickness = keyboard.BorderThicknessN.Value;
             }
             if (ValidColor(keyboard.BorderColor, out var colorBrush))
             {
@@ -633,6 +633,8 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
         public static string StringWithValidNewlines(string s)
         {
+            if (s == null) return "";
+
             if (s.Contains("\\r\\n"))
                 s = s.Replace("\\r\\n", Environment.NewLine);
 

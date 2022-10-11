@@ -104,32 +104,29 @@ namespace JuliusSweetland.OptiKey.Models
         private string verticalOffset;
         [XmlElement("VerticalOffset")] public string VerticalOffset{ get { return verticalOffset; } set { verticalOffset = value; VerticalOffsetN = ValidOffset(value, ScreenHeight); OnPropertyChanged(); } }
 
-        public string Symbol
-        { get; set; }
+        public string Symbol { get; set; }
 
-        public double? SymbolMargin
-        { get; set; }
-
-        public string BackgroundColor
-        { get; set; }
-
-        public string BorderColor
-        { get; set; }
-
-        [XmlIgnore]
-        public Thickness? BorderThickness
-        { get; set; }
-
-        [XmlElement("BorderThickness")]
-        public string BorderThicknessAsString
+        [XmlIgnore] public double? SymbolMarginN;
+        public string SymbolMargin
         {
-            get { return BorderThickness.ToString(); }
+            get { return SymbolMarginN.HasValue ? SymbolMarginN.Value.ToString() : null; }
+            set { SymbolMarginN = double.TryParse(value, out double result) ? (double?)result : null; OnPropertyChanged(); }
+        }
+
+        public string BackgroundColor { get; set; }
+
+        public string BorderColor { get; set; }
+
+        [XmlIgnore] public Thickness? BorderThicknessN { get; set; }
+        public string BorderThickness
+        {
+            get { return BorderThicknessN.HasValue ? BorderThicknessN.ToString() : null; }
             set
             {
                 try
                 {
                     ThicknessConverter thicknessConverter = new ThicknessConverter();
-                    BorderThickness = (Thickness)thicknessConverter.ConvertFromString(value);
+                    BorderThicknessN = (Thickness)thicknessConverter.ConvertFromString(value);
                 }
                 catch (System.FormatException)
                 {
@@ -138,25 +135,17 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
-        [XmlIgnore]
-        public bool Hidden
-        { get; set; }
-
-        [XmlElement("HideFromKeyboardMenu")]
-        public string HiddenBoolAsString
+        [XmlIgnore] public bool Hidden { get; set; }
+        public string HideFromKeyboardMenu
         {
-            get { return this.Hidden ? "True" : "False"; }
-            set { this.Hidden = bool.TryParse(value, out bool result) && result; }
+            get { return Hidden ? "True" : null; }
+            set { Hidden = bool.TryParse(value, out bool result) && result; }
         }
 
-        [XmlIgnore]
-        public bool IsShiftAware
-        { get; set; }
-
-        [XmlElement("IsShiftAware")]
-        public string IsShiftAwareAsString
+        [XmlIgnore] public bool IsShiftAware { get; set; }
+        [XmlElement("IsShiftAware")] public string IsShiftAwareAsString
         {
-            get { return this.IsShiftAware ? "True" : "False"; }
+            get { return this.IsShiftAware ? "True" : null; }
             set { this.IsShiftAware = bool.TryParse(value, out bool result) && result; }
         }
 
