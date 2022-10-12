@@ -41,11 +41,19 @@
                 <ColumnDefinition Width="*" SharedSizeGroup="cc7" />
                 <ColumnDefinition Width="*" SharedSizeGroup="cc8" />
               </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                  <Button Click="MoveUp_Click">
+                    <Path Fill="Black" Data="M0 6 6 0 12 6Z " />
+                  </Button>
+                  <Button Click="MoveDown_Click">
+                    <Path Fill="Black" Data="M0 0 6 6 12 0Z "/>
+                  </Button>
+                </StackPanel>
               <Button Grid.Column="7" Margin="3,0" Background="IndianRed" Click="DeleteCommand_Click"
                                     BorderThickness="0" Width="30" Height="20">
-                <Path Data="M0,0 12,12 M12,0 0,12" Width="12" Height="12" Stroke="Black" StrokeThickness="4"/>
-              </Button>
-              <ComboBox VerticalAlignment="Top" Margin="0"
+                  <Path Data="M0,0 12,12 M12,0 0,12" Width="12" Height="12" Stroke="Black" StrokeThickness="4"/>
+                </Button>
+              <ComboBox Grid.Column="2" VerticalAlignment="Top" Margin="0"
                   ItemsSource="{Binding Source={x:Static controls:CommandsEditor.CommandKeyList}}"
                   SelectedItem="{Binding Type, Mode=OneTime}"
                         SelectionChanged="SelectType"/>

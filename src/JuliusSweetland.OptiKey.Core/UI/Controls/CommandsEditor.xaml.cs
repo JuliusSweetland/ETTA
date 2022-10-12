@@ -56,6 +56,21 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             Commands.Add(new TextCommand() { Value = Interactor.Label });
         }
 
+        private void MoveUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (commandIndex < 1) return;
+
+            Commands.Move(commandIndex, commandIndex - 1);
+        }
+
+        private void MoveDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (Commands.Count < 2) return;
+            if (Commands.Count < commandIndex + 2) return;
+
+            Commands.Move(commandIndex, commandIndex + 1);
+        }
+
         private void SelectType(object sender, SelectionChangedEventArgs e)
         {
             if (commandIndex < 0)
