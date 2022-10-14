@@ -146,24 +146,6 @@ namespace JuliusSweetland.OptiKey.UI.Windows
         public ICommand BackCommand { get { return backCommand; } }
         public ICommand RestartCommand { get { return restartCommand; } }
 
-        public static readonly DependencyProperty BackgroundColourOverrideProperty =
-            DependencyProperty.Register("BackgroundColourOverride", typeof(Brush), typeof(MainWindow), new PropertyMetadata(default(Brush)));
-
-        public Brush BackgroundColourOverride
-        {
-            get { return (Brush)GetValue(BackgroundColourOverrideProperty); }
-            set { SetValue(BackgroundColourOverrideProperty, value); }
-        }
-
-        public static readonly DependencyProperty BorderBrushOverrideProperty =
-            DependencyProperty.Register("BorderBrushOverride", typeof(Brush), typeof(MainWindow), new PropertyMetadata(default(Brush)));
-
-        public Brush BorderBrushOverride
-        {
-            get { return (Brush)GetValue(BorderBrushOverrideProperty); }
-            set { SetValue(BorderBrushOverrideProperty, value); }
-        }
-
         private void RequestManagementWindow()
         {
             Log.Info("RequestManagementWindow called.");

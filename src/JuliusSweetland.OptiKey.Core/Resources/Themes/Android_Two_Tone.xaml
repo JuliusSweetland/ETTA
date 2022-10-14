@@ -15,13 +15,9 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
     <ResourceDictionary Source="/OptiKey;component/Resources/Themes/Colours/Android.xaml" />
     <ResourceDictionary Source="/OptiKey;component/Resources/Icons/KeySymbols.xaml" />
     <ResourceDictionary>
-      <SolidColorBrush x:Key="WindowBorderBrush" Color="{StaticResource Grey}" />
-      <SolidColorBrush x:Key="KeyboardBackgroundBrush" Color="{StaticResource Black}" />
-      <SolidColorBrush x:Key="KeyboardBorderBrush" Color="{StaticResource Grey}" />
       <SolidColorBrush x:Key="KeyDefaultForegroundBrush" Color="{StaticResource White}" />
       <SolidColorBrush x:Key="KeyDefaultBorderBrush" Color="{StaticResource Grey}" />
       <SolidColorBrush x:Key="KeyDefaultBackgroundBrush" Color="{StaticResource Black}" />
-      <SolidColorBrush x:Key="NonSymbolBackgroundBrush" Color="{StaticResource Purple}" />
       <SolidColorBrush x:Key="KeyHoverForegroundBrush" Color="{StaticResource Red}" />
       <SolidColorBrush x:Key="KeySelectionProgressBrush" Color="{StaticResource Red}" />
       <SolidColorBrush x:Key="CapturingMultiKeySelectionBrush" Color="{StaticResource Red}" />
@@ -82,27 +78,16 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
           <system:String>/Resources/Fonts/#Pak Nastaleeq</system:String>
         </valueConverters:FontFamilyNotIn.Fonts>
       </valueConverters:FontFamilyNotIn>
-      <Style x:Key="MainWindowStyle" TargetType="{x:Type windows:MainWindow}" BasedOn="{StaticResource {x:Type Window}}">
-        <Setter Property="Background" Value="{StaticResource KeyboardBackgroundBrush}" />
-        <Setter Property="BorderBrush" Value="{StaticResource WindowBorderBrush}" />
+      <Style x:Key="KeyboardViewStyle" TargetType="{x:Type controls:KeyboardView}">
+        <Setter Property="Background" Value="{StaticResource KeyDefaultBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource KeyDefaultBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
         <Style.Triggers>
-          <!--Is the main window's background colour overridden - this can be set by a dynamic keyboard-->
-          <DataTrigger Binding="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource Self}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
-            <Setter Property="Background" Value="{Binding Path=BackgroundColourOverride, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
-          </DataTrigger>
-          <!--Is the main window's border brush overridden - this can be set by a dynamic keyboard-->
-          <DataTrigger Binding="{Binding Path=BorderBrushOverride, RelativeSource={RelativeSource Self}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
-            <Setter Property="BorderBrush" Value="{Binding Path=BorderBrushOverride, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
-          </DataTrigger>
           <!--Is the keyboard an IConversationKeyboard-->
           <DataTrigger Binding="{Binding DataContext.Keyboard, ElementName=MainView, Converter={StaticResource ObjectIsType}, ConverterParameter={x:Type keyboardBase:IConversationKeyboard}, Mode=OneWay}" Value="True">
             <Setter Property="BorderThickness" Value="{Binding Source={x:Static properties:Settings.Default}, Path=ConversationBorderThickness}" />
           </DataTrigger>
         </Style.Triggers>
-      </Style>
-      <Style x:Key="KeyboardViewStyle" TargetType="{x:Type controls:KeyboardView}">
-        <Setter Property="BorderBrush" Value="{StaticResource KeyboardBorderBrush}" />
       </Style>
       <Style x:Key="KeyTextStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource KeyDefaultForegroundBrush}" />
@@ -373,10 +358,9 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         </Style.Triggers>
       </Style>
       <Style x:Key="KeyBorderStyle" TargetType="{x:Type Border}">
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="0" />
-        <Setter Property="Margin" Value="0" />
         <Setter Property="BorderBrush" Value="{StaticResource KeyDefaultBorderBrush}" />
         <Setter Property="Background" Value="{StaticResource KeyDefaultBackgroundBrush}" />
         <Setter Property="behaviours:KeyBehaviours.BeginAnimationOnKeySelectionEvent">

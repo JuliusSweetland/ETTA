@@ -24,7 +24,6 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
     public partial class DynamicKeyboard : KeyboardView
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly MainWindow mainWindow;
         private readonly string inputFilename;
         private readonly XmlKeyboard keyboard;
         private readonly IList<Tuple<KeyValue, KeyValue>> keyFamily;
@@ -33,7 +32,6 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
         private readonly IWindowManipulationService windowManipulationService;
 
         public DynamicKeyboard(
-            MainWindow parentWindow,
             string inputFile,
             IList<Tuple<KeyValue, KeyValue>> keyFamily,
             IDictionary<string, List<KeyValue>> keyValueByGroup,
@@ -41,7 +39,6 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             IWindowManipulationService windowManipulationService)
         {
             InitializeComponent();
-            this.mainWindow = parentWindow;
             inputFilename = inputFile;
             this.keyFamily = keyFamily;
             this.keyValueByGroup = keyValueByGroup;
@@ -66,11 +63,11 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 return;
             }
 
-            if (!ValidateKeyboard()) { return; }
+            if (!ValidateKeyboard()) return;
 
             SetupGrid();
 
-            if (!SetupDynamicItems()) { return; }
+            if (!SetupDynamicItems()) return;
 
             SetupStyle();
         }
@@ -83,11 +80,11 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             overrideTimesByKey = new Dictionary<KeyValue, TimeSpanOverrides>();
             keyboard = xmlKeyboard;
 
-            if (!ValidateKeyboard()) { return; }
+            if (!ValidateKeyboard()) return;
 
             SetupGrid();
 
-            if (!SetupDynamicItems()) { return; }
+            if (!SetupDynamicItems()) return;
 
             SetupStyle();
         }
@@ -111,26 +108,28 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
 
             // If the keyboard overrides any size/position values, tell the windowsManipulationService that it shouldn't be persisting state changes
-            if (keyboard.WindowStateN.HasValue
-                || keyboard.PositionN.HasValue
-                || keyboard.DockSizeN.HasValue
-                || keyboard.WidthN.HasValue
-                || keyboard.HeightN.HasValue
-                || keyboard.HorizontalOffsetN.HasValue
-                || keyboard.VerticalOffsetN.HasValue)
+            if (!(windowManipulationService != null)
+                && !keyboard.WindowStateN.HasValue
+                && !keyboard.PositionN.HasValue
+                && !keyboard.DockSizeN.HasValue
+                && !keyboard.WidthN.HasValue
+                && !keyboard.HeightN.HasValue
+                && !keyboard.HorizontalOffsetN.HasValue
+                && !keyboard.VerticalOffsetN.HasValue)
             {
-                Log.InfoFormat("Overriding size and position for dynamic keyboard");
-                if (windowManipulationService != null)
-                    windowManipulationService.OverridePersistedState(
-                        keyboard.PersistNewStateN.HasValue ? keyboard.PersistNewStateN.Value : false,
-                        keyboard.WindowStateN.HasValue ? keyboard.WindowState : null,
-                        keyboard.PositionN.HasValue ? keyboard.Position : null,
-                        keyboard.DockSizeN.HasValue ? keyboard.DockSize : null,
-                        keyboard.WidthN.HasValue ? keyboard.Width : null,
-                        keyboard.HeightN.HasValue ? keyboard.Height : null,
-                        keyboard.HorizontalOffsetN.HasValue ? keyboard.HorizontalOffset : null,
-                        keyboard.VerticalOffsetN.HasValue ? keyboard.VerticalOffset : null);
+                return true;
             }
+            
+            Log.InfoFormat("Overriding size and position for dynamic keyboard");
+            windowManipulationService.OverridePersistedState(
+                keyboard.PersistNewStateN ?? false,
+                keyboard.WindowStateN.HasValue ? keyboard.WindowState : null,
+                keyboard.PositionN.HasValue ? keyboard.Position : null,
+                keyboard.DockSizeN.HasValue ? keyboard.DockSize : null,
+                keyboard.WidthN.HasValue ? keyboard.Width : null,
+                keyboard.HeightN.HasValue ? keyboard.Height : null,
+                keyboard.HorizontalOffsetN.HasValue ? keyboard.HorizontalOffset : null,
+                keyboard.VerticalOffsetN.HasValue ? keyboard.VerticalOffset : null);
 
             return true;
         }
@@ -293,7 +292,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 if (addCommandList != null && addCommandList.Any())
                     xmlKeyValue.Commands = addCommandList;
                 else
-                    xmlKeyValue = null; //reate a key that performs no action
+                    xmlKeyValue = null; //create a key that performs no action
 
                 CreateDynamicKey(xmlDynamicKey, xmlKeyValue, minKeyWidth, minKeyHeight);
             }
@@ -301,113 +300,113 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
         private List<KeyCommand> AddCommandList(Interactor xmlDynamicKey, List<KeyCommand> commands)
         {
-            var xmlKeyValue = new KeyValue($"R{xmlDynamicKey.RowN}-C{xmlDynamicKey.ColN}");
-            var commandList = new List<KeyCommand>();
-            if (commands.Any())
-            {
-                var rootDir = Path.GetDirectoryName(inputFilename);
-                foreach (KeyCommand keyCommand in xmlDynamicKey.Commands)
-                {
-                    KeyValue commandKeyValue;
-                    if (keyCommand is ActionCommand dynamicAction)
-                    {
-                        if (!Enum.TryParse(dynamicAction.Value, out FunctionKeys actionEnum))
-                            Log.ErrorFormat("Could not parse {0} as function key", dynamicAction.Value);
-                        else
-                        {
-                            commandKeyValue = new KeyValue(actionEnum);
-                            commandList.Add(new ActionCommand() { FunctionKey = actionEnum });
-
-                            if (KeyValues.KeysWhichCanBeLockedDown.Contains(commandKeyValue) 
-                                && !keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
-                            {
-                                keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
-                            }
-                        }
-                    }
-                    else if (keyCommand is ChangeKeyboardCommand dynamicLink)
-                    {
-                        if (string.IsNullOrEmpty(dynamicLink.Value))
-                            Log.ErrorFormat("Destination Keyboard not found for {0} ", dynamicLink.Value);
-                        else
-                        {
-                            var kb_link = rootDir != null ? Enum.TryParse(dynamicLink.Value, out Enums.Keyboards keyboardEnum) ? dynamicLink.Value : Path.Combine(rootDir, dynamicLink.Value) : null;
-
-                            commandList.Add(new ChangeKeyboardCommand() { Value = kb_link, BackAction = dynamicLink.BackAction });
-                        }
-                    }
-                    else if (keyCommand is KeyDownCommand dynamicKeyDown)
-                    {
-                        if (string.IsNullOrEmpty(dynamicKeyDown.Value))
-                            Log.ErrorFormat("KeyDown text not found for {0} ", dynamicKeyDown.Value);
-                        else
-                        {
-                            commandKeyValue = new KeyValue(dynamicKeyDown.Value);
-                            commandList.Add(new KeyDownCommand() { Value = dynamicKeyDown.Value });
-                            if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
-                                keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
-                        }
-                    }
-                    else if (keyCommand is KeyTogglCommand dynamicKeyToggle)
-                    {
-                        if (string.IsNullOrEmpty(dynamicKeyToggle.Value))
-                            Log.ErrorFormat("KeyToggle text not found for {0} ", dynamicKeyToggle.Value);
-                        else
-                        {
-                            commandKeyValue = new KeyValue(dynamicKeyToggle.Value);
-                            commandList.Add(new KeyTogglCommand() { Value = dynamicKeyToggle.Value }); ;
-                            if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
-                                keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
-                        }
-                    }
-                    else if (keyCommand is KeyUpCommand dynamicKeyUp)
-                    {
-                        if (string.IsNullOrEmpty(dynamicKeyUp.Value))
-                            Log.ErrorFormat("KeyUp text not found for {0} ", dynamicKeyUp.Value);
-                        else
-                            commandList.Add(new KeyUpCommand() { Value = dynamicKeyUp.Value });
-                    }
-                    else if (keyCommand is MoveWindowCommand dynamicBounds)
-                    {
-                        commandList.Add(new MoveWindowCommand() { Value = dynamicBounds.Value } );
-                    }
-                    else if (keyCommand is TextCommand dynamicText)
-                    {
-                        if (string.IsNullOrEmpty(dynamicText.Value))
-                            Log.ErrorFormat("Text not found for {0} ", dynamicText.Value);
-                        else
-                            commandList.Add(new TextCommand() { Value = dynamicText.Value });
-                    }
-                    else if (keyCommand is WaitCommand dynamicWait)
-                    {
-                        if (!int.TryParse(dynamicWait.Value, out _))
-                            Log.ErrorFormat("Could not parse wait {0} as int value", dynamicWait.Value);
-                        else
-                            commandList.Add(new WaitCommand() { Value = dynamicWait.Value } );
-                    }
-                    else if (keyCommand is PluginCommand dynamicPlugin)
-                    {
-                        if (string.IsNullOrWhiteSpace(dynamicPlugin.Name))
-                            Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Name);
-                        else if (string.IsNullOrWhiteSpace(dynamicPlugin.Method))
-                            Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Name);
-                        else
-                            commandList.Add(new PluginCommand() { Name = dynamicPlugin.Name,
-                                Method = dynamicPlugin.Method, Arguments = dynamicPlugin.Arguments } );
-                    }
-                    else if (keyCommand is LoopCommand dynamicLoop)
-                    {
-                        var result = AddCommandList(xmlDynamicKey, dynamicLoop.Commands);
-                        if (result != null && result.Any())
-                            commandList.Add(new LoopCommand() { Value = dynamicLoop.Count.ToString(), Commands = result } );
-                        else
-                            return null;
-                    }
-                }
-            }
-            else
+            if (!commands.Any())
             {
                 Log.ErrorFormat("No value found in dynamic key with label {0}", xmlDynamicKey.Label);
+                return commands;
+            }
+
+            var commandList = new List<KeyCommand>();
+            var rootDir = Path.GetDirectoryName(inputFilename);
+            var xmlKeyValue = new KeyValue($"R{xmlDynamicKey.RowN}-C{xmlDynamicKey.ColN}");
+
+            foreach (KeyCommand keyCommand in xmlDynamicKey.Commands)
+            {
+                KeyValue commandKeyValue;
+                if (keyCommand is ActionCommand dynamicAction)
+                {
+                    if (!Enum.TryParse(dynamicAction.Value, out FunctionKeys actionEnum))
+                        Log.ErrorFormat("Could not parse {0} as function key", dynamicAction.Value);
+                    else
+                    {
+                        commandKeyValue = new KeyValue(actionEnum);
+                        commandList.Add(new ActionCommand() { FunctionKey = actionEnum });
+
+                        if (KeyValues.KeysWhichCanBeLockedDown.Contains(commandKeyValue) 
+                            && !keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
+                        {
+                            keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
+                        }
+                    }
+                }
+                else if (keyCommand is ChangeKeyboardCommand dynamicLink)
+                {
+                    if (string.IsNullOrEmpty(dynamicLink.Value))
+                        Log.ErrorFormat("Destination Keyboard not found for {0} ", dynamicLink.Value);
+                    else
+                    {
+                        var kb_link = rootDir != null ? Enum.TryParse(dynamicLink.Value, out Enums.Keyboards keyboardEnum) ? dynamicLink.Value : Path.Combine(rootDir, dynamicLink.Value) : null;
+
+                        commandList.Add(new ChangeKeyboardCommand() { Value = kb_link, BackAction = dynamicLink.BackAction });
+                    }
+                }
+                else if (keyCommand is KeyDownCommand dynamicKeyDown)
+                {
+                    if (string.IsNullOrEmpty(dynamicKeyDown.Value))
+                        Log.ErrorFormat("KeyDown text not found for {0} ", dynamicKeyDown.Value);
+                    else
+                    {
+                        commandKeyValue = new KeyValue(dynamicKeyDown.Value);
+                        commandList.Add(new KeyDownCommand() { Value = dynamicKeyDown.Value });
+                        if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
+                            keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
+                    }
+                }
+                else if (keyCommand is KeyTogglCommand dynamicKeyToggle)
+                {
+                    if (string.IsNullOrEmpty(dynamicKeyToggle.Value))
+                        Log.ErrorFormat("KeyToggle text not found for {0} ", dynamicKeyToggle.Value);
+                    else
+                    {
+                        commandKeyValue = new KeyValue(dynamicKeyToggle.Value);
+                        commandList.Add(new KeyTogglCommand() { Value = dynamicKeyToggle.Value }); ;
+                        if (!keyFamily.Contains(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue)))
+                            keyFamily.Add(new Tuple<KeyValue, KeyValue>(xmlKeyValue, commandKeyValue));
+                    }
+                }
+                else if (keyCommand is KeyUpCommand dynamicKeyUp)
+                {
+                    if (string.IsNullOrEmpty(dynamicKeyUp.Value))
+                        Log.ErrorFormat("KeyUp text not found for {0} ", dynamicKeyUp.Value);
+                    else
+                        commandList.Add(new KeyUpCommand() { Value = dynamicKeyUp.Value });
+                }
+                else if (keyCommand is MoveWindowCommand dynamicBounds)
+                {
+                    commandList.Add(new MoveWindowCommand() { Value = dynamicBounds.Value } );
+                }
+                else if (keyCommand is TextCommand dynamicText)
+                {
+                    if (string.IsNullOrEmpty(dynamicText.Value))
+                        Log.ErrorFormat("Text not found for {0} ", dynamicText.Value);
+                    else
+                        commandList.Add(new TextCommand() { Value = dynamicText.Value });
+                }
+                else if (keyCommand is WaitCommand dynamicWait)
+                {
+                    if (!int.TryParse(dynamicWait.Value, out _))
+                        Log.ErrorFormat("Could not parse wait {0} as int value", dynamicWait.Value);
+                    else
+                        commandList.Add(new WaitCommand() { Value = dynamicWait.Value } );
+                }
+                else if (keyCommand is PluginCommand dynamicPlugin)
+                {
+                    if (string.IsNullOrWhiteSpace(dynamicPlugin.Name))
+                        Log.ErrorFormat("Plugin not found for {0} ", dynamicPlugin.Name);
+                    else if (string.IsNullOrWhiteSpace(dynamicPlugin.Method))
+                        Log.ErrorFormat("Method not found for {0} ", dynamicPlugin.Name);
+                    else
+                        commandList.Add(new PluginCommand() { Name = dynamicPlugin.Name,
+                            Method = dynamicPlugin.Method, Arguments = dynamicPlugin.Arguments } );
+                }
+                else if (keyCommand is LoopCommand dynamicLoop)
+                {
+                    var result = AddCommandList(xmlDynamicKey, dynamicLoop.Commands);
+                    if (result != null && result.Any())
+                        commandList.Add(new LoopCommand() { Value = dynamicLoop.Count.ToString(), Commands = result } );
+                    else
+                        return null;
+                }
             }
             return commandList;
         }
@@ -423,7 +422,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                     newKey = new KeyPopup { Value = xmlKeyValue, GazeRegion = Rect.Parse(xmlKey.GazeRegion) };
                 else
                     newKey.GazeRegion = Rect.Parse(xmlKey.GazeRegion);
-        }
+            }
 
             //add this item's KeyValue to each KeyGroup referenced in its definition
             foreach (var name in xmlKey.Profiles.Where(x => x.IsMember).Select(x => x.Profile.Name.ToUpper()))
@@ -571,19 +570,11 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             {
                 Log.InfoFormat("Setting border color for custom keyboard: {0}", keyboard.BorderColor);
                 this.BorderBrush = colorBrush;
-                if(mainWindow != null)
-                {
-                    mainWindow.BorderBrushOverride = colorBrush;
-                }
             }
             if (ValidColor(keyboard.BackgroundColor, out colorBrush))
             {
                 Log.InfoFormat("Setting background color for custom keyboard: {0}", keyboard.BackgroundColor);
                 this.Background = colorBrush;
-                if (mainWindow != null)
-                {
-                    mainWindow.BackgroundColourOverride = colorBrush;
-                }
             }
         }
 

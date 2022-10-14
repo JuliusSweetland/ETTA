@@ -89,7 +89,6 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             set { SetValue(KeyboardProperty, value); }
         }
 
-
         public static readonly DependencyProperty PointToKeyValueMapProperty =
             DependencyProperty.Register("PointToKeyValueMap", typeof(Dictionary<Rect, KeyValue>),
                 typeof(KeyboardHost), new PropertyMetadata(default(Dictionary<Rect, KeyValue>)));
@@ -152,7 +151,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             //Clear out point to key map
             PointToKeyValueMap = null;
 
-            mainWindow = mainWindow != null ? mainWindow : VisualAndLogicalTreeHelper.FindVisualParent<MainWindow>(this);
+            mainWindow = mainWindow ?? VisualAndLogicalTreeHelper.FindVisualParent<MainWindow>(this);
 
             //Clear any potential main window color overrides
             if (mainWindow != null)
@@ -161,8 +160,6 @@ namespace JuliusSweetland.OptiKey.UI.Controls
                 keyValueByGroup = mainWindow.KeyValueByGroup;
                 overrideTimesByKey = mainWindow.OverrideTimesByKey;
                 windowManipulationService = mainWindow.WindowManipulationService;
-                mainWindow.BackgroundColourOverride = null;
-                mainWindow.BorderBrushOverride = null;
 
                 //Clear the dictionaries
                 keyFamily?.Clear();
@@ -189,7 +186,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             if (Keyboard is ViewModelKeyboards.DynamicKeyboard)
             {
                 var kb = Keyboard as ViewModelKeyboards.DynamicKeyboard;
-                newContent = new DynamicKeyboard(mainWindow, kb.Link, keyFamily, keyValueByGroup, overrideTimesByKey, windowManipulationService) { DataContext = Keyboard };
+                newContent = new DynamicKeyboard(kb.Link, keyFamily, keyValueByGroup, overrideTimesByKey, windowManipulationService) { DataContext = Keyboard };
             }
             else
             {
