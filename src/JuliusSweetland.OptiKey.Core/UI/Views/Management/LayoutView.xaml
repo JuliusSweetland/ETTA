@@ -52,7 +52,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         </Grid>
         <StackPanel Orientation="Horizontal">
           <controls:LayoutEditor/>
-          <Border Background="Black" BorderBrush="Black" BorderThickness="3" CornerRadius="5">
+          <Border Background="#303030" CornerRadius="0">
             <UserControl VerticalAlignment="Top" Content="{Binding Viewbox}"/>
           </Border>
         </StackPanel>

@@ -15,9 +15,8 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         Topmost="True"
         AllowsTransparency="True"
         ResizeMode="NoResize"
-        Style="{DynamicResource MainWindowStyle}"
+        Background="Transparent"
         Tag="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <!--Set background to transparent so keyboards can have transparent backgrounds-->
     <!--Don't set the window's Width and Height properties on the window itself - they are loaded and applied from settings-->
     <!--ResizeMode will be turned on when supported-->
 

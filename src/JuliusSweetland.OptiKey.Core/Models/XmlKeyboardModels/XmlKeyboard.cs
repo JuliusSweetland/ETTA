@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using JuliusSweetland.OptiKey.Enums;
+using JuliusSweetland.OptiKey.Static;
 using JuliusSweetland.OptiKey.UI.ValueConverters;
 using log4net;
 using System;
@@ -70,8 +71,8 @@ namespace JuliusSweetland.OptiKey.Models
             set { DockSizeN = Enum.TryParse(value, out DockSizes result) ? (DockSizes?)result : null; OnPropertyChanged(); }
         }
 
-        private double ScreenWidth { get { return SystemParameters.VirtualScreenWidth; } }
-        private double ScreenHeight { get { return SystemParameters.VirtualScreenHeight; } }
+        private double ScreenWidth { get { return Graphics.VirtualScreenWidthInPixels; } }
+        private double ScreenHeight { get { return Graphics.VirtualScreenHeightInPixels; } }
         [XmlIgnore] public double? WidthN { get; set; }
         private string width;
         public string Width
@@ -293,8 +294,8 @@ namespace JuliusSweetland.OptiKey.Models
                 : numericDim > 0 ? numericDim : screenDim + numericDim;
 
             if (numericDim > -.97 * screenDim
-                && !(numericDim > -.03 * screenDim && numericDim < .03 * screenDim)
-                && numericDim < 1.03 * screenDim)
+                && !(numericDim >= 0 && numericDim < .03 * screenDim)
+                && numericDim < screenDim)
                 return numericDim;
 
             return screenDim;

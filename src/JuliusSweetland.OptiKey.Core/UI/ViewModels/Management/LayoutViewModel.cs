@@ -1,7 +1,9 @@
+// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using JuliusSweetland.OptiKey.Enums;
 using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.Models;
 using JuliusSweetland.OptiKey.Properties;
+using JuliusSweetland.OptiKey.Static;
 using JuliusSweetland.OptiKey.UI.Controls;
 using JuliusSweetland.OptiKey.UI.Utilities;
 using JuliusSweetland.OptiKey.UI.ViewModels.Keyboards;
@@ -553,19 +555,18 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         private Canvas canvas;
         private Border gazeRegion = new Border() { Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#FB6043"), BorderThickness = new Thickness(5), Child = new Viewbox() { Stretch = Stretch.Uniform,
         StretchDirection = StretchDirection.Both, Child = new TextBlock() { Text = "Gaze\nHere", TextAlignment=TextAlignment.Center, Foreground = Brushes.White } } };
-        public double ScreenWidth { get { return SystemParameters.VirtualScreenWidth; } }
-        public double ScreenHeight { get { return SystemParameters.VirtualScreenHeight; } }
+        public double ScreenWidth { get { return Graphics.VirtualScreenWidthInPixels; } }
+        public double ScreenHeight { get { return Graphics.VirtualScreenHeightInPixels; } }
         public double ScreenLeft { get { return .2 * ScreenWidth; } }
         public double ScreenTop { get { return .2 * ScreenHeight; } }
-        public Border KeyboardView { get; set; }
         public Thickness Margin { get { return new Thickness(Left, Top, 0, 0); } }
-        public double Width { get { return XmlKeyboard.WidthN.HasValue ? XmlKeyboard.WidthN.Value : ScreenWidth; } }
-        public double Height { get { return XmlKeyboard.HeightN.HasValue ? XmlKeyboard.HeightN.Value : ScreenHeight; } }
+        public double Width { get { return XmlKeyboard.WidthN ?? ScreenWidth; } }
+        public double Height { get { return XmlKeyboard.HeightN ?? ScreenHeight; } }
         public double Left
         {
             get
             {
-                var offset = XmlKeyboard.HorizontalOffsetN.HasValue ? XmlKeyboard.HorizontalOffsetN.Value : 0;
+                var offset = XmlKeyboard.HorizontalOffsetN ?? 0;
                 return Enum.TryParse(XmlKeyboard.Position, out MoveToDirections newMovePosition)
                     ? newMovePosition == MoveToDirections.Left || newMovePosition == MoveToDirections.TopLeft || newMovePosition == MoveToDirections.BottomLeft
                         ? ScreenLeft + offset
@@ -579,7 +580,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         {
             get
             {
-                var offset = XmlKeyboard.VerticalOffsetN.HasValue ? XmlKeyboard.VerticalOffsetN.Value : 0;
+                var offset = XmlKeyboard.VerticalOffsetN ?? 0;
                 return Enum.TryParse(XmlKeyboard.Position, out MoveToDirections newMovePosition)
                     ? newMovePosition == MoveToDirections.Top || newMovePosition == MoveToDirections.TopLeft || newMovePosition == MoveToDirections.TopRight
                         ? ScreenTop + offset
@@ -594,7 +595,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         {
             Viewbox = null;
 
-            var thickness = 20;
+            var thickness = 40;
             if (canvas != null && canvas.Children != null)
                 canvas.Children.Clear();
 
@@ -605,13 +606,13 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             };
             canvas.Children.Add(new Border()
             {
-                Background = Brushes.Black,
+                Background = new SolidColorBrush(Color.FromRgb(24,24,24)),
                 BorderBrush = Brushes.White,
                 BorderThickness = new Thickness(thickness),
                 Width = ScreenWidth + 2 * thickness,
                 Height = ScreenHeight + 2 * thickness,
                 Margin = new Thickness(ScreenLeft - thickness, ScreenTop - thickness, 0, 0),
-            }); ;
+            });
             canvas.Children.Add(new System.Windows.Shapes.Line()
             {
                 X1 = ScreenLeft + .25 * ScreenWidth,
