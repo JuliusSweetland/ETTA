@@ -1,6 +1,7 @@
-﻿using JuliusSweetland.OptiKey.Enums;
+﻿// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
+using JuliusSweetland.OptiKey.Enums;
+using JuliusSweetland.OptiKey.UI.ValueConverters;
 using log4net;
-// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Media;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -113,25 +115,58 @@ namespace JuliusSweetland.OptiKey.Models
             set { SymbolMarginN = double.TryParse(value, out double result) ? (double?)result : null; OnPropertyChanged(); }
         }
 
-        public string BackgroundColor { get; set; }
-
-        public string BorderColor { get; set; }
-
-        [XmlIgnore] public Thickness? BorderThicknessN { get; set; }
-        public string BorderThickness
+        [XmlIgnore] public SolidColorBrush BackgroundBrush { get; set; }
+        private string backgroundColor;
+        public string BackgroundColor
         {
-            get { return BorderThicknessN.HasValue ? BorderThicknessN.ToString() : null; }
+            get { return backgroundColor; }
             set
             {
-                try
+                backgroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
+                if (HlsColor.TryParse(value, out SolidColorBrush brush))
                 {
-                    ThicknessConverter thicknessConverter = new ThicknessConverter();
-                    BorderThicknessN = (Thickness)thicknessConverter.ConvertFromString(value);
+                    BackgroundBrush = brush;
+                    OnPropertyChanged();
                 }
-                catch (System.FormatException)
+                else if (BackgroundBrush != null)
                 {
-                    Log.ErrorFormat("Cannot interpret \"{0}\" as thickness", value);
+                    BackgroundBrush = null;
+                    OnPropertyChanged();
                 }
+            }
+        }
+
+        [XmlIgnore] public SolidColorBrush BorderBrush { get; set; }
+        private string borderColor;
+        public string BorderColor
+        {
+            get { return borderColor; }
+            set
+            {
+                borderColor = string.IsNullOrWhiteSpace(value) ? null : value;
+                if (HlsColor.TryParse(value, out SolidColorBrush brush))
+                {
+                    BorderBrush = brush;
+                    OnPropertyChanged();
+                }
+                else if (BorderBrush != null)
+                {
+                    BorderBrush = null;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [XmlIgnore] public int? BorderThicknessN;
+        private string borderThickness;
+        public string BorderThickness
+        {
+            get { return borderThickness; }
+            set
+            {
+                borderThickness = value;
+                BorderThicknessN = int.TryParse(value, out int result) ? (int?)result : null;
+                OnPropertyChanged();
             }
         }
 

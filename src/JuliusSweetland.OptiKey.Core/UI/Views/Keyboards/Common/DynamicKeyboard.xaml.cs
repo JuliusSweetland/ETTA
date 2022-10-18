@@ -111,13 +111,14 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
 
             // If the keyboard overrides any size/position values, tell the windowsManipulationService that it shouldn't be persisting state changes
-            if (keyboard.WindowStateN.HasValue
-                || keyboard.PositionN.HasValue
-                || keyboard.DockSizeN.HasValue
-                || keyboard.WidthN.HasValue
-                || keyboard.HeightN.HasValue
-                || keyboard.HorizontalOffsetN.HasValue
-                || keyboard.VerticalOffsetN.HasValue)
+            if (windowManipulationService == null
+                || !keyboard.WindowStateN.HasValue
+                && !keyboard.PositionN.HasValue
+                && !keyboard.DockSizeN.HasValue
+                && !keyboard.WidthN.HasValue
+                && !keyboard.HeightN.HasValue
+                && !keyboard.HorizontalOffsetN.HasValue
+                && !keyboard.VerticalOffsetN.HasValue)
             {
                 Log.InfoFormat("Overriding size and position for dynamic keyboard");
                 if (windowManipulationService != null)
@@ -565,25 +566,17 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             if (keyboard.BorderThicknessN.HasValue)
             {
                 Log.InfoFormat("Setting border thickness for custom keyboard: {0}", keyboard.BorderThicknessN.Value);
-                this.BorderThickness = keyboard.BorderThicknessN.Value;
+                this.BorderThickness = new Thickness(keyboard.BorderThicknessN.Value);
             }
-            if (ValidColor(keyboard.BorderColor, out var colorBrush))
+            if (keyboard.BorderBrush != null)
             {
                 Log.InfoFormat("Setting border color for custom keyboard: {0}", keyboard.BorderColor);
-                this.BorderBrush = colorBrush;
-                if(mainWindow != null)
-                {
-                    mainWindow.BorderBrushOverride = colorBrush;
-                }
+                this.BorderBrush = keyboard.BorderBrush;
             }
-            if (ValidColor(keyboard.BackgroundColor, out colorBrush))
+            if (keyboard.BackgroundBrush != null)
             {
                 Log.InfoFormat("Setting background color for custom keyboard: {0}", keyboard.BackgroundColor);
-                this.Background = colorBrush;
-                if (mainWindow != null)
-                {
-                    mainWindow.BackgroundColourOverride = colorBrush;
-                }
+                this.Background = keyboard.BackgroundBrush;
             }
         }
 
@@ -631,36 +624,10 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             Grid.SetRowSpan(key, rowSpan);
         }
 
-        public static string StringWithValidNewlines(string s)
-        {
-            if (s == null) return "";
-
-            if (s.Contains("\\r\\n"))
-                s = s.Replace("\\r\\n", Environment.NewLine);
-
-            if (s.Contains("\\n"))
-                s = s.Replace("\\n", Environment.NewLine);
-
-            return s;
-        }
-
         protected override void OnLoaded(object sender, RoutedEventArgs e)
         {
             base.OnLoaded(sender, e);
             ShiftAware = keyboard != null && keyboard.IsShiftAware;
-        }
-
-        private bool ValidColor(string color, out SolidColorBrush colorBrush)
-        {
-            if (!string.IsNullOrEmpty(color)
-                && (Regex.IsMatch(color, "^(#[0-9A-Fa-f]{3})$|^(#[0-9A-Fa-f]{6})$")
-                || System.Drawing.Color.FromName(color).IsKnownColor))
-            {
-                colorBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
-                return true;
-            }
-            colorBrush = null;
-            return false;
         }
     }
 }

@@ -42,6 +42,9 @@
           <RowDefinition/>
           <RowDefinition/>
           <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Column="0" Grid.Row="0" Margin="1,0,1,0" Content="Name"/>
         <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="HideFromKeyboardMenu"/>
@@ -55,6 +58,9 @@
         <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="Height"/>
         <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="HorizontalOffset"/>
         <Label Grid.Column="0" Grid.Row="11" Margin="1,0,1,0" Content="VerticaOffset"/>
+        <Label Grid.Column="0" Grid.Row="12" Margin="1,0,1,0" Content="BackgroundColor"/>
+        <Label Grid.Column="0" Grid.Row="13" Margin="1,0,1,0" Content="BorderColor"/>
+        <Label Grid.Column="0" Grid.Row="14" Margin="1,0,1,0" Content="BorderThickness"/>
         
         <TextBox Grid.Column="1" Grid.Row="0" Margin="1,0,1,0" Text="{Binding XmlKeyboard.Name, UpdateSourceTrigger=PropertyChanged}"/>
           <CheckBox Grid.Column="1" Grid.Row="1" Margin="1,0,1,0" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -97,6 +103,12 @@
         <TextBox Grid.Column="1" Grid.Row="11" Margin="1,0,1,0"
                  ToolTip="Enter an amount in pixels or use % to specify the percent of the screen"
                  Text="{Binding XmlKeyboard.VerticalOffset, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="12" Margin="1,0,1,0"
+                 Text="{Binding XmlKeyboard.BackgroundColor, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="13" Margin="1,0,1,0"
+                 Text="{Binding XmlKeyboard.BorderColor, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Grid.Column="1" Grid.Row="14" Margin="1,0,1,0"
+                 Text="{Binding XmlKeyboard.BorderThickness, UpdateSourceTrigger=PropertyChanged}"/>
       </Grid>
     </Expander>
     <Expander Grid.Row="1" Header="Keygroups" IsExpanded="True">

@@ -179,6 +179,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlElement("Loop", typeof(LoopCommand))]
         [XmlElement("Plugin", typeof(PluginCommand))]
         [XmlElement("MoveWindow", typeof(MoveWindowCommand))]
+        [XmlElement("Switch", typeof(SwitchCommand))]
         [XmlElement("Text", typeof(TextCommand))]
         [XmlElement("Wait", typeof(WaitCommand))]
         public ObservableCollection<KeyCommand> Commands { get { return commands; } set { commands = value; } }
@@ -289,7 +290,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 backgroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
+                if (HlsColor.TryParse(value, out SolidColorBrush brush))
                 {
                     BackgroundBrush = brush;
                     OnPropertyChanged();
@@ -311,7 +312,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 foregroundColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
+                if (HlsColor.TryParse(value, out SolidColorBrush brush))
                 {
                     ForegroundBrush = brush;
                     OnPropertyChanged();
@@ -332,7 +333,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 borderColor = string.IsNullOrWhiteSpace(value) ? null : value;
-                if (ValidColor(value, out SolidColorBrush brush))
+                if (HlsColor.TryParse(value, out SolidColorBrush brush))
                 {
                     BorderBrush = brush;
                     OnPropertyChanged();
@@ -379,7 +380,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 keyDisabledBackground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDisabledBackgroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                KeyDisabledBackgroundBrush = HlsColor.TryParse(value, out SolidColorBrush brush) ? brush : null;
             }
         }
 
@@ -391,7 +392,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 keyDisabledForeground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDisabledForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                KeyDisabledForegroundBrush = HlsColor.TryParse(value, out SolidColorBrush brush) ? brush : null;
             }
         }
 
@@ -416,7 +417,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 keyDownBackground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDownBackgroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                KeyDownBackgroundBrush = HlsColor.TryParse(value, out SolidColorBrush brush) ? brush : null;
             }
         }
 
@@ -428,7 +429,7 @@ namespace JuliusSweetland.OptiKey.Models
             set
             {
                 keyDownForeground = string.IsNullOrWhiteSpace(value) ? null : value;
-                KeyDownForegroundBrush = ValidColor(value, out SolidColorBrush brush) ? brush : null;
+                KeyDownForegroundBrush = HlsColor.TryParse(value, out SolidColorBrush brush) ? brush : null;
             }
         }
 
@@ -581,19 +582,6 @@ namespace JuliusSweetland.OptiKey.Models
             Expressed.UsePersianCompatibilityFontN = UsePersianCompatibilityFontN ?? inherited.UsePersianCompatibilityFontN ?? false;
             Expressed.UseUnicodeCompatibilityFontN = UseUnicodeCompatibilityFontN ?? inherited.UseUnicodeCompatibilityFontN ?? false;
             Expressed.UseUrduCompatibilityFontN = UseUrduCompatibilityFontN ?? inherited.UseUrduCompatibilityFontN ?? false;
-        }
-
-        private bool ValidColor(string color, out SolidColorBrush colorBrush)
-        {
-            if (!string.IsNullOrEmpty(color)
-                && (Regex.IsMatch(color, "^(#[0-9A-Fa-f]{3})$|^(#[0-9A-Fa-f]{6})$")
-                || System.Drawing.Color.FromName(color).IsKnownColor))
-            {
-                colorBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
-                return true;
-            }
-            colorBrush = null;
-            return false;
         }
         //Legacy elements
 

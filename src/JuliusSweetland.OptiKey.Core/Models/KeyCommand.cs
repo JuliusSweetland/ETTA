@@ -1,5 +1,6 @@
 ﻿// Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved
 using JuliusSweetland.OptiKey.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -98,6 +99,24 @@ namespace JuliusSweetland.OptiKey.Models
     public class MoveWindowCommand : KeyCommand
     {
         [XmlText] public string XmlText { get { return Value; } set { Value = value; } }
+    }
+
+    public class SwitchCommand : KeyCommand
+    {
+        [XmlElement("Time", typeof(SwitchTime))]
+        public List<SwitchTime> SwitchTimes = new List<SwitchTime>();
+    }
+
+    public class SwitchTime
+    {
+        [XmlIgnore] public TimeSpan? TimeSpan;
+        [XmlAttribute] public string Value
+        {
+            get { return TimeSpan.HasValue ? TimeSpan.Value.TotalMilliseconds.ToString() : null; }
+            set { TimeSpan = double.TryParse(value, out double result) 
+                    ? (TimeSpan?)System.TimeSpan.FromMilliseconds(result) : null; }
+        }
+        public KeyCommand KeyCommand { get; set; }
     }
 
     public class TextCommand : KeyCommand

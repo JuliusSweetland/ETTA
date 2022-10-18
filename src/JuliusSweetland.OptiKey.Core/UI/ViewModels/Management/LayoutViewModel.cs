@@ -557,7 +557,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         public double ScreenHeight { get { return SystemParameters.VirtualScreenHeight; } }
         public double ScreenLeft { get { return .2 * ScreenWidth; } }
         public double ScreenTop { get { return .2 * ScreenHeight; } }
-        public Border KeyboardBorder { get; set; }
+        public Border KeyboardView { get; set; }
         public Thickness Margin { get { return new Thickness(Left, Top, 0, 0); } }
         public double Width { get { return XmlKeyboard.WidthN.HasValue ? XmlKeyboard.WidthN.Value : ScreenWidth; } }
         public double Height { get { return XmlKeyboard.HeightN.HasValue ? XmlKeyboard.HeightN.Value : ScreenHeight; } }
@@ -632,14 +632,13 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 Stroke = Brushes.White,
                 StrokeThickness = 6 * thickness
             });
-            KeyboardBorder = new Border() { Background = Brushes.Transparent, BorderBrush = Brushes.Gray, BorderThickness = new Thickness(2) };
-            KeyboardBorder.SetBinding(Border.WidthProperty, new Binding("Width") { Source = this });
-            KeyboardBorder.SetBinding(Border.HeightProperty, new Binding("Height") { Source = this });
-            KeyboardBorder.SetBinding(Border.MarginProperty, new Binding("Margin") { Source = this });
-            canvas.Children.Add(KeyboardBorder);
             
             var dynamicKeyboard = new Views.Keyboards.Common.DynamicKeyboard(XmlKeyboard);
-            KeyboardBorder.Child = dynamicKeyboard;
+            dynamicKeyboard.SetBinding(FrameworkElement.WidthProperty, new Binding("Width") { Source = this });
+            dynamicKeyboard.SetBinding(FrameworkElement.HeightProperty, new Binding("Height") { Source = this });
+            dynamicKeyboard.SetBinding(FrameworkElement.MarginProperty, new Binding("Margin") { Source = this });
+            canvas.Children.Add(dynamicKeyboard);
+
             foreach (var i in Interactors.Where(x => x.Key != null))
             {
                 i.Key.InputBindings.Add(new MouseBinding()
