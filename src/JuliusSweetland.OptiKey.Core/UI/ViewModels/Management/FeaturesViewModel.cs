@@ -385,12 +385,9 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             get
             {
 
-                return (Settings.Default.Debug != Debug)
+                return Settings.Default.Debug != Debug
                     || Settings.Default.CommuniKatePagesetLocation != CommuniKatePagesetLocation
-                    || Settings.Default.LookToScrollIsDefault != LookToScrollIsDefault
-                    || (Settings.Default.LookToScrollOverlayBoundsThickness
-                        + Settings.Default.LookToScrollOverlayDeadzoneThickness == 0
-                        && LookToScrollOverlayBoundsThickness + LookToScrollOverlayDeadzoneThickness > 0);
+                    || Settings.Default.LookToScrollIsDefault != LookToScrollIsDefault;
             }
         }
 
