@@ -444,8 +444,9 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
               <Setter Property="Opacity" Value="{Binding Path=KeyDownOpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
             </MultiDataTrigger.Setters>
           </MultiDataTrigger>
+          <!--N.B. If implemented here the trigger conflicts with key down animation crashing the program, therefore it must be handled as a standalone visual element: see Style x:Key="KeyDownStyle"-->
           <!--This key state is down and has a keydown override-->
-          <MultiDataTrigger>
+          <!--<MultiDataTrigger>
             <MultiDataTrigger.Conditions>
               <Condition Binding="{Binding Path=KeyDownState, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Mode=OneWay}" Value="{x:Static enums:KeyDownStates.Down}" />
               <Condition Binding="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
@@ -453,7 +454,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
             <MultiDataTrigger.Setters>
               <Setter Property="Background" Value="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
             </MultiDataTrigger.Setters>
-          </MultiDataTrigger>
+          </MultiDataTrigger>-->
           <!--This key state is locked down and has a keydown override-->
           <MultiDataTrigger>
             <MultiDataTrigger.Conditions>
@@ -468,6 +469,22 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
           <MultiDataTrigger>
             <MultiDataTrigger.Conditions>
               <Condition Binding="{Binding Path=KeyDownState, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Mode=OneWay}" Value="{x:Static enums:KeyDownStates.LockedDown}" />
+              <Condition Binding="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
+            </MultiDataTrigger.Conditions>
+            <MultiDataTrigger.Setters>
+              <Setter Property="Background" Value="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+            </MultiDataTrigger.Setters>
+          </MultiDataTrigger>
+        </Style.Triggers>
+      </Style>
+      <Style x:Key="KeyDownStyle" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Style.Triggers>
+          <!--This key state is down and has a keydown override-->
+          <MultiDataTrigger>
+            <MultiDataTrigger.Conditions>
+              <Condition Binding="{Binding Path=KeyDownState, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Mode=OneWay}" Value="{x:Static enums:KeyDownStates.Down}" />
               <Condition Binding="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
             </MultiDataTrigger.Conditions>
             <MultiDataTrigger.Setters>
@@ -554,6 +571,81 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                      VerticalOffset="{Binding Path=VerticalOffset, RelativeSource={RelativeSource AncestorType={x:Type controls:KeyPopup}}}">
                 <Grid>
                   <Border Style="{StaticResource KeyBorderStyle}">
+                    <Border Style="{StaticResource KeyDownStyle}">
+                      <Grid>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="1*" />
+                          <RowDefinition Height="2*" />
+                          <RowDefinition Height="1*" />
+                        </Grid.RowDefinitions>
+                        <ContentControl Grid.RowSpan="3">
+                          <!--Enforce size limits of one key high/wide using the Span info on the key-->
+                          <ContentControl.MaxWidth>
+                            <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
+                              <MultiBinding.Bindings>
+                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
+                                <Binding Path="WidthSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:KeyPopup}}" />
+                              </MultiBinding.Bindings>
+                            </MultiBinding>
+                          </ContentControl.MaxWidth>
+                          <ContentControl.MaxHeight>
+                            <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
+                              <MultiBinding.Bindings>
+                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
+                                <Binding Path="HeightSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:KeyPopup}}" />
+                              </MultiBinding.Bindings>
+                            </MultiBinding>
+                          </ContentControl.MaxHeight>
+                          <Grid>
+                            <Grid.ColumnDefinitions>
+                              <ColumnDefinition Width="1*" />
+                              <ColumnDefinition Width="2*" />
+                              <ColumnDefinition Width="8*" />
+                              <ColumnDefinition Width="2*" />
+                              <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <controls:ProgressIndicator Grid.Column="1" Grid.ColumnSpan="3" 
+                                                                            Style="{StaticResource KeySelectionProgressStyle}" />
+                            <Viewbox>
+                              <Viewbox.Style>
+                                <Style TargetType="{x:Type Viewbox}">
+                                  <Setter Property="Grid.Column" Value="1" />
+                                  <Setter Property="Grid.ColumnSpan" Value="3" />
+                                  <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasSymbol, RelativeSource={RelativeSource AncestorType={x:Type controls:KeyPopup}}}" Value="False">
+                                      <Setter Property="Grid.Column" Value="2" />
+                                      <Setter Property="Grid.ColumnSpan" Value="1" />
+                                    </DataTrigger>
+                                  </Style.Triggers>
+                                </Style>
+                              </Viewbox.Style>
+                              <Grid>
+                                <TextBlock Style="{StaticResource KeyTextStyle}" />
+                                <Path Style="{StaticResource KeySymbolStyle}" Width="64" Height="64" VerticalAlignment="Center" />
+                              </Grid>
+                            </Viewbox>
+                          </Grid>
+                        </ContentControl>
+                        <Path Grid.Row="2" Style="{StaticResource KeyLockIconStyle}" />
+                      </Grid>
+                    </Border>
+                  </Border>
+                  <Border Style="{StaticResource CurrentKeyBorderHighlightStyle}" />
+                  <!--Custom border style for multiKey-->
+                  <Border Style="{StaticResource HighlightedKeyBorderHighlightStyle}" />
+                </Grid>
+              </Popup>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style TargetType="{x:Type controls:Key}">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type controls:Key}">
+              <Grid>
+                <Border Style="{StaticResource KeyBorderStyle}">
+                  <Border Style="{StaticResource KeyDownStyle}">
                     <Grid>
                       <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -566,7 +658,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                           <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
                             <MultiBinding.Bindings>
                               <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                              <Binding Path="WidthSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:KeyPopup}}" />
+                              <Binding Path="WidthSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:Key}}" />
                             </MultiBinding.Bindings>
                           </MultiBinding>
                         </ContentControl.MaxWidth>
@@ -574,7 +666,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                           <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
                             <MultiBinding.Bindings>
                               <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                              <Binding Path="HeightSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:KeyPopup}}" />
+                              <Binding Path="HeightSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:Key}}" />
                             </MultiBinding.Bindings>
                           </MultiBinding>
                         </ContentControl.MaxHeight>
@@ -594,7 +686,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                                 <Setter Property="Grid.Column" Value="1" />
                                 <Setter Property="Grid.ColumnSpan" Value="3" />
                                 <Style.Triggers>
-                                  <DataTrigger Binding="{Binding Path=HasSymbol, RelativeSource={RelativeSource AncestorType={x:Type controls:KeyPopup}}}" Value="False">
+                                  <DataTrigger Binding="{Binding Path=HasSymbol, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}}" Value="False">
                                     <Setter Property="Grid.Column" Value="2" />
                                     <Setter Property="Grid.ColumnSpan" Value="1" />
                                   </DataTrigger>
@@ -602,6 +694,9 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                               </Style>
                             </Viewbox.Style>
                             <Grid>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="{Binding Path=SharedSizeGroup, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}}" />
+                              </Grid.ColumnDefinitions>
                               <TextBlock Style="{StaticResource KeyTextStyle}" />
                               <Path Style="{StaticResource KeySymbolStyle}" Width="64" Height="64" VerticalAlignment="Center" />
                             </Grid>
@@ -611,80 +706,6 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                       <Path Grid.Row="2" Style="{StaticResource KeyLockIconStyle}" />
                     </Grid>
                   </Border>
-                  <Border Style="{StaticResource CurrentKeyBorderHighlightStyle}" />
-                  <!--Custom border style for multiKey-->
-                  <Border Style="{StaticResource HighlightedKeyBorderHighlightStyle}" />
-                </Grid>
-              </Popup>
-            </ControlTemplate>
-          </Setter.Value>
-        </Setter>
-      </Style>
-      <Style TargetType="{x:Type controls:Key}">
-        <Setter Property="Template">
-          <Setter.Value>
-            <ControlTemplate TargetType="{x:Type controls:Key}">
-              <Grid>
-                <Border Style="{StaticResource KeyBorderStyle}">
-                  <Grid>
-                    <Grid.RowDefinitions>
-                      <RowDefinition Height="1*" />
-                      <RowDefinition Height="2*" />
-                      <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-                    <ContentControl Grid.RowSpan="3">
-                      <!--Enforce size limits of one key high/wide using the Span info on the key-->
-                      <ContentControl.MaxWidth>
-                        <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
-                          <MultiBinding.Bindings>
-                            <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                            <Binding Path="WidthSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:Key}}" />
-                          </MultiBinding.Bindings>
-                        </MultiBinding>
-                      </ContentControl.MaxWidth>
-                      <ContentControl.MaxHeight>
-                        <MultiBinding Converter="{StaticResource LengthDividedBySpan}">
-                          <MultiBinding.Bindings>
-                            <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType={x:Type Grid}}" />
-                            <Binding Path="HeightSpan" RelativeSource="{RelativeSource AncestorType={x:Type controls:Key}}" />
-                          </MultiBinding.Bindings>
-                        </MultiBinding>
-                      </ContentControl.MaxHeight>
-                      <Grid>
-                        <Grid.ColumnDefinitions>
-                          <ColumnDefinition Width="1*" />
-                          <ColumnDefinition Width="2*" />
-                          <ColumnDefinition Width="8*" />
-                          <ColumnDefinition Width="2*" />
-                          <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-                        <controls:ProgressIndicator Grid.Column="1" Grid.ColumnSpan="3" 
-                                                                            Style="{StaticResource KeySelectionProgressStyle}" />
-                        <Viewbox>
-                          <Viewbox.Style>
-                            <Style TargetType="{x:Type Viewbox}">
-                              <Setter Property="Grid.Column" Value="1" />
-                              <Setter Property="Grid.ColumnSpan" Value="3" />
-                              <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=HasSymbol, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}}" Value="False">
-                                  <Setter Property="Grid.Column" Value="2" />
-                                  <Setter Property="Grid.ColumnSpan" Value="1" />
-                                </DataTrigger>
-                              </Style.Triggers>
-                            </Style>
-                          </Viewbox.Style>
-                          <Grid>
-                            <Grid.ColumnDefinitions>
-                              <ColumnDefinition SharedSizeGroup="{Binding Path=SharedSizeGroup, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}}" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource KeyTextStyle}" />
-                            <Path Style="{StaticResource KeySymbolStyle}" Width="64" Height="64" VerticalAlignment="Center" />
-                          </Grid>
-                        </Viewbox>
-                      </Grid>
-                    </ContentControl>
-                    <Path Grid.Row="2" Style="{StaticResource KeyLockIconStyle}" />
-                  </Grid>
                 </Border>
                 <Border Style="{StaticResource CurrentKeyBorderHighlightStyle}" />
                 <!--Custom border style for multiKey-->
