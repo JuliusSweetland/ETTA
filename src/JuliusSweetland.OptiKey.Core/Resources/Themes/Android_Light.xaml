@@ -363,20 +363,6 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         <Setter Property="CornerRadius" Value="0" />
         <Setter Property="BorderBrush" Value="{StaticResource KeyDefaultBorderBrush}" />
         <Setter Property="Background" Value="{StaticResource KeyDefaultBackgroundBrush}" />
-        <Setter Property="behaviours:KeyBehaviours.BeginAnimationOnKeySelectionEvent">
-          <Setter.Value>
-            <Storyboard>
-              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" 
-                                                          Duration="0:0:0.2" FillBehavior="Stop">
-                <DiscreteColorKeyFrame Value="{StaticResource KeySelectionBorder}" KeyTime="0:0:0" />
-              </ColorAnimationUsingKeyFrames>
-              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
-                                                          Duration="0:0:0.2" FillBehavior="Stop">
-                <DiscreteColorKeyFrame Value="{StaticResource KeySelectionBackground}" KeyTime="0:0:0" />
-              </ColorAnimationUsingKeyFrames>
-            </Storyboard>
-          </Setter.Value>
-        </Setter>
         <Style.Triggers>
           <!--This key has a Background Colour Override-->
           <DataTrigger Binding="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
@@ -444,9 +430,8 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
               <Setter Property="Opacity" Value="{Binding Path=KeyDownOpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
             </MultiDataTrigger.Setters>
           </MultiDataTrigger>
-          <!--N.B. If implemented here the trigger conflicts with key down animation crashing the program, therefore it must be handled as a standalone visual element: see Style x:Key="KeyDownStyle"-->
           <!--This key state is down and has a keydown override-->
-          <!--<MultiDataTrigger>
+          <MultiDataTrigger>
             <MultiDataTrigger.Conditions>
               <Condition Binding="{Binding Path=KeyDownState, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Mode=OneWay}" Value="{x:Static enums:KeyDownStates.Down}" />
               <Condition Binding="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
@@ -454,7 +439,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
             <MultiDataTrigger.Setters>
               <Setter Property="Background" Value="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
             </MultiDataTrigger.Setters>
-          </MultiDataTrigger>-->
+          </MultiDataTrigger>
           <!--This key state is locked down and has a keydown override-->
           <MultiDataTrigger>
             <MultiDataTrigger.Conditions>
@@ -477,21 +462,23 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
           </MultiDataTrigger>
         </Style.Triggers>
       </Style>
-      <Style x:Key="KeyDownStyle" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Style.Triggers>
-          <!--This key state is down and has a keydown override-->
-          <MultiDataTrigger>
-            <MultiDataTrigger.Conditions>
-              <Condition Binding="{Binding Path=KeyDownState, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Mode=OneWay}" Value="{x:Static enums:KeyDownStates.Down}" />
-              <Condition Binding="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
-            </MultiDataTrigger.Conditions>
-            <MultiDataTrigger.Setters>
-              <Setter Property="Background" Value="{Binding Path=KeyDownBackgroundOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Key}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
-            </MultiDataTrigger.Setters>
-          </MultiDataTrigger>
-        </Style.Triggers>
+      <Style x:Key="KeySelectionStyle" TargetType="{x:Type Border}">
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="behaviours:KeyBehaviours.BeginAnimationOnKeySelectionEvent">
+          <Setter.Value>
+            <Storyboard>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" 
+                                                          Duration="0:0:0.2" FillBehavior="Stop">
+                <DiscreteColorKeyFrame Value="{StaticResource KeySelectionBorder}" KeyTime="0:0:0" />
+              </ColorAnimationUsingKeyFrames>
+              <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                                          Duration="0:0:0.2" FillBehavior="Stop">
+                <DiscreteColorKeyFrame Value="{StaticResource KeySelectionBackground}" KeyTime="0:0:0" />
+              </ColorAnimationUsingKeyFrames>
+            </Storyboard>
+          </Setter.Value>
+        </Setter>
       </Style>
       <Style x:Key="CurrentKeyBorderHighlightStyle" TargetType="{x:Type Border}">
         <Setter Property="BorderThickness" Value="5" />
@@ -571,7 +558,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                      VerticalOffset="{Binding Path=VerticalOffset, RelativeSource={RelativeSource AncestorType={x:Type controls:KeyPopup}}}">
                 <Grid>
                   <Border Style="{StaticResource KeyBorderStyle}">
-                    <Border Style="{StaticResource KeyDownStyle}">
+                    <Border Style="{StaticResource KeySelectionStyle}">
                       <Grid>
                         <Grid.RowDefinitions>
                           <RowDefinition Height="1*" />
@@ -645,7 +632,7 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
             <ControlTemplate TargetType="{x:Type controls:Key}">
               <Grid>
                 <Border Style="{StaticResource KeyBorderStyle}">
-                  <Border Style="{StaticResource KeyDownStyle}">
+                  <Border Style="{StaticResource KeySelectionStyle}">
                     <Grid>
                       <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
@@ -719,13 +706,29 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
         <Setter Property="Template">
           <Setter.Value>
             <ControlTemplate TargetType="{x:Type controls:Scratchpad}">
-              <Border BorderThickness="1">
+              <Border>
                 <Border.Style>
                   <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="BorderBrush" Value="{StaticResource ScratchpadBorderBrush}" />
                     <Style.Triggers>
+                      <DataTrigger Binding="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                        <Setter Property="Background" Value="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Path=BorderColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                        <Setter Property="BorderBrush" Value="{Binding Path=BorderColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Path=BorderThicknessOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                        <Setter Property="BorderThickness" Value="{Binding Path=BorderThicknessOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Mode=OneWay}" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Path=CornerRadiusOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                        <Setter Property="CornerRadius" Value="{Binding Path=CornerRadiusOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Mode=OneWay}" />
+                      </DataTrigger>
                       <DataTrigger Binding="{Binding DataContext.ScratchpadIsDisabled, RelativeSource={RelativeSource AncestorType=controls:KeyboardHost}}" Value="True">
                         <Setter Property="BorderBrush" Value="{StaticResource ScratchpadDisabledBorderBrush}" />
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Path=OpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                        <Setter Property="Opacity" Value="{Binding Path=OpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
                       </DataTrigger>
                     </Style.Triggers>
                   </Style>
@@ -752,14 +755,17 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                       </TextBox.FontSize>
                       <TextBox.Style>
                         <Style TargetType="{x:Type TextBox}">
-                          <Setter Property="Foreground" Value="{StaticResource ScratchpadForegroundBrush}" />
                           <Setter Property="Background" Value="{StaticResource ScratchpadBackgroundBrush}" />
+                          <Setter Property="Foreground" Value="{StaticResource ScratchpadForegroundBrush}" />
                           <Setter Property="FontFamily" Value="{Binding Source={x:Static properties:Settings.Default}, Path=FontFamily}" />
                           <Setter Property="FontWeight" Value="{Binding Source={x:Static properties:Settings.Default}, Path=FontWeight}" />
                           <Setter Property="FontStretch" Value="{Binding Source={x:Static properties:Settings.Default}, Path=FontStretch}" />
                           <Style.Triggers>
                             <DataTrigger Binding="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
                               <Setter Property="Background" Value="{Binding Path=BackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=ForegroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
+                              <Setter Property="Foreground" Value="{Binding Path=ForegroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Path=OpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True">
                               <Setter Property="Opacity" Value="{Binding Path=OpacityOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
@@ -768,16 +774,32 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                               <Setter Property="Foreground" Value="{StaticResource ScratchpadDisabledForegroundBrush}" />
                               <Setter Property="Background" Value="{StaticResource ScratchpadDisabledBackgroundBrush}" />
                             </DataTrigger>
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=DisabledBackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
+                                <Condition Binding="{Binding DataContext.ScratchpadIsDisabled, RelativeSource={RelativeSource AncestorType=controls:KeyboardHost}}" Value="True"/>
+                              </MultiDataTrigger.Conditions>
+                              <MultiDataTrigger.Setters>
+                                <Setter Property="Background" Value="{Binding Path=DisabledBackgroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+                              </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                              <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=DisabledForegroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource OverrideHasValue}, Mode=OneWay}" Value="True" />
+                                <Condition Binding="{Binding DataContext.ScratchpadIsDisabled, RelativeSource={RelativeSource AncestorType=controls:KeyboardHost}}" Value="True"/>
+                              </MultiDataTrigger.Conditions>
+                              <MultiDataTrigger.Setters>
+                                <Setter Property="Foreground" Value="{Binding Path=DisabledForegroundColourOverride, RelativeSource={RelativeSource AncestorType={x:Type controls:Scratchpad}}, Converter={StaticResource CloneBrush}, Mode=OneWay}" />
+                              </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
                           </Style.Triggers>
                         </Style>
                       </TextBox.Style>
                     </TextBox>
                     <Canvas>
-                      <Border x:Name="ScratchpadCaret" 
-                                                    Canvas.Left="0" Canvas.Top="0" 
-                                                    Width="5" 
-                                                    Height="{Binding FontSize, ElementName=ScratchpadTextBox}" 
-                                                    Background="{StaticResource ScratchpadForegroundBrush}">
+                      <Border x:Name="ScratchpadCaret" Canvas.Left="0" Canvas.Top="0" Width="5" 
+                              Height="{Binding FontSize, ElementName=ScratchpadTextBox}" 
+                              Background="Transparent">
                         <Border.Style>
                           <Style TargetType="{x:Type Border}">
                             <Style.Triggers>
@@ -785,8 +807,8 @@ Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserve
                                 <BeginStoryboard>
                                   <Storyboard  x:Name="CaretStoryBoard" RepeatBehavior="Forever">
                                     <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background.Color"
-                                                                                                      Duration="0:0:0:1"
-                                                                                                      FillBehavior="HoldEnd">
+                                                                  Duration="0:0:0:1"
+                                                                  FillBehavior="HoldEnd">
                                       <ColorAnimationUsingKeyFrames.KeyFrames >
                                         <DiscreteColorKeyFrame KeyTime="0:0:0.750" Value="Transparent" />
                                         <DiscreteColorKeyFrame KeyTime="0:0:0.000" Value="{StaticResource ScratchpadCaretBackgroundBrush}"/>

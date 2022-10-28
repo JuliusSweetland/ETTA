@@ -674,7 +674,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                 }
                 if (i is DynamicScratchpad)
                 {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlScratchpad>(dynamicKeyboard.MainGrid)
+                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<Scratchpad>(dynamicKeyboard.MainGrid)
                         .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
                     {
                         item.InputBindings.Add(new MouseBinding()
@@ -685,30 +685,20 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
                         });
                     }
                 }
-                if (i is DynamicSuggestionCol)
+                if (i is DynamicSuggestionRow || i is DynamicSuggestionCol)
                 {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlSuggestionCol>(dynamicKeyboard.MainGrid)
+                    foreach (var grid in VisualAndLogicalTreeHelper.FindLogicalChildren<Grid>(dynamicKeyboard.MainGrid)
                         .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
                     {
-                        item.InputBindings.Add(new MouseBinding()
+                        foreach(var item in VisualAndLogicalTreeHelper.FindLogicalChildren<Key>(grid))
                         {
-                            MouseAction = MouseAction.LeftClick,
-                            Command = InteractorCommand,
-                            CommandParameter = i
-                        });
-                    }
-                }
-                if (i is DynamicSuggestionRow)
-                {
-                    foreach (var item in VisualAndLogicalTreeHelper.FindLogicalChildren<XmlSuggestionRow>(dynamicKeyboard.MainGrid)
-                        .Where(x => Grid.GetRow(x) == i.RowN && Grid.GetColumn(x) == i.ColN))
-                    {
-                        item.InputBindings.Add(new MouseBinding()
-                        {
-                            MouseAction = MouseAction.LeftClick,
-                            Command = InteractorCommand,
-                            CommandParameter = i
-                        });
+                            item.InputBindings.Add(new MouseBinding()
+                            {
+                                MouseAction = MouseAction.LeftClick,
+                                Command = InteractorCommand,
+                                CommandParameter = i
+                            });
+                        }
                     }
                 }
                 if (i == Interactor)

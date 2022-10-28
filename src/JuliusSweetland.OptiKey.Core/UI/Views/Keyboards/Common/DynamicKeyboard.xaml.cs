@@ -2,8 +2,10 @@
 using JuliusSweetland.OptiKey.Enums;
 using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.Models;
+using JuliusSweetland.OptiKey.Properties;
 using JuliusSweetland.OptiKey.Services;
 using JuliusSweetland.OptiKey.UI.Controls;
+using JuliusSweetland.OptiKey.UI.ValueConverters;
 using JuliusSweetland.OptiKey.UI.Windows;
 using log4net;
 using System;
@@ -14,6 +16,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 
 namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
@@ -65,7 +68,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
             if (!ValidateKeyboard()) return;
 
-            SetupGrid();
+            SetupMainGrid(keyboard.Grid.Rows, keyboard.Grid.Cols);
 
             if (!SetupDynamicItems()) return;
 
@@ -82,7 +85,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
             if (!ValidateKeyboard()) return;
 
-            SetupGrid();
+            SetupMainGrid(keyboard.Grid.Rows, keyboard.Grid.Cols);
 
             if (!SetupDynamicItems()) return;
 
@@ -161,14 +164,13 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 MainGrid.ColumnDefinitions.RemoveRange(0, MainGrid.ColumnDefinitions.Count);
             if (MainGrid.RowDefinitions.Count > 0)
                 MainGrid.RowDefinitions.RemoveRange(0, MainGrid.RowDefinitions.Count);
-            AddRowsToGrid(4);
-            AddColsToGrid(4);
+            SetupMainGrid(4, 4);
 
             // Top middle two cells are main error message
-            PlaceKeyInPosition(new Key { Text = heading }, 0, 1, 1, 2);
+            PlaceKeyInPosition(MainGrid, new Key { Text = heading }, 0, 1, 1, 2);
 
             // Middle row is detailed error message
-            PlaceKeyInPosition(new Key { Text = content }, 1, 0, 2, 4);
+            PlaceKeyInPosition(MainGrid, new Key { Text = content }, 1, 0, 2, 4);
 
             // Back key
             var backKey = new Key
@@ -177,13 +179,13 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 Text = Properties.Resources.BACK,
                 Value = KeyValues.BackFromKeyboardKey
             };
-            PlaceKeyInPosition(backKey, 3, 3);
+            PlaceKeyInPosition(MainGrid, backKey, 3, 3);
 
             // Fill in empty keys
-            PlaceKeyInPosition(new Key(), 0, 0, 1, 1);
-            PlaceKeyInPosition(new Key(), 0, 3, 1, 1);
-            PlaceKeyInPosition(new Key(), 3, 0, 1, 1);
-            PlaceKeyInPosition(new Key(), 3, 1, 1, 2);
+            PlaceKeyInPosition(MainGrid, new Key(), 0, 0, 1, 1);
+            PlaceKeyInPosition(MainGrid, new Key(), 0, 3, 1, 1);
+            PlaceKeyInPosition(MainGrid, new Key(), 3, 0, 1, 1);
+            PlaceKeyInPosition(MainGrid, new Key(), 3, 1, 1, 2);
         }
 
         private bool SetupDynamicItems()
@@ -203,7 +205,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 
                 if (dynamicItem is DynamicKey || dynamicItem is DynamicPopup)
                 {
-                    AddDynamicKey(dynamicItem, minKeyWidth, minKeyHeight);
+                    AddDynamicKey(MainGrid, dynamicItem, minKeyWidth, minKeyHeight);
                 }
                 else if (dynamicItem is DynamicOutputPanel)
                 {
@@ -213,78 +215,81 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                     Grid.SetRow(newItem, dynamicItem.RowN);
                     Grid.SetColumnSpan(newItem, dynamicItem.WidthN);
                     Grid.SetRowSpan(newItem, dynamicItem.HeightN);
-                    if (profile.BackgroundBrush != null)
-                        newItem.Background = profile.BackgroundBrush;
-                    if (profile.ForegroundBrush != null)
-                        newItem.Foreground = profile.ForegroundBrush;
-                    if (profile.OpacityN.HasValue)
-                        newItem.Opacity = profile.OpacityN.Value;
                 }
                 else if (dynamicItem is DynamicScratchpad)
                 {
-                    var newItem = new XmlScratchpad();
+                    var newItem = new Scratchpad();
+                    var rs = new RelativeSource() { AncestorType = typeof(KeyboardHost) };
+                    newItem.SetBinding(FlowDirectionProperty, new Binding("UiLanguageFlowDirection") { Source = Settings.Default });
+                    newItem.SetBinding(Scratchpad.TextProperty, new Binding("DataContext.KeyboardOutputService.Text") { RelativeSource = rs });
                     MainGrid.Children.Add(newItem);
                     Grid.SetColumn(newItem, dynamicItem.ColN);
                     Grid.SetRow(newItem, dynamicItem.RowN);
                     Grid.SetColumnSpan(newItem, dynamicItem.WidthN);
                     Grid.SetRowSpan(newItem, dynamicItem.HeightN);
-                    newItem.Background = profile.BorderBrush;
-                    if (profile.BorderBrush != null)
-                        newItem.BorderBrush = profile.BorderBrush;
-                    if (profile.BackgroundBrush != null)
-                        newItem.Background = profile.BackgroundBrush;
-                    if (profile.ForegroundBrush != null)
-                        newItem.Foreground = profile.ForegroundBrush;
+                    newItem.BackgroundColourOverride = profile.BackgroundBrush;
+                    newItem.ForegroundColourOverride = profile.ForegroundBrush;
+                    newItem.BorderColourOverride = profile.BorderBrush;
+                    if (profile.BorderThicknessN.HasValue)
+                        newItem.BorderThicknessOverride = profile.BorderThicknessN.Value;
+                    if (profile.CornerRadiusN.HasValue)
+                        newItem.CornerRadiusOverride = profile.CornerRadiusN.Value;
                     if (profile.OpacityN.HasValue)
-                        newItem.Opacity = profile.OpacityN.Value;
+                        newItem.OpacityOverride = profile.OpacityN.Value;
+                    newItem.DisabledBackgroundColourOverride = profile.KeyDisabledBackgroundBrush;
+                    newItem.DisabledForegroundColourOverride = profile.KeyDisabledForegroundBrush;
                 }
                 else if (dynamicItem is DynamicSuggestionRow)
                 {
-                    var newItem = new XmlSuggestionRow();
-                    MainGrid.Children.Add(newItem);
-                    Grid.SetColumn(newItem, dynamicItem.ColN);
-                    Grid.SetRow(newItem, dynamicItem.RowN);
-                    Grid.SetColumnSpan(newItem, dynamicItem.WidthN);
-                    Grid.SetRowSpan(newItem, dynamicItem.HeightN);
-                    newItem.BackgroundColourOverride = profile.BorderBrush;
-                    newItem.DisabledBackgroundColourOverride = profile.KeyDisabledBackgroundBrush;
-                    if (profile.BorderBrush != null)
-                        newItem.BorderBrush = profile.BorderBrush;
-                    if (profile.ForegroundBrush != null)
-                        newItem.Foreground = profile.ForegroundBrush;
-                    if (profile.OpacityN.HasValue)
-                        newItem.OpacityOverride = profile.OpacityN.Value;
+                    var grid = new Grid();
+                    AddRowsToGrid(grid, 1);
+                    AddColsToGrid(grid, 4);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var dk = new DynamicKey() { WidthN = 1, HeightN = 1, ColN = i, Expressed = dynamicItem.Expressed };
+                        var fk = i < 1 ? FunctionKeys.Suggestion1 : i < 2 ? FunctionKeys.Suggestion2 : i < 3 ? FunctionKeys.Suggestion3 : FunctionKeys.Suggestion4;
+                        var newKey = CreateDynamicKey(dk, new KeyValue(fk), 1, 1);
+                        PlaceKeyInPosition(grid, newKey, 0, i, 1, 1);
+                    }
+                    MainGrid.Children.Add(grid);
+                    Grid.SetColumn(grid, dynamicItem.ColN);
+                    Grid.SetRow(grid, dynamicItem.RowN);
+                    Grid.SetColumnSpan(grid, dynamicItem.WidthN);
+                    Grid.SetRowSpan(grid, dynamicItem.HeightN);
                 }
                 else if (dynamicItem is DynamicSuggestionCol)
                 {
-                    var newItem = new XmlSuggestionCol();
-                    MainGrid.Children.Add(newItem);
-                    Grid.SetColumn(newItem, dynamicItem.ColN);
-                    Grid.SetRow(newItem, dynamicItem.RowN);
-                    Grid.SetColumnSpan(newItem, dynamicItem.WidthN);
-                    Grid.SetRowSpan(newItem, dynamicItem.HeightN);
-                    newItem.BackgroundColourOverride = profile.BorderBrush;
-                    newItem.DisabledBackgroundColourOverride = profile.KeyDisabledBackgroundBrush;
-                    if (profile.BorderBrush != null)
-                        newItem.BorderBrush = profile.BorderBrush;
-                    if (profile.ForegroundBrush != null)
-                        newItem.Foreground = profile.ForegroundBrush;
-                    if (profile.OpacityN.HasValue)
-                        newItem.OpacityOverride = profile.OpacityN.Value;
+                    var grid = new Grid();
+                    AddRowsToGrid(grid, 4);
+                    AddColsToGrid(grid, 1);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var dk = new DynamicKey() { WidthN = 1, HeightN = 1, ColN = i, Expressed = dynamicItem.Expressed };
+                        var fk = i < 1 ? FunctionKeys.Suggestion1 : i < 2 ? FunctionKeys.Suggestion2 : i < 3 ? FunctionKeys.Suggestion3 : FunctionKeys.Suggestion4;
+                        var newKey = CreateDynamicKey(dk, new KeyValue(fk), 1, 1);
+                        PlaceKeyInPosition(grid, newKey, i, 0, 1, 1);
+                    }
+                    MainGrid.Children.Add(grid);
+                    Grid.SetColumn(grid, dynamicItem.ColN);
+                    Grid.SetRow(grid, dynamicItem.RowN);
+                    Grid.SetColumnSpan(grid, dynamicItem.WidthN);
+                    Grid.SetRowSpan(grid, dynamicItem.HeightN);
                 }
             }
 
             return true;
         }
 
-        private void AddDynamicKey(Interactor xmlDynamicKey, int minKeyWidth, int minKeyHeight)
+        private void AddDynamicKey(Grid grid, Interactor xmlDynamicKey, int minKeyWidth, int minKeyHeight)
         {
             var xmlKeyValue = new KeyValue($"R{xmlDynamicKey.RowN}-C{xmlDynamicKey.ColN}");
             if (xmlDynamicKey.Commands.Count == 1
                 && Enum.TryParse(xmlDynamicKey.Commands.First().Value, out FunctionKeys actionEnum)
                 && KeyValues.KeysWhichCanBeLockedDown.Contains(new KeyValue(actionEnum)))
             {
-                CreateDynamicKey(xmlDynamicKey, new KeyValue(actionEnum), minKeyWidth, minKeyHeight);
+                var newKey = CreateDynamicKey(xmlDynamicKey, new KeyValue(actionEnum), minKeyWidth, minKeyHeight);
+                PlaceKeyInPosition(grid, newKey, xmlDynamicKey.RowN, xmlDynamicKey.ColN, xmlDynamicKey.HeightN, xmlDynamicKey.WidthN);
+
             }
             else
             {
@@ -294,7 +299,8 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 else
                     xmlKeyValue = null; //create a key that performs no action
 
-                CreateDynamicKey(xmlDynamicKey, xmlKeyValue, minKeyWidth, minKeyHeight);
+                var newKey = CreateDynamicKey(xmlDynamicKey, xmlKeyValue, minKeyWidth, minKeyHeight);
+                PlaceKeyInPosition(grid, newKey, xmlDynamicKey.RowN, xmlDynamicKey.ColN, xmlDynamicKey.HeightN, xmlDynamicKey.WidthN);
             }
         }
 
@@ -411,7 +417,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             return commandList;
         }
 
-        private void CreateDynamicKey(Interactor xmlKey, KeyValue xmlKeyValue, int minKeyWidth, int minKeyHeight)
+        private Key CreateDynamicKey(Interactor xmlKey, KeyValue xmlKeyValue, int minKeyWidth, int minKeyHeight)
         {
             var profile = xmlKey.Expressed;
             // Add the core properties from XML to a new key
@@ -499,6 +505,43 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
             }
 
+            void SetSuggestionProperties(int index)
+            {
+                var mb = new MultiBinding() { Converter = new SuggestionsPaged(), Mode = BindingMode.OneWay };
+                var rs = new RelativeSource() { AncestorType = typeof(KeyboardHost) };
+                mb.Bindings.Add(new Binding("DataContext.SuggestionService.Suggestions") { RelativeSource = rs });
+                mb.Bindings.Add(new Binding("DataContext.SuggestionService.SuggestionsPage") { RelativeSource = rs });
+                mb.Bindings.Add(new Binding("DataContext.SuggestionService.SuggestionsPerPage") { RelativeSource = rs });
+                mb.Bindings.Add(new Binding() { Source = index });
+                newKey.SharedSizeGroup = "KeyWithSuggestion";
+                newKey.Case = Case.None;
+                newKey.SetBinding(Key.TextProperty, mb);
+            }
+            if (xmlKeyValue != null && xmlKeyValue.FunctionKey.HasValue)
+            {
+                switch (xmlKeyValue.FunctionKey.Value)
+                {
+                    case FunctionKeys.Suggestion1:
+                        SetSuggestionProperties(0);
+                        break;
+                    case FunctionKeys.Suggestion2:
+                        SetSuggestionProperties(1);
+                        break;
+                    case FunctionKeys.Suggestion3:
+                        SetSuggestionProperties(2);
+                        break;
+                    case FunctionKeys.Suggestion4:
+                        SetSuggestionProperties(3);
+                        break;
+                    case FunctionKeys.Suggestion5:
+                        SetSuggestionProperties(4);
+                        break;
+                    case FunctionKeys.Suggestion6:
+                        SetSuggestionProperties(5);
+                        break;
+                }
+            }
+
             //Auto set width span and height span
             if (profile.AutoScaleToOneKeyWidthN.HasValue && profile.AutoScaleToOneKeyWidthN.Value)
                 newKey.WidthSpan = (double)xmlKey.WidthN / minKeyWidth;
@@ -554,8 +597,8 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 }
             }
 
-            PlaceKeyInPosition(newKey, xmlKey.RowN, xmlKey.ColN, xmlKey.HeightN, xmlKey.WidthN);
             xmlKey.Key = newKey;
+            return newKey;
         }
 
         private void SetupStyle()
@@ -578,24 +621,15 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
         }
 
-        private void SetupGrid()
+        private void SetupMainGrid(int rows, int cols)
         {
-            XmlGrid grid = keyboard.Grid;
-            AddRowsToGrid(grid.Rows);
-            AddColsToGrid(grid.Cols);
-        }
-
-        private void AddRowsToGrid(int nRows)
-        {
-            for (int i = 0; i < nRows; i++)
-            {
-                MainGrid.RowDefinitions.Add(new RowDefinition());
-            }
+            AddRowsToGrid(MainGrid, rows);
+            AddColsToGrid(MainGrid, cols);
 
             if (keyboard != null && keyboard.ShowOutputPanelN.HasValue && keyboard.ShowOutputPanelN.Value)
             {
                 // make sure top controls and main grid are scaled appropriately
-                TopGrid.RowDefinitions[1].Height = new GridLength(nRows, GridUnitType.Star);
+                TopGrid.RowDefinitions[1].Height = new GridLength(keyboard.Grid.Rows, GridUnitType.Star);
             }
             else
             {
@@ -605,17 +639,25 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             }
         }
 
-        private void AddColsToGrid(int nCols)
+        private void AddRowsToGrid(Grid grid, int nRows)
         {
-            for (int i = 0; i < nCols; i++)
+            for (int i = 0; i < nRows; i++)
             {
-                MainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                grid.RowDefinitions.Add(new RowDefinition());
             }
         }
 
-        private void PlaceKeyInPosition(Key key, int row, int col, int rowSpan = 1, int colSpan = 1)
+        private void AddColsToGrid(Grid grid, int nCols)
         {
-            MainGrid.Children.Add(key);
+            for (int i = 0; i < nCols; i++)
+            {
+                grid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+        }
+
+        private void PlaceKeyInPosition(Grid grid, Key key, int row, int col, int rowSpan = 1, int colSpan = 1)
+        {
+            grid.Children.Add(key);
             Grid.SetColumn(key, col);
             Grid.SetRow(key, row);
             Grid.SetColumnSpan(key, colSpan);
