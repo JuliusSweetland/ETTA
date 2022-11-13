@@ -3,14 +3,12 @@ using JuliusSweetland.OptiKey.UI.Controls;
 using JuliusSweetland.OptiKey.Models;
 using System.Windows.Controls;
 using System;
-using System.IO;
 using System.Linq;
 using System.Windows.Media;
 using System.Reflection;
-using System.Windows;
-using JuliusSweetland.OptiKey.Enums;
 using log4net;
 using JuliusSweetland.OptiKey.Properties;
+using JuliusSweetland.OptiKey.Extensions;
 
 namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
 {
@@ -121,7 +119,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
                 {
                     Key newKey = new Key();
                     newKey.SharedSizeGroup = "ErrorText1";
-                    newKey.Text = DynamicKeyboard.StringWithValidNewlines(JuliusSweetland.OptiKey.Properties.Resources.KEYBOARD_FOLDER_CAN_BE_CHANGED_SPLIT_LINE);
+                    newKey.Text = Properties.Resources.KEYBOARD_FOLDER_CAN_BE_CHANGED_SPLIT_LINE.ToStringWithValidNewlines();
                     this.AddKey(newKey, 1, 1, 1, 2);
                 }
                 {

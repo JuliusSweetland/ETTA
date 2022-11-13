@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 
 namespace JuliusSweetland.OptiKey.UI.ValueConverters
@@ -160,6 +161,19 @@ namespace JuliusSweetland.OptiKey.UI.ValueConverters
 
             // Set return value
             return color;
+        }
+
+        public static bool TryParse(string color, out SolidColorBrush colorBrush)
+        {
+            if (!string.IsNullOrEmpty(color)
+                && (Regex.IsMatch(color, "^(#[0-9A-Fa-f]{3})$|^(#[0-9A-Fa-f]{6})$")
+                || System.Drawing.Color.FromName(color).IsKnownColor))
+            {
+                colorBrush = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
+                return true;
+            }
+            colorBrush = null;
+            return false;
         }
     }
 }

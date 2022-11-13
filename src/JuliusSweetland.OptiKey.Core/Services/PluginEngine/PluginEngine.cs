@@ -48,59 +48,27 @@ namespace JuliusSweetland.OptiKey.Services.PluginEngine
             }
         }
 
-        public static void RunPlugin_Legacy(Dictionary<string, string> context, XmlPluginKey key)
-        {
-            Plugin plugin = availablePlugins[key.Plugin];
-            List<string> methodArgs = null;
-            if (key.Arguments?.Argument?.Count > 0)
-            {
-                // FIXME: This logic does not support two methods with the same name and different arguments
-                methodArgs = new List<String>();
-                foreach (MethodInfo pluginMethod in plugin.Type.GetMethods())
-                {
-                    if (pluginMethod.Name.Equals(key.Method))
-                    {
-                        foreach (ParameterInfo pluginMethodParam in pluginMethod.GetParameters())
-                        {
-                            string argValue = null;
-                            foreach (PluginArgument arg in key.Arguments.Argument)
-                            {
-                                if (arg.Name.Equals(pluginMethodParam.Name))
-                                {
-                                    argValue = GetArgumentValue(context, arg.Value);
-                                    break;
-                                }
-                            }
-                            methodArgs.Add(argValue);
-                        }
-                        break;
-                    }
-                }
-            }
-            plugin.Type.InvokeMember(key.Method, BindingFlags.InvokeMethod, null, plugin.Instance, methodArgs?.ToArray());
-        }
-
         public static bool IsPluginAvailable(string key)
         {
             return availablePlugins.ContainsKey(key);
         }
 
-        public static void RunDynamicPlugin(Dictionary<string, string> context, KeyCommand key)
+        public static void RunPlugin(Dictionary<string, string> context, PluginCommand command)
         {
-            Plugin plugin = availablePlugins[key.Value];
+            Plugin plugin = availablePlugins[command.Name];
             List<string> methodArgs = null;
-            if (key.Argument.Any())
+            if (command.Arguments.Any())
             {
                 // FIXME: This logic does not support two methods with the same name and different arguments
                 methodArgs = new List<string>();
                 foreach (MethodInfo pluginMethod in plugin.Type.GetMethods())
                 {
-                    if (pluginMethod.Name.Equals(key.Method))
+                    if (pluginMethod.Name.Equals(command.Method))
                     {
                         foreach (ParameterInfo pluginMethodParam in pluginMethod.GetParameters())
                         {
                             string argValue = null;
-                            foreach (DynamicArgument arg in key.Argument)
+                            foreach (PluginArgument arg in command.Arguments)
                             {
                                 if (arg.Name.Equals(pluginMethodParam.Name))
                                 {
@@ -114,7 +82,7 @@ namespace JuliusSweetland.OptiKey.Services.PluginEngine
                     }
                 }
             }
-            plugin.Type.InvokeMember(key.Method, BindingFlags.InvokeMethod, null, plugin.Instance, methodArgs?.ToArray());
+            plugin.Type.InvokeMember(command.Method, BindingFlags.InvokeMethod, null, plugin.Instance, methodArgs?.ToArray());
         }
 
         public static bool PluginExists(string pluginId)

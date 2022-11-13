@@ -493,7 +493,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
         public int GazeIndicatorSize
         {
             get { return gazeIndicatorSize; }
-            set { SetProperty(ref gazeIndicatorSize, value); }
+            set { Settings.Default.GazeIndicatorSize = value; SetProperty(ref gazeIndicatorSize, value); }
         }
 
         private bool magnifierCenterOnScreen;
@@ -586,10 +586,7 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             {
                 return Settings.Default.ConversationOnlyMode != ConversationOnlyMode
                     || Settings.Default.ConversationConfirmEnable != ConversationConfirmEnable
-                    || Settings.Default.ConversationConfirmOnlyMode != ConversationConfirmOnlyMode
-                    || Settings.Default.EnableResizeWithMouse != EnableResizeWithMouse
-                    || (Settings.Default.GazeIndicatorStyle == GazeIndicatorStyles.None
-                        && (GazeIndicatorStyles)Enum.Parse(typeof(GazeIndicatorStyles), GazeIndicatorStyle) != GazeIndicatorStyles.None);
+                    || Settings.Default.ConversationConfirmOnlyMode != ConversationConfirmOnlyMode;
             }
         }
 
@@ -719,7 +716,6 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
 
             windowManipulationService.SetOpacity(Settings.Default.MainWindowOpacity);
             Settings.Default.EnableResizeWithMouse = EnableResizeWithMouse;
-            windowManipulationService.SetResizeState();
         }
 
         #endregion

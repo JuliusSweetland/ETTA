@@ -2924,6 +2924,23 @@ namespace JuliusSweetland.OptiKey.Properties {
             }
         }
 
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.SettingsManageabilityAttribute(global::System.Configuration.SettingsManageability.Roaming)]
+        public virtual string KeyboardFile
+        {
+            get
+            {
+                return ((string)(this["KeyboardFile"]));
+            }
+            set
+            {
+                this["KeyboardFile"] = value;
+            }
+        }
+
         public bool IsOverridden(string propName)
         {
             var propActual = this.GetType().GetProperty(propName);

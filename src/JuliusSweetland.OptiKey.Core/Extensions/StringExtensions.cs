@@ -363,6 +363,9 @@ namespace JuliusSweetland.OptiKey.Extensions
 
         public static string ToStringWithValidNewlines(this string s)
         {
+            if (s == null)
+                return s;
+
             if (s.Contains("\\r\\n"))
                 s = s.Replace("\\r\\n", Environment.NewLine);
 

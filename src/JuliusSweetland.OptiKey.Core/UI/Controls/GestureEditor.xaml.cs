@@ -157,7 +157,7 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             {
                 comboBox.ItemsSource = KeyboardList;
             }
-            else if (keyCommand == Enums.KeyCommands.Function)
+            else if (keyCommand == Enums.KeyCommands.Action)
             {
                 comboBox.ItemsSource = FunctionKeyList;
             }

@@ -1,0 +1,80 @@
+<!--Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved-->
+<UserControl x:Class="JuliusSweetland.OptiKey.UI.Controls.ProfileEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:JuliusSweetland.OptiKey.UI.Controls"
+             mc:Ignorable="d">
+  <UserControl.Resources>
+    <CollectionViewSource x:Key="AutoScaleWidth" Source="{Binding Source={x:Static controls:InteractorEditor.AutoScaleWidth}}"/>
+    <CollectionViewSource x:Key="AutoScaleHeight" Source="{Binding Source={x:Static controls:InteractorEditor.AutoScaleHeight}}"/>
+    <CollectionViewSource x:Key="CompatibilityList" Source="{Binding Source={x:Static controls:InteractorEditor.CompatibilityList}}"/>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+      <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Label Grid.Column="0" Grid.Row="0" Margin="1,0,1,0" Content="Name"/>
+    <Label Grid.Column="0" Grid.Row="1" Margin="1,0,1,0" Content="LockOnTime"/>
+    <Label Grid.Column="0" Grid.Row="2" Margin="1,0,1,0" Content="CompletionTimes"/>
+    <Label Grid.Column="0" Grid.Row="3" Margin="1,0,1,0" Content="TimeRequiredToLockDown"/>
+    <Label Grid.Column="0" Grid.Row="4" Margin="1,0,1,0" Content="Opacity"/>
+    <Label Grid.Column="0" Grid.Row="5" Margin="1,0,1,0" Content="BackgroundColor"/>
+    <Label Grid.Column="0" Grid.Row="6" Margin="1,0,1,0" Content="ForegroundColor"/>
+    <Label Grid.Column="0" Grid.Row="7" Margin="1,0,1,0" Content="BorderColor"/>
+    <Label Grid.Column="0" Grid.Row="8" Margin="1,0,1,0" Content="BorderThickness"/>
+    <Label Grid.Column="0" Grid.Row="9" Margin="1,0,1,0" Content="CornerRadius"/>
+    <Label Grid.Column="0" Grid.Row="10" Margin="1,0,1,0" Content="SharedSizeGroup"/>
+    <Label Grid.Column="0" Grid.Row="11" Margin="1,0,1,0" Content="AutoScaleToOneKeyWidth"/>
+    <Label Grid.Column="0" Grid.Row="12" Margin="1,0,1,0" Content="AutoScaleToOneKeyHeight"/>
+    <Label Grid.Column="0" Grid.Row="13" Margin="1,0,1,0" Content="CompatibilityFont"/>
+    <TextBox Grid.Column="2" Grid.Row="0" Margin="1,0,1,0" Text="{Binding Name}"/>
+    <TextBox Grid.Column="2" Grid.Row="1" Margin="1,0,1,0" Text="{Binding LockOnTime}"
+                 ToolTip="Time to gaze at a key before the selection animation will begin"/>
+    <TextBox Grid.Column="2" Grid.Row="2" Margin="1,0,1,0" Text="{Binding CompletionTimes}"
+                 ToolTip="Comma delimited list of time required to select a key for initial and subsequent activations"/>
+    <TextBox Grid.Column="2" Grid.Row="3" Margin="1,0,1,0" Text="{Binding TimeRequiredToLockDown}"
+                 ToolTip="If used, time of continuous gaze required to lock down the key"/>
+    <TextBox Grid.Column="2" Grid.Row="4" Margin="1,0,1,0" Text="{Binding Opacity}"/>
+    <TextBox Grid.Column="2" Grid.Row="5" Margin="1,0,1,0" Text="{Binding BackgroundColor}"/>
+    <TextBox Grid.Column="2" Grid.Row="6" Margin="1,0,1,0" Text="{Binding ForegroundColor}"/>
+    <TextBox Grid.Column="2" Grid.Row="7" Margin="1,0,1,0" Text="{Binding BorderColor}"/>
+    <TextBox Grid.Column="2" Grid.Row="8" Margin="1,0,1,0" Text="{Binding BorderThickness}"/>
+    <TextBox Grid.Column="2" Grid.Row="9" Margin="1,0,1,0" Text="{Binding CornerRadius}"/>
+    <TextBox Grid.Column="2" Grid.Row="10" Margin="1,0,1,0" Text="{Binding SharedSizeGroup}"
+                 ToolTip="Useful to override size groups if you you have long labels"/>
+    <ComboBox Grid.Column="2" Grid.Row="11" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleWidth}}"
+                  ToolTip="The most narrow key is used as the base width unless overridden to false"
+              SelectedItem="{Binding AutoScaleToOneKeyWidth}"/>
+    <ComboBox Grid.Column="2" Grid.Row="12" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource AutoScaleHeight}}"
+                  ToolTip="The shotest key is used as the base height unless overridden to false"
+              SelectedItem="{Binding AutoScaleToOneKeyHeight}"/>
+    <ComboBox Grid.Column="2" Grid.Row="13" Margin="1,0,1,0" ItemsSource="{Binding Source={StaticResource CompatibilityList}}"
+             ToolTip="Select an override to limit the fonts to only those with compatibility"
+                  SelectedItem="{Binding CompatibilityFont}"/>
+  </Grid>
+</UserControl>
+
+ 

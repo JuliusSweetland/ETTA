@@ -1,0 +1,101 @@
+<!--Copyright (c) 2022 OPTIKEY LTD (UK company number 11854839) - All Rights Reserved-->
+<UserControl x:Class="JuliusSweetland.OptiKey.UI.Controls.CommandsEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:JuliusSweetland.OptiKey.UI.Controls"
+             xmlns:valueConverters="clr-namespace:JuliusSweetland.OptiKey.UI.ValueConverters"
+             mc:Ignorable="d">
+  <UserControl.Resources>
+    <valueConverters:InvertedBoolToVisibilityConverter x:Key="InvertedBoolToVisibilityConverter" />
+  </UserControl.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+    <StackPanel Grid.Column="1" Grid.RowSpan="3">
+      <ListBox Name="CommandList" Background="Transparent" ItemsSource="{Binding Interactor.Commands}">
+        <ListBox.ItemContainerStyle>
+          <Style TargetType="{x:Type ListBoxItem}">
+            <EventSetter Event="MouseEnter" Handler="SelectCommand" />
+          </Style>
+        </ListBox.ItemContainerStyle>
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" SharedSizeGroup="cc1" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc2" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc3" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc4" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc5" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc6" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc7" />
+                <ColumnDefinition Width="*" SharedSizeGroup="cc8" />
+              </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                  <Button Click="MoveUp_Click">
+                    <Path Fill="Black" Data="M0 6 6 0 12 6Z " />
+                  </Button>
+                  <Button Click="MoveDown_Click">
+                    <Path Fill="Black" Data="M0 0 6 6 12 0Z "/>
+                  </Button>
+                </StackPanel>
+              <Button Grid.Column="7" Margin="3,0" Background="IndianRed" Click="DeleteCommand_Click"
+                                    BorderThickness="0" Width="30" Height="20">
+                  <Path Data="M0,0 12,12 M12,0 0,12" Width="12" Height="12" Stroke="Black" StrokeThickness="4"/>
+                </Button>
+              <ComboBox Grid.Column="2" VerticalAlignment="Top" Margin="0"
+                  ItemsSource="{Binding Source={x:Static controls:CommandsEditor.CommandKeyList}}"
+                  SelectedItem="{Binding Type, Mode=OneTime}"
+                        SelectionChanged="SelectType"/>
+              <TextBox Grid.Column="3" VerticalAlignment="Center" Margin="3,0" MinWidth="90"
+                          Visibility="{Binding HideTextBox, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+                          Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              <ComboBox Grid.Column="3" VerticalAlignment="Center" Margin="3,0" MinWidth="90" IsTextSearchEnabled="True"
+                          Visibility="{Binding HideFunction, Converter={StaticResource InvertedBoolToVisibilityConverter}}"
+                          ItemsSource="{Binding Source={x:Static controls:CommandsEditor.FunctionKeyList}}"
+                          Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              <StackPanel Grid.Column="3" Orientation="Horizontal"
+                          Visibility="{Binding HideBack, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                <ComboBox VerticalAlignment="Center" Margin="3,0" MinWidth="90" IsTextSearchEnabled="True"
+                          ItemsSource="{Binding Source={x:Static controls:CommandsEditor.KeyboardList}}"
+                          Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label VerticalAlignment="Center" Content="Link Back:"/>
+                <CheckBox VerticalAlignment="Center" HorizontalAlignment="Left"
+                          ToolTip="When checked you will be able to navigate back to the new keyboard from future keyboards"
+                          IsChecked="{Binding BackAction}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="3" Orientation="Vertical"
+                          Visibility="{Binding HidePlugin, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal">
+                  <TextBox VerticalAlignment="Center" Margin="3,0" HorizontalAlignment="Left" MinWidth="90" 
+                          Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                  <Label VerticalAlignment="Center" Content="Method:"/>
+                  <TextBox VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="60" 
+                          Text="{Binding Method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+                  <TextBox VerticalAlignment="Center" Margin="3,0" HorizontalAlignment="Left" MinWidth="90" IsEnabled="False"
+                           ToolTip="Open the saved keyboard file in notepad to edit arguments"
+                         Text="Argument editing disabled"/>
+              </StackPanel>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Orientation="Horizontal">
+        <Button Content="Add" HorizontalAlignment="Left" Click="AddCommand_Click" Margin="3,0" Width="40"/>
+      </StackPanel>
+    </StackPanel>
+  </Grid>
+</UserControl>
+
+  

@@ -4,10 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Xml.Serialization;
-using JuliusSweetland.OptiKey.Extensions;
 using JuliusSweetland.OptiKey.Properties;
 using JuliusSweetland.OptiKey.UI.Views.Keyboards.Common;
+using JuliusSweetland.OptiKey.Extensions;
 
 namespace JuliusSweetland.OptiKey.Models
 {
@@ -36,16 +35,14 @@ namespace JuliusSweetland.OptiKey.Models
 
         #endregion
 
-        public List<KeyboardInfo> keyboards;
+        public List<KeyboardInfo> AllKeyboards = new List<KeyboardInfo>();
+        public List<KeyboardInfo> keyboards = new List<KeyboardInfo>();
 
-        public DynamicKeyboardFolder(String filePath)
+        public DynamicKeyboardFolder(string filePath)
         {
-            if (String.IsNullOrEmpty(filePath))
-            {
+            // Find all possible xml files
+            if (string.IsNullOrWhiteSpace(filePath))
                 filePath = Settings.Default.DynamicKeyboardsLocation;
-            }
-
-            keyboards = new List<KeyboardInfo>();
 
             if (Directory.Exists(filePath))
             {
@@ -61,6 +58,7 @@ namespace JuliusSweetland.OptiKey.Models
                     KeyboardInfo info = GetKeyboardInfo(keyboardPath);
                     if (null != info.fullPath)
                     {
+                        AllKeyboards.Add(info);
                         if (!info.isHidden)
                         {
                             keyboards.Add(info);
@@ -86,8 +84,8 @@ namespace JuliusSweetland.OptiKey.Models
             try
             {
                 XmlKeyboard spec = XmlKeyboard.ReadFromFile(keyboardPath);
-                
-                info.keyboardName = DynamicKeyboard.StringWithValidNewlines(spec.Name);
+
+                info.keyboardName = spec.Name.ToStringWithValidNewlines();
                 info.symbolString = spec.Symbol;
                 info.isHidden = spec.Hidden;
 

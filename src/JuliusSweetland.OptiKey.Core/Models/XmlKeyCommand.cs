@@ -23,7 +23,7 @@ namespace JuliusSweetland.OptiKey.Models
             }
         }
 
-        [XmlIgnore] public bool HideFunctionList { get { return Name != KeyCommands.Function; } }
+        [XmlIgnore] public bool HideFunctionList { get { return Name != KeyCommands.Action; } }
         [XmlAttribute] public string Value { get; set; }
 
         [XmlIgnore] public bool BackAction { get; set; }
@@ -38,7 +38,7 @@ namespace JuliusSweetland.OptiKey.Models
         [XmlIgnore] public bool HideMethod { get { return Name != KeyCommands.Plugin; } }
         [XmlAttribute] public string Method { get; set; }
 
-        public List<DynamicArgument> Argument { get; set; }
+        public List<PluginArgument> Argument { get; set; }
 
         public List<KeyCommand> LoopCommands { get; set; }
 
