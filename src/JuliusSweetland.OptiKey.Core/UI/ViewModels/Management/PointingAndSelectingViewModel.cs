@@ -231,9 +231,14 @@ namespace JuliusSweetland.OptiKey.UI.ViewModels.Management
             {
                 return new List<KeyValuePair<string, ProgressIndicatorBehaviours>>
                 {
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FADE, Enums.ProgressIndicatorBehaviours.Fade),
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FILL_IN, Enums.ProgressIndicatorBehaviours.FillIn),
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FILL_OUT, Enums.ProgressIndicatorBehaviours.FillOut),
                     new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FILL_PIE, Enums.ProgressIndicatorBehaviours.FillPie),
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FILL_RIGHT, Enums.ProgressIndicatorBehaviours.FillRight),
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.FILL_UP, Enums.ProgressIndicatorBehaviours.FillUp),
                     new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.GROW, Enums.ProgressIndicatorBehaviours.Grow),
-                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.SHRINK_INDICATOR, Enums.ProgressIndicatorBehaviours.Shrink)
+                    new KeyValuePair<string, ProgressIndicatorBehaviours>(Resources.SHRINK_INDICATOR, Enums.ProgressIndicatorBehaviours.Shrink)                    
                 };
             }
         }

@@ -3,8 +3,13 @@ namespace JuliusSweetland.OptiKey.Enums
 {
     public enum ProgressIndicatorBehaviours
     {
+        Fade,
+        FillIn,
+        FillOut,
         FillPie,
+        FillRight,
+        FillUp,
+        Grow,
         Shrink,
-        Grow
     }
-}            
+}

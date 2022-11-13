@@ -418,20 +418,20 @@ namespace JuliusSweetland.OptiKey.UI.Controls
         }
 
         public static readonly DependencyProperty BorderThicknessOverrideProperty =
-            DependencyProperty.Register("BorderThicknessOverrideProperty", typeof(int), typeof(Key), new PropertyMetadata(defaultValue:1));
+            DependencyProperty.Register("BorderThicknessOverrideProperty", typeof(int?), typeof(Key), new PropertyMetadata(default(int?)));
 
-        public int BorderThicknessOverride
+        public int? BorderThicknessOverride
         {
-            get { return (int)GetValue(BorderThicknessOverrideProperty); }
+            get { return (int?)GetValue(BorderThicknessOverrideProperty); }
             set { SetValue(BorderThicknessOverrideProperty, value); }
         }
 
         public static readonly DependencyProperty CornerRadiusOverrideProperty =
-            DependencyProperty.Register("CornerRadiusOverrideProperty", typeof(int), typeof(Key), new PropertyMetadata(defaultValue: 0));
+            DependencyProperty.Register("CornerRadiusOverrideProperty", typeof(int?), typeof(Key), new PropertyMetadata(default(int?)));
 
-        public int CornerRadiusOverride
+        public int? CornerRadiusOverride
         {
-            get { return (int)GetValue(CornerRadiusOverrideProperty); }
+            get { return (int?)GetValue(CornerRadiusOverrideProperty); }
             set { SetValue(CornerRadiusOverrideProperty, value); }
         }
 
@@ -462,21 +462,12 @@ namespace JuliusSweetland.OptiKey.UI.Controls
             set { SetValue(KeyDownBackgroundOverrideProperty, value); }
         }
 
-        public static readonly DependencyProperty KeyDownOpacityOverrideProperty =
-            DependencyProperty.Register("KeyDownOpacityOverride", typeof(double), typeof(Key), new PropertyMetadata(defaultValue: 1.0));
-
-        public double KeyDownOpacityOverride
-        {
-            get { return (double)GetValue(KeyDownOpacityOverrideProperty); }
-            set { SetValue(KeyDownOpacityOverrideProperty, value); }
-        }
-
         public static readonly DependencyProperty OpacityOverrideProperty =
-            DependencyProperty.Register("OpacityOverride", typeof(double), typeof(Key), new PropertyMetadata(defaultValue: 1.0));
+            DependencyProperty.Register("OpacityOverride", typeof(double?), typeof(Key), new PropertyMetadata(default(double?)));
 
-        public double OpacityOverride
+        public double? OpacityOverride
         {
-            get { return (double)GetValue(OpacityOverrideProperty); }
+            get { return (double?)GetValue(OpacityOverrideProperty); }
             set { SetValue(OpacityOverrideProperty, value); }
         }
 
@@ -487,6 +478,24 @@ namespace JuliusSweetland.OptiKey.UI.Controls
         {
             get { return (double)GetValue(DisabledBackgroundOpacityProperty); }
             set { SetValue(DisabledBackgroundOpacityProperty, value); }
+        }
+
+        public static readonly DependencyProperty DisabledOpacityOverrideProperty =
+            DependencyProperty.Register("DisabledOpacityOverride", typeof(double?), typeof(Key), new PropertyMetadata(default(double?)));
+
+        public double? DisabledOpacityOverride
+        {
+            get { return (double?)GetValue(DisabledOpacityOverrideProperty); }
+            set { SetValue(DisabledOpacityOverrideProperty, value); }
+        }
+
+        public static readonly DependencyProperty KeyDownOpacityOverrideProperty =
+            DependencyProperty.Register("KeyDownOpacityOverride", typeof(double?), typeof(Key), new PropertyMetadata(default(double?)));
+
+        public double? KeyDownOpacityOverride
+        {
+            get { return (double?)GetValue(KeyDownOpacityOverrideProperty); }
+            set { SetValue(KeyDownOpacityOverrideProperty, value); }
         }
 
         public static readonly DependencyProperty ForegroundColourOverrideProperty =

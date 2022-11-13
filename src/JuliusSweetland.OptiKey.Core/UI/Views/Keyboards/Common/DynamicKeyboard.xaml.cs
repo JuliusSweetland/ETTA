@@ -574,7 +574,7 @@ namespace JuliusSweetland.OptiKey.UI.Views.Keyboards.Common
             if (profile.OpacityN.HasValue)
                 newKey.OpacityOverride = profile.OpacityN.Value;
             if (profile.KeyDisabledOpacityN.HasValue)
-                newKey.DisabledBackgroundOpacity = profile.KeyDisabledOpacityN.Value;
+                newKey.DisabledOpacityOverride = profile.KeyDisabledOpacityN.Value;
             if (profile.KeyDownOpacityN.HasValue)
                 newKey.KeyDownOpacityOverride = profile.KeyDownOpacityN.Value;
 

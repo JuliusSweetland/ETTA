@@ -2473,4 +2473,19 @@ Magyar
   <data name="LIMIT_BACKONE" xml:space="preserve">
     <value>Limit "BackOne" deletion to a single character</value>
   </data>
+  <data name="FADE" xml:space="preserve">
+    <value>Fade</value>
+  </data>
+  <data name="FILL_IN" xml:space="preserve">
+    <value>Fill In</value>
+  </data>
+  <data name="FILL_OUT" xml:space="preserve">
+    <value>Fill Out</value>
+  </data>
+  <data name="FILL_RIGHT" xml:space="preserve">
+    <value>Fill Right</value>
+  </data>
+  <data name="FILL_UP" xml:space="preserve">
+    <value>Fill Up</value>
+  </data>
 </root>
